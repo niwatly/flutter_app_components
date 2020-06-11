@@ -28,13 +28,13 @@ class DefaultApiClient with IApiClient {
         return Uri(
           scheme: useHttp ? "http" : "https",
           host: host,
-          path: "$path",
+          path: path,
           port: port,
           queryParameters: query,
         );
       } on FormatException catch (_) {
         //URIの組み立てに失敗した
-        return throw InvalidUriError(host, "$path", query);
+        return throw InvalidUriError(host, path, query);
       }
     };
   }
