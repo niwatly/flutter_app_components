@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'dialog_helper.dart';
+import 'dialog_route.dart';
 import 'floating_dialog.dart';
 
 class DialogBuilder extends StatefulWidget {
