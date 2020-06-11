@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'floating_dialog.dart';
+import 'package:flutter_app_components/inapp_navigation/floating_dialog.dart';
 
 class DialogRoute<T> extends PopupRoute<T> {
   final WidgetBuilder builder;
@@ -38,7 +37,7 @@ class DialogRoute<T> extends PopupRoute<T> {
   }
 }
 
-class DialogBuilder {
+class DialogBuilder extends StatefulWidget {
   final String okLabel;
   final String cancelLabel;
   final String confirmLabel;
@@ -47,8 +46,9 @@ class DialogBuilder {
   final TextStyle okStyle;
   final Widget loadingWidget;
   final TextStyle loadingMessageStyle;
+  final Widget child;
   
-  DialogBuilder({
+  const DialogBuilder({
     @required this.okLabel,
     @required this.cancelLabel,
     @required this.confirmLabel,
@@ -57,41 +57,54 @@ class DialogBuilder {
     @required this.okStyle,
     @required this.loadingWidget,
     @required this.loadingMessageStyle,
-  });
+    @required this.child,
+    Key key,
+  }) : super(key: key);
   
-  Route error(String message) => DialogRoute(
-    builder: (context) => _createDialog(
-      context: context,
-      title: errorLabel,
-      body: message,
-      actions: [
-        FlatButton(
-          child: Text(
-            okLabel,
-            style: okStyle,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
+  @override
+  State<StatefulWidget> createState() => DialogBuilderState();
+}
+
+class DialogBuilderState extends State<DialogBuilder> {
+  Route error(
+      String message,
+      ) =>
+      DialogRoute(
+        builder: (context) => _createDialog(
+          context: context,
+          title: widget.errorLabel,
+          body: message,
+          actions: [
+            FlatButton(
+              child: Text(
+                widget.okLabel,
+                style: widget.okStyle,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
   
-  Route confirm(String message) => DialogRoute(
-    builder: (context) => _createDialog(
-      context: context,
-      title: confirmLabel,
-      body: message,
-      actions: [
-        FlatButton(
-          child: Text(
-            okLabel,
-            style: okStyle,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
+  Route confirm(
+      String message,
+      ) =>
+      DialogRoute(
+        builder: (context) => _createDialog(
+          context: context,
+          title: widget.confirmLabel,
+          body: message,
+          actions: [
+            FlatButton(
+              child: Text(
+                widget.okLabel,
+                style: widget.okStyle,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
   
   Route<bool> ask({
     String title,
@@ -100,20 +113,20 @@ class DialogBuilder {
       DialogRoute<bool>(
         builder: (context) => _createDialog(
           context: context,
-          title: title ?? confirmLabel,
+          title: title ?? widget.confirmLabel,
           body: message,
           actions: [
             FlatButton(
               child: Text(
-                cancelLabel,
-                style: cancelStyle,
+                widget.cancelLabel,
+                style: widget.cancelStyle,
               ),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             FlatButton(
               child: Text(
-                okLabel,
-                style: okStyle,
+                widget.okLabel,
+                style: widget.okStyle,
               ),
               onPressed: () => Navigator.of(context).pop(true),
             ),
@@ -121,31 +134,36 @@ class DialogBuilder {
         ),
       );
   
-  Route<int> pick(List<String> candidates, {String title, String message}) => DialogRoute<int>(
-    builder: (context) => FloatingDialog(
-      onClose: () => Navigator.of(context).pop(-1),
-      title: title,
-      child: ListView.separated(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        separatorBuilder: (context, index) => const Divider(height: 12),
-        itemCount: candidates.length,
-        itemBuilder: (context, index) => InkWell(
-          onTap: () => Navigator.of(context).pop(index),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              candidates[index],
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 5,
-              style: DialogTheme.of(context).contentTextStyle,
+  Route<int> pick(
+      List<String> candidates, {
+        String title,
+        String message,
+      }) =>
+      DialogRoute<int>(
+        builder: (context) => FloatingDialog(
+          onClose: () => Navigator.of(context).pop(-1),
+          title: title,
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => const Divider(height: 12),
+            itemCount: candidates.length,
+            itemBuilder: (context, index) => InkWell(
+              onTap: () => Navigator.of(context).pop(index),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  candidates[index],
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 5,
+                  style: DialogTheme.of(context).contentTextStyle,
+                ),
+              ),
             ),
           ),
         ),
-      ),
-    ),
-  );
+      );
   
   Route<T> loading<T>({
     Future<T> future,
@@ -170,7 +188,7 @@ class DialogBuilder {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                loadingWidget,
+                widget.loadingWidget,
                 const SizedBox(height: 16),
                 if (message != null && message.isNotEmpty)
                   Padding(
@@ -179,12 +197,12 @@ class DialogBuilder {
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      color: DialogTheme.of(context).backgroundColor,
+                      color: (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         child: Text(
                           message,
-                          style: loadingMessageStyle,
+                          style: widget.loadingMessageStyle,
                         ),
                       ),
                     ),
@@ -211,4 +229,9 @@ class DialogBuilder {
         ),
         actions: actions,
       );
+  
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
 }
