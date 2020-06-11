@@ -1,4 +1,4 @@
-# flutterappcomponents
+# flutter_app_components
 
 A new Flutter package.
 
