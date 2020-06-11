@@ -47,7 +47,6 @@ class DialogBuilder {
   final TextStyle okStyle;
   final Widget loadingWidget;
   final TextStyle loadingMessageStyle;
-  final Color contentBackgroundColor;
 
   DialogBuilder({
     @required this.okLabel,
@@ -58,7 +57,6 @@ class DialogBuilder {
     @required this.okStyle,
     @required this.loadingWidget,
     @required this.loadingMessageStyle,
-    @required this.contentBackgroundColor,
   });
 
   Route error(String message) => DialogRoute(
@@ -127,7 +125,7 @@ class DialogBuilder {
         builder: (context) => FloatingDialog(
           onClose: () => Navigator.of(context).pop(-1),
           title: title,
-          contentBackgroundColor: contentBackgroundColor,
+          contentBackgroundColor: DialogTheme.of(context).backgroundColor,
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -214,7 +212,6 @@ class DialogBuilder {
     List<Widget> actions,
   }) =>
       AlertDialog(
-        backgroundColor: contentBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
