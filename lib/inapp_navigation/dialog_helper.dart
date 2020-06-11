@@ -158,29 +158,32 @@ class DialogBuilder {
     Future<T> future,
     String message,
   }) {
-    final child = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        loadingWidget,
-        const SizedBox(height: 16),
-        if (message != null && message.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 36),
-            child: Material(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              color: const Color(0x60000000),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                child: Text(
-                  message,
-                  style: loadingMessageStyle,
+    final child = WillPopScope(
+      onWillPop: () async => false,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          loadingWidget,
+          const SizedBox(height: 16),
+          if (message != null && message.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 36),
+              child: Material(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                color: const Color(0x60000000),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  child: Text(
+                    message,
+                    style: loadingMessageStyle,
+                  ),
                 ),
               ),
-            ),
-          )
-      ],
+            )
+        ],
+      ),
     );
 
     return DialogRoute(
