@@ -1,4 +1,9 @@
-import 'refresh_provider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+
+import 'controller/refresh_controller.dart';
+import 'refresh_state.dart';
 
 /// [RefreshController] を生成するメソッド
 ///

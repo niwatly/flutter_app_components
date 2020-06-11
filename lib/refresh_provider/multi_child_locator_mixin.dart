@@ -1,4 +1,4 @@
-import 'refresh_provider.dart';
+import 'package:state_notifier/state_notifier.dart';
 
 mixin MultiLocatorMixin on LocatorMixin {
   bool _isInitStateDone = false;

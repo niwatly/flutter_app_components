@@ -1,4 +1,9 @@
-import 'refresh_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+import 'package:provider/provider.dart';
+
+import 'controller/refresh_controller.dart';
+import 'refresh_state.dart';
 
 /// [RefreshState] を3つ状態に分けて、状態ごとにUIを出し分ける
 ///
@@ -85,11 +90,12 @@ class RefreshSelector<V, E> extends StatelessWidget {
   }
 }
 
-class _Refresh<V, E> extends SingleChildStatelessWidget {
-  const _Refresh(Widget child) : super(child: child);
+class _Refresh<V, E> extends StatelessWidget {
+  final Widget child;
+  const _Refresh(this.child);
 
   @override
-  Widget buildWithChild(BuildContext context, Widget child) {
+  Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => context.read<RefreshController<V, E>>().requestCleanRefresh(silent: true),
       child: child,

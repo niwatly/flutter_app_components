@@ -1,4 +1,9 @@
-import '../refresh_provider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:state_notifier/state_notifier.dart';
+
+import '../refresh_config.dart';
+import '../refresh_state.dart';
 
 part 'simple_refresh_controller.dart';
 part 'page_refresh_controller.dart';
@@ -10,8 +15,10 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
 
   DateTime _lastLoadTime;
 
+  // ignore: close_sinks
   Sink<Stream<void>> requestLifetimeRefreshSink;
 
+  // ignore: close_sinks
   Sink<Stream<RefreshConfig>> requestConfigRefreshSink;
 
   final CompositeSubscription _compositeSubscription = CompositeSubscription();

@@ -1,5 +1,3 @@
-//import 'refresh_provider.dart';
-
 class RefreshState<V, E> {
   final bool isRefreshing;
   final bool initialRefreshCompleted;
