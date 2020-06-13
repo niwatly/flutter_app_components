@@ -18,9 +18,9 @@ class DefaultApiClient with IApiClient {
   UriBuilder _uriBuilder;
 
   DefaultApiClient({
-    @required this.useHttp,
+    this.useHttp = true,
     @required this.host,
-    @required this.port,
+    this.port,
     this.headersFuture,
   }) {
     _uriBuilder = (path, query) {
