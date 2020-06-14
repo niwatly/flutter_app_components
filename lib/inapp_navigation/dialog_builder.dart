@@ -6,8 +6,10 @@ import 'floating_dialog.dart';
 class DialogBuilder extends StatefulWidget {
   final String okLabel;
   final String cancelLabel;
-  final String confirmLabel;
-  final String errorLabel;
+  final String confirmTitle;
+  final String errorTitle;
+  final String pickTitle;
+  final String askTitle;
   final TextStyle cancelStyle;
   final TextStyle okStyle;
   final Widget loadingWidget;
@@ -15,15 +17,17 @@ class DialogBuilder extends StatefulWidget {
   final Widget child;
 
   const DialogBuilder({
-    @required this.okLabel,
-    @required this.cancelLabel,
-    @required this.confirmLabel,
-    @required this.errorLabel,
-    @required this.cancelStyle,
-    @required this.okStyle,
-    @required this.loadingWidget,
-    @required this.loadingMessageStyle,
-    @required this.child,
+    this.okLabel,
+    this.cancelLabel,
+    this.confirmTitle,
+    this.errorTitle,
+    this.pickTitle,
+    this.askTitle,
+    this.cancelStyle,
+    this.okStyle,
+    this.loadingWidget,
+    this.loadingMessageStyle,
+    this.child,
     Key key,
   }) : super(key: key);
 
@@ -32,18 +36,25 @@ class DialogBuilder extends StatefulWidget {
 }
 
 class DialogBuilderState extends State<DialogBuilder> {
+  String get okLabel => widget.okLabel ?? "OK";
+  String get cancelLabel => widget.cancelLabel ?? "Cancel";
+  String get errorTitle => widget.errorTitle ?? "Error";
+  String get confirmTitle => widget.confirmTitle ?? "Confirm";
+  String get pickTitle => widget.pickTitle ?? "Select one";
+  String get askTitle => widget.askTitle ?? "Ask";
+
   Route error(
     String message,
   ) =>
       DialogRoute(
         builder: (context) => _createDialog(
           context: context,
-          title: widget.errorLabel,
+          title: errorTitle,
           body: message,
           actions: [
             FlatButton(
               child: Text(
-                widget.okLabel,
+                okLabel,
                 style: widget.okStyle,
               ),
               onPressed: () => Navigator.of(context).pop(),
@@ -58,12 +69,12 @@ class DialogBuilderState extends State<DialogBuilder> {
       DialogRoute(
         builder: (context) => _createDialog(
           context: context,
-          title: widget.confirmLabel,
+          title: confirmTitle,
           body: message,
           actions: [
             FlatButton(
               child: Text(
-                widget.okLabel,
+                okLabel,
                 style: widget.okStyle,
               ),
               onPressed: () => Navigator.of(context).pop(),
@@ -79,19 +90,19 @@ class DialogBuilderState extends State<DialogBuilder> {
       DialogRoute<bool>(
         builder: (context) => _createDialog(
           context: context,
-          title: title ?? widget.confirmLabel,
+          title: title ?? askTitle,
           body: message,
           actions: [
             FlatButton(
               child: Text(
-                widget.cancelLabel,
+                cancelLabel,
                 style: widget.cancelStyle,
               ),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             FlatButton(
               child: Text(
-                widget.okLabel,
+                okLabel,
                 style: widget.okStyle,
               ),
               onPressed: () => Navigator.of(context).pop(true),
@@ -108,7 +119,7 @@ class DialogBuilderState extends State<DialogBuilder> {
       DialogRoute<int>(
         builder: (context) => FloatingDialog(
           onClose: () => Navigator.of(context).pop(-1),
-          title: title,
+          title: title ?? pickTitle,
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -154,7 +165,7 @@ class DialogBuilderState extends State<DialogBuilder> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                widget.loadingWidget,
+                widget.loadingWidget ?? CircularProgressIndicator(),
                 const SizedBox(height: 16),
                 if (message != null && message.isNotEmpty)
                   Padding(
