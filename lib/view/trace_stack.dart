@@ -45,7 +45,7 @@ class TraceStack extends StatelessWidget {
       child: Stack(
         fit: fit,
         alignment: alignment,
-        clip: clip,
+        overflow: clip,
         children: children,
       ),
     );
