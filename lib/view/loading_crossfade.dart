@@ -22,19 +22,13 @@ class LoadingCrossFade extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       layoutBuilder: (top, topKey, bottom, bottomKey) {
-        Widget base;
-        Widget following;
+        final topIsFirst = topKey == const ValueKey(CrossFadeState.showFirst);
 
-        if (topKey == const ValueKey(CrossFadeState.showFirst)) {
-          base = top;
-          following = bottom;
-        } else {
-          base = bottom;
-          following = top;
-        }
         return TraceStack(
-          baseChild: base,
-          followChildren: [following],
+          children: [
+            TraceStackChild.base(child: topIsFirst ? top : bottom),
+            TraceStackChild.follow(child: topIsFirst ? bottom : top),
+          ],
         );
       },
       crossFadeState: isLoading == true ? CrossFadeState.showSecond : CrossFadeState.showFirst,
