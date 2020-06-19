@@ -7,11 +7,17 @@ class TraceStack extends StatelessWidget {
   final Widget baseChild;
   final List<Widget> followChildren;
   final bool isBaseChildOnBackground;
+  final StackFit fit;
+  final AlignmentGeometry alignment;
+  final Overflow clip;
   
   const TraceStack({
     @required this.baseChild,
     this.followChildren = const [],
     this.isBaseChildOnBackground = false,
+    this.clip = Overflow.clip,
+    this.fit = StackFit.loose,
+    this.alignment = AlignmentDirectional.topStart,
   });
   
   @override
@@ -37,6 +43,9 @@ class TraceStack extends StatelessWidget {
     return ChangeNotifierProvider<_Notifier>(
       create: (context) => _Notifier(),
       child: Stack(
+        fit: fit,
+        alignment: alignment,
+        clip: clip,
         children: children,
       ),
     );
