@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LazyFutureBuilder extends StatelessWidget {
-  final Future Function() futureBuilder;
+  final FutureOr Function() futureBuilder;
   final Widget Function(BuildContext context, Future Function() futureBuilder, bool isFutureBuilding) builder;
-  
+
   const LazyFutureBuilder({
     @required this.futureBuilder,
     @required this.builder,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<_Notifier>(
@@ -17,11 +19,11 @@ class LazyFutureBuilder extends StatelessWidget {
       child: Consumer<_Notifier>(
         builder: (context, notifier, child) => builder(
           context,
-              () async {
+          () async {
             if (notifier.value) {
               return;
             }
-            
+
             try {
               notifier.value = true;
               await futureBuilder();
