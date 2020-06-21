@@ -66,11 +66,11 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
 class RouteNotFoundException implements Exception {
   final String message;
 
-  RouteNotFoundException.invalidUri(String src) : message = "Invalid uri found. $src.";
+  RouteNotFoundException.invalidUri(String uri) : message = "Invalid uri found. uri = $uri.";
 
-  RouteNotFoundException.cannotExtractPath(Uri src) : message = "Cannot extract path. $src";
+  RouteNotFoundException.cannotExtractPath(Uri uri) : message = "Cannot extract path. uri = $uri";
 
-  RouteNotFoundException.noMatch(Uri src) : message = "No routes matched. $src";
+  RouteNotFoundException.noMatch(String path) : message = "No routes matched. path = $path";
 
   @override
   String toString() => message;
