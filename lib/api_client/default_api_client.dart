@@ -12,7 +12,7 @@ class DefaultApiClient with IApiClient {
   final bool useHttp;
   final String host;
   final int port;
-  final Future<Map<String, String>> headersFuture;
+  final FutureOr<Map<String, String>> headersFuture;
   Map<String, String> _headers;
 
   UriBuilder _uriBuilder;
