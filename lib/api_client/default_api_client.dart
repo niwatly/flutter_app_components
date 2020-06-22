@@ -9,6 +9,8 @@ import 'api_client.dart';
 import 'api_client_error.dart';
 
 class DefaultApiClient with IApiClient {
+  static Function(int statusCode, Uri uri) onResponseReceived;
+
   final bool useHttp;
   final String host;
   final int port;
@@ -44,6 +46,8 @@ class DefaultApiClient with IApiClient {
 
     try {
       final response = await Response.fromStream(await client.send(request));
+
+      onResponseReceived?.call(response.statusCode, request.url);
 
       if (response.statusCode < 200 || 300 <= response.statusCode) {
         //200が返ってこなかった
