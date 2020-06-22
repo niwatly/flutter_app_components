@@ -133,6 +133,9 @@ class DefaultApiClient with IApiClient {
   }
 
   @override
+  void close() {}
+
+  @override
   bool operator ==(Object other) =>
       identical(this, other) || other is DefaultApiClient && runtimeType == other.runtimeType && useHttp == other.useHttp && host == other.host && port == other.port && _headers == other._headers;
 
