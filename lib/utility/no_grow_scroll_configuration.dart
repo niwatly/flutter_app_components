@@ -9,7 +9,9 @@ class _Behavior extends ScrollBehavior {
 class NoGlowScrollConfiguration extends StatelessWidget {
   final Widget child;
 
-  const NoGlowScrollConfiguration(this.child);
+  const NoGlowScrollConfiguration({
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_components/utility/no_grow_scroll_configuration.dart';
 
 import 'unfocus.dart';
 
@@ -13,7 +14,8 @@ class ScrollableAlign extends StatelessWidget {
   final bool showScrollBar;
   final bool unfocusWhenScrollStarted;
   final bool unfocusWhenTapped;
-  
+  final bool disableGrowEffect;
+
   const ScrollableAlign({
     this.alignment = Alignment.topCenter,
     this.child,
@@ -22,8 +24,9 @@ class ScrollableAlign extends StatelessWidget {
     this.showScrollBar = false,
     this.unfocusWhenScrollStarted = false,
     this.unfocusWhenTapped = false,
+    this.disableGrowEffect = false,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     Widget ret = LayoutBuilder(
@@ -40,7 +43,7 @@ class ScrollableAlign extends StatelessWidget {
         ),
       ),
     );
-    
+
     if (unfocusWhenScrollStarted || unfocusWhenTapped) {
       ret = Unfocus(
         child: ret,
@@ -48,13 +51,19 @@ class ScrollableAlign extends StatelessWidget {
         unfocusWhenTapped: unfocusWhenTapped,
       );
     }
-    
+
     if (showScrollBar) {
       ret = Scrollbar(
         child: ret,
       );
     }
-    
+
+    if (disableGrowEffect) {
+      ret = NoGlowScrollConfiguration(
+        child: ret,
+      );
+    }
+
     return ret;
   }
 }
