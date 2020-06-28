@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'unfocus.dart';
+
 /// ScrollViewの子供の高さが画面の幅に満たないとき、スクロールすると子供が不自然に見切れることを防ぐScrollView
 ///
 /// ※ physicsをAlwaysScrollableScrollPhysicsにしなければ発生しないが、常時PullToRefresh可能な状態を実現するためにはAlwaysScrollableScrollPhysicsが必要
@@ -9,18 +11,22 @@ class ScrollableAlign extends StatelessWidget {
   final EdgeInsets padding;
   final ScrollController controller;
   final bool showScrollBar;
-
+  final bool unfocusWhenScrollStarted;
+  final bool unfocusWhenTapped;
+  
   const ScrollableAlign({
     this.alignment = Alignment.topCenter,
     this.child,
     this.padding,
     this.controller,
     this.showScrollBar = false,
+    this.unfocusWhenScrollStarted = false,
+    this.unfocusWhenTapped = false,
   });
-
+  
   @override
   Widget build(BuildContext context) {
-    final scroll = LayoutBuilder(
+    Widget ret = LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
         padding: padding,
         physics: const AlwaysScrollableScrollPhysics(),
@@ -34,11 +40,21 @@ class ScrollableAlign extends StatelessWidget {
         ),
       ),
     );
-
-    if (showScrollBar) {
-      return Scrollbar(child: scroll);
-    } else {
-      return scroll;
+    
+    if (unfocusWhenScrollStarted || unfocusWhenTapped) {
+      ret = Unfocus(
+        child: ret,
+        unfocusWhenScrollStarted: unfocusWhenScrollStarted,
+        unfocusWhenTapped: unfocusWhenTapped,
+      );
     }
+    
+    if (showScrollBar) {
+      ret = Scrollbar(
+        child: ret,
+      );
+    }
+    
+    return ret;
   }
 }
