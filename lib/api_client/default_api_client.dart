@@ -16,6 +16,7 @@ class DefaultApiClient with IApiClient {
   final int port;
   final FutureOr<Map<String, String>> headersFuture;
   Map<String, String> _headers;
+  Client _client;
 
   UriBuilder _uriBuilder;
 
@@ -25,6 +26,7 @@ class DefaultApiClient with IApiClient {
     this.port,
     this.headersFuture,
   }) {
+    _client = Client();
     _uriBuilder = (path, query) {
       try {
         return Uri(
@@ -42,10 +44,8 @@ class DefaultApiClient with IApiClient {
   }
 
   Future<Response> _sendRequest(BaseRequest request) async {
-    final client = Client();
-
     try {
-      final response = await Response.fromStream(await client.send(request));
+      final response = await Response.fromStream(await _client.send(request));
 
       onResponseReceived?.call(response.statusCode, request.url);
 
@@ -63,8 +63,6 @@ class DefaultApiClient with IApiClient {
       throw TimeoutError(request.url, e);
     } catch (e) {
       throw UnknownError(e);
-    } finally {
-      client.close();
     }
   }
 
@@ -133,7 +131,9 @@ class DefaultApiClient with IApiClient {
   }
 
   @override
-  void close() {}
+  void close() {
+    _client.close();
+  }
 
   @override
   bool operator ==(Object other) =>
