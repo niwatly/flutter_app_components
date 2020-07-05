@@ -15,6 +15,7 @@ class ScrollableAlign extends StatelessWidget {
   final bool unfocusWhenScrollStarted;
   final bool unfocusWhenTapped;
   final bool disableGrowEffect;
+  final bool reverse;
 
   const ScrollableAlign({
     this.alignment = Alignment.topCenter,
@@ -25,6 +26,7 @@ class ScrollableAlign extends StatelessWidget {
     this.unfocusWhenScrollStarted = false,
     this.unfocusWhenTapped = false,
     this.disableGrowEffect = false,
+    this.reverse = false,
   });
 
   @override
@@ -32,6 +34,7 @@ class ScrollableAlign extends StatelessWidget {
     Widget ret = LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
         padding: padding,
+        reverse: reverse,
         physics: const AlwaysScrollableScrollPhysics(),
         controller: controller,
         child: ConstrainedBox(
