@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../utility/extension.dart';
 import 'screen_arguments.dart';
 
-typedef RouteGenerator = IScreenArguments Function(Map<String, List<String>> params);
+typedef RouteGenerator = IScreenArguments Function(String url, Map<String, List<String>> params);
 
 class RouteState {}
 
@@ -107,7 +107,7 @@ class InAppRouter {
       errorCallback?.call(RouteNotFoundException.noMatch(uri), StackTrace.current);
       found = const RouteNotFoundScreenArguments();
     } else {
-      found = routeDefines[match.route.route](match.parameters);
+      found = routeDefines[match.route.route](match.route.route, match.parameters);
     }
 
     return found;
