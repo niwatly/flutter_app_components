@@ -23,7 +23,7 @@ dependencies:
 
   # InheritedWidgetを利用した状態管理を楽に行いたい
   # https://pub.dev/packages/provider
-  provider: ^4.1.3
+  provider: ^4.1.3+1
 
   # RxOperatorを使いたい
   # https://pub.dev/packages/rxdart
