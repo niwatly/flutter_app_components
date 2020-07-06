@@ -33,6 +33,8 @@ abstract class IApiClient {
     Map<String, dynamic> query,
     Map<String, dynamic> body,
   });
+
+  void close();
 }
 
 String makeQueryWithSquareBlanketsArrayParameters(Map<String, dynamic /*String|Iterable<String>*/ > queryParameters) {

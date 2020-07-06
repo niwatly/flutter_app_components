@@ -15,6 +15,7 @@ class PaginationIndicator extends StatelessWidget {
   final NotificationReceivedCallback onNotificationReceived;
   final Widget child;
   final bool hasMore;
+  final bool reverse;
 
   const PaginationIndicator({
     Key key,
@@ -22,6 +23,7 @@ class PaginationIndicator extends StatelessWidget {
     @required this.hasMore,
     @required this.child,
     this.onNotificationReceived,
+    this.reverse = false,
   }) : super(key: key);
 
   @override
@@ -47,7 +49,8 @@ class PaginationIndicator extends StatelessWidget {
             child: this.child,
           ),
           Positioned(
-            bottom: 0,
+            bottom: reverse ? null : 0,
+            top: reverse ? 0 : null,
             child: Selector<_Notifier, bool>(
               selector: (context, x) => x.value == _State.Loading,
               builder: (context, value, child) => Offstage(

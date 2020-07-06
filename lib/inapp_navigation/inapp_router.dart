@@ -90,6 +90,10 @@ class InAppRouter {
       return const RouteNotFoundScreenArguments();
     }
 
+    return handlePath(path);
+  }
+
+  Future<IScreenArguments> handlePath(String path) async {
     if (path == Navigator.defaultRouteName) {
       //背景: defaultRouteNameへの遷移がリクエストされたらアプリを立ち上げたい（開く画面は特に気にしない）
       //背景: handleUriメソッドを呼べるということは既に何かしらの画面を開いている
@@ -104,7 +108,7 @@ class InAppRouter {
     final match = _router.match(path);
 
     if (match == null) {
-      errorCallback?.call(RouteNotFoundException.noMatch(uri), StackTrace.current);
+      errorCallback?.call(RouteNotFoundException.noMatch(path), StackTrace.current);
       found = const RouteNotFoundScreenArguments();
     } else {
       found = routeDefines[match.route.route](match.route.route, match.parameters);

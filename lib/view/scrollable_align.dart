@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_components/utility/no_grow_scroll_configuration.dart';
+
+import 'unfocus.dart';
 
 /// ScrollViewの子供の高さが画面の幅に満たないとき、スクロールすると子供が不自然に見切れることを防ぐScrollView
 ///
@@ -9,6 +12,10 @@ class ScrollableAlign extends StatelessWidget {
   final EdgeInsets padding;
   final ScrollController controller;
   final bool showScrollBar;
+  final bool unfocusWhenScrollStarted;
+  final bool unfocusWhenTapped;
+  final bool disableGrowEffect;
+  final bool reverse;
 
   const ScrollableAlign({
     this.alignment = Alignment.topCenter,
@@ -16,13 +23,18 @@ class ScrollableAlign extends StatelessWidget {
     this.padding,
     this.controller,
     this.showScrollBar = false,
+    this.unfocusWhenScrollStarted = false,
+    this.unfocusWhenTapped = false,
+    this.disableGrowEffect = false,
+    this.reverse = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final scroll = LayoutBuilder(
+    Widget ret = LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
         padding: padding,
+        reverse: reverse,
         physics: const AlwaysScrollableScrollPhysics(),
         controller: controller,
         child: ConstrainedBox(
@@ -35,10 +47,26 @@ class ScrollableAlign extends StatelessWidget {
       ),
     );
 
-    if (showScrollBar) {
-      return Scrollbar(child: scroll);
-    } else {
-      return scroll;
+    if (unfocusWhenScrollStarted || unfocusWhenTapped) {
+      ret = Unfocus(
+        child: ret,
+        unfocusWhenScrollStarted: unfocusWhenScrollStarted,
+        unfocusWhenTapped: unfocusWhenTapped,
+      );
     }
+
+    if (showScrollBar) {
+      ret = Scrollbar(
+        child: ret,
+      );
+    }
+
+    if (disableGrowEffect) {
+      ret = NoGlowScrollConfiguration(
+        child: ret,
+      );
+    }
+
+    return ret;
   }
 }

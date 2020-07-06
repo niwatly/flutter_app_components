@@ -9,11 +9,14 @@ import 'api_client.dart';
 import 'api_client_error.dart';
 
 class DefaultApiClient with IApiClient {
+  static Function(int statusCode, Uri uri) onResponseReceived;
+
   final bool useHttp;
   final String host;
   final int port;
-  final Future<Map<String, String>> headersFuture;
+  final FutureOr<Map<String, String>> headersFuture;
   Map<String, String> _headers;
+  Client _client;
 
   UriBuilder _uriBuilder;
 
@@ -23,6 +26,7 @@ class DefaultApiClient with IApiClient {
     this.port,
     this.headersFuture,
   }) {
+    _client = Client();
     _uriBuilder = (path, query) {
       try {
         return Uri(
@@ -40,10 +44,10 @@ class DefaultApiClient with IApiClient {
   }
 
   Future<Response> _sendRequest(BaseRequest request) async {
-    final client = Client();
-
     try {
-      final response = await Response.fromStream(await client.send(request));
+      final response = await Response.fromStream(await _client.send(request));
+
+      onResponseReceived?.call(response.statusCode, request.url);
 
       if (response.statusCode < 200 || 300 <= response.statusCode) {
         //200が返ってこなかった
@@ -59,8 +63,6 @@ class DefaultApiClient with IApiClient {
       throw TimeoutError(request.url, e);
     } catch (e) {
       throw UnknownError(e);
-    } finally {
-      client.close();
     }
   }
 
@@ -126,6 +128,11 @@ class DefaultApiClient with IApiClient {
     final request = await _createBaseRequest("PATCH", _uriBuilder(path, query));
 
     return _sendRequest(request);
+  }
+
+  @override
+  void close() {
+    _client.close();
   }
 
   @override
