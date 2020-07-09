@@ -64,6 +64,13 @@ class UnsuccessfulStatusError implements IApiClientError {
   String toString() => "$runtimeType（uri = ${response?.request?.url}, code = ${response?.statusCode?.toString() ?? "null"}, body = ${response?.body ?? "null"}）";
 }
 
+/// リクエストを送る前にHttpClientがclosed状態だった
+class ClientClosedError implements IApiClientError {
+  @override
+  ApiClientErrorKind get kind => ApiClientErrorKind.ClientClosed;
+  const ClientClosedError();
+}
+
 /// 想定外のエラー
 class UnknownError implements IApiClientError {
   final dynamic e;
@@ -83,6 +90,7 @@ enum ApiClientErrorKind {
   InvalidRequest,
   Timeout,
   UnsuccessfulStatus,
+  ClientClosed,
   Json,
   Unknown,
 }
