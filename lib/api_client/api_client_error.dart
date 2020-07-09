@@ -61,7 +61,15 @@ class UnsuccessfulStatusError implements IApiClientError {
   const UnsuccessfulStatusError(this.response);
 
   @override
-  String toString() => "$runtimeType（uri = ${response?.request?.url}, code = ${response?.statusCode?.toString() ?? "null"}, body = ${response?.body ?? "null"}）";
+  String toString() {
+    final url = response?.request?.url;
+    final status = response?.statusCode?.toString() ?? null;
+    final body = response != null && response.headers["Content-Type"] == "application/json" //
+        ? response.body
+        : null;
+
+    return "$runtimeType（uri = $url, code = ${status}, body = $body）";
+  }
 }
 
 /// リクエストを送る前にHttpClientがclosed状態だった
