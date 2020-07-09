@@ -142,7 +142,7 @@ class DialogBuilderState extends State<DialogBuilder> {
         ),
       );
 
-  Route<T> loading<T>({
+  Route loading<T>({
     Future<T> future,
     String message,
   }) {
@@ -151,13 +151,7 @@ class DialogBuilderState extends State<DialogBuilder> {
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            T data;
-
-            if (snapshot.hasData) {
-              data = snapshot.data;
-            }
-
-            WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop(data));
+            WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
           }
 
           return WillPopScope(
