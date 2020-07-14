@@ -94,6 +94,11 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
   Stream<RefreshState<V, E>> _doRefresh(RefreshConfig config, RefreshState<V, E> currentState);
 
   bool _checkNeedLoad(RefreshConfig config) {
+    if (state.isRefreshing) {
+      // リフレッシュ命令を処理中なので更新しない
+      return false;
+    }
+    
     if (config.resetLifetime) {
       // 強制ロードが要求されたので更新する
       return true;
