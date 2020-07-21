@@ -15,7 +15,7 @@ class ForwardNavigationText extends StatelessWidget {
     this.onTap,
     this.color,
     this.style,
-    this.padding = const EdgeInsets.fromLTRB(4, 4, 0, 4),
+    this.padding = const EdgeInsets.fromLTRB(4, 8, 0, 8),
   });
 
   @override
