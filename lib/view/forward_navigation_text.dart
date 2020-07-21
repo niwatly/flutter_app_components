@@ -35,7 +35,7 @@ class ForwardNavigationText extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: AutoSizeText(
                       label,
                       maxLines: 1,
