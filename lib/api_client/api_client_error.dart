@@ -1,4 +1,4 @@
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 abstract class IApiClientError implements Exception {
   ApiClientErrorKind get kind;
@@ -56,10 +56,11 @@ class UnsuccessfulStatusError implements IApiClientError {
   @override
   ApiClientErrorKind get kind => ApiClientErrorKind.UnsuccessfulStatus;
 
-  final Response response;
+  final http.Response response;
 
   const UnsuccessfulStatusError(this.response);
 
+  bool get isContentJson => response != null && response.headers["Content-Type"] == "application/json";
   @override
   String toString() {
     final url = response?.request?.url;
