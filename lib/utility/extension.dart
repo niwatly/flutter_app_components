@@ -139,11 +139,11 @@ extension BuildContextEx on BuildContext {
   /// Theme.of(context).textTheme への convenience method です
   TextTheme get texts => Theme.of(this).textTheme;
   
-  Locator readOrWatch(bool inBuild) {
+  T readOrWatch<T>(bool inBuild) {
     if (inBuild) {
-      return watch;
+      return watch<T>();
     } else {
-      return read;
+      return read<T>();
     }
   }
 }
