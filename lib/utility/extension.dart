@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart' hide Locator;
 import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -137,6 +138,14 @@ extension BuildContextEx on BuildContext {
 
   /// Theme.of(context).textTheme への convenience method です
   TextTheme get texts => Theme.of(this).textTheme;
+  
+  Locator readOrWatch(bool inBuild) {
+    if (inBuild) {
+      return watch;
+    } else {
+      return read;
+    }
+  }
 }
 
 extension StateNotifierEx<T> on StateNotifier<T> {
