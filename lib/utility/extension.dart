@@ -35,7 +35,8 @@ extension DateHelper on DateTime {
   String toJsonString() => toUtc().toIso8601String();
 
   String toElapsedString() {
-    final diff = DateTime.now().difference(this);
+    final now = DateTime.now();
+    final diff = now.difference(this);
 
     if (diff.isNegative) {
       return "";
@@ -49,8 +50,10 @@ extension DateHelper on DateTime {
       return "${diff.inHours}時間前";
     } else if (diff.inDays < 14) {
       return "${diff.inDays}日前";
-    } else {
+    } else if (year == now.year) {
       return toFormatString(format: "MM月dd日");
+    } else {
+      return toFormatString(format: "yy年MM月dd日");
     }
   }
 }
