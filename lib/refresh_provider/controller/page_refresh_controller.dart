@@ -14,8 +14,12 @@ class PageRefreshController<V extends IPagiable<V>, E> extends RefreshController
   PageRefreshController({
     @required this.refresher,
     Duration lifetime,
+    RefreshState<V, E> initialState,
     this.defaultPage = 1,
-  }) : super._(lifetime: lifetime);
+  }) : super._(
+          lifetime: lifetime,
+          initialState: initialState,
+        );
 
   @override
   Stream<RefreshState<V, E>> _doRefresh(RefreshConfig config, RefreshState<V, E> currentState) async* {

@@ -8,12 +8,14 @@ class ForwardNavigationText extends StatelessWidget {
   final Future Function() onTap;
   final Color color;
   final TextStyle style;
+  final EdgeInsets padding;
 
   const ForwardNavigationText({
     @required this.label,
     this.onTap,
     this.color,
     this.style,
+    this.padding = const EdgeInsets.fromLTRB(4, 8, 0, 8),
   });
 
   @override
@@ -29,11 +31,11 @@ class ForwardNavigationText extends StatelessWidget {
           builder: (context, futureBuilder, isFutureBuilding) => InkWell(
             onTap: futureBuilder,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(4, 4, 0, 4),
+              padding: padding,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: AutoSizeText(
                       label,
                       maxLines: 1,

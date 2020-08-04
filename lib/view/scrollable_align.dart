@@ -16,6 +16,7 @@ class ScrollableAlign extends StatelessWidget {
   final bool unfocusWhenTapped;
   final bool disableGrowEffect;
   final bool reverse;
+  final bool scrollBarIsAlwaysShown;
 
   const ScrollableAlign({
     this.alignment = Alignment.topCenter,
@@ -23,6 +24,7 @@ class ScrollableAlign extends StatelessWidget {
     this.padding,
     this.controller,
     this.showScrollBar = false,
+    this.scrollBarIsAlwaysShown = false,
     this.unfocusWhenScrollStarted = false,
     this.unfocusWhenTapped = false,
     this.disableGrowEffect = false,
@@ -58,6 +60,7 @@ class ScrollableAlign extends StatelessWidget {
     if (showScrollBar) {
       ret = Scrollbar(
         child: ret,
+        isAlwaysShown: scrollBarIsAlwaysShown,
       );
     }
 

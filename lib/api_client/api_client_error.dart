@@ -1,4 +1,4 @@
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 abstract class IApiClientError implements Exception {
   ApiClientErrorKind get kind;
@@ -56,12 +56,28 @@ class UnsuccessfulStatusError implements IApiClientError {
   @override
   ApiClientErrorKind get kind => ApiClientErrorKind.UnsuccessfulStatus;
 
-  final Response response;
+  final http.Response response;
 
   const UnsuccessfulStatusError(this.response);
 
+  bool get isContentJson => response != null && response.headers["Content-Type"] == "application/json";
   @override
-  String toString() => "$runtimeType（uri = ${response?.request?.url}, code = ${response?.statusCode?.toString() ?? "null"}, body = ${response?.body ?? "null"}）";
+  String toString() {
+    final url = response?.request?.url;
+    final status = response?.statusCode?.toString() ?? null;
+    final body = response != null && response.headers["Content-Type"] == "application/json" //
+        ? response.body
+        : null;
+
+    return "$runtimeType（uri = $url, code = ${status}, body = $body）";
+  }
+}
+
+/// リクエストを送る前にHttpClientがclosed状態だった
+class ClientClosedError implements IApiClientError {
+  @override
+  ApiClientErrorKind get kind => ApiClientErrorKind.ClientClosed;
+  const ClientClosedError();
 }
 
 /// 想定外のエラー
@@ -83,6 +99,7 @@ enum ApiClientErrorKind {
   InvalidRequest,
   Timeout,
   UnsuccessfulStatus,
+  ClientClosed,
   Json,
   Unknown,
 }
