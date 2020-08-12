@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +7,7 @@ import 'lazy_future_builder.dart';
 
 class ForwardNavigationText extends StatelessWidget {
   final String label;
-  final Future Function() onTap;
+  final FutureOr Function() onTap;
   final Color color;
   final TextStyle style;
   final EdgeInsets padding;
