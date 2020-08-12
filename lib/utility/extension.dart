@@ -138,7 +138,7 @@ extension BuildContextEx on BuildContext {
 
   /// Theme.of(context).textTheme への convenience method です
   TextTheme get texts => Theme.of(this).textTheme;
-  
+
   T readOrWatch<T>(bool inBuild) {
     if (inBuild) {
       return watch<T>();
@@ -175,5 +175,10 @@ extension StateNotifierEx<T> on StateNotifier<T> {
     return sc.stream //
         .doOnDone(() => finallyCallback())
         .doOnCancel(() => finallyCallback());
+  }
+
+  Stream<T> get streamAndStartWith {
+    // ignore: invalid_use_of_protected_member
+    return stream.startWith(state);
   }
 }
