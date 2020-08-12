@@ -23,6 +23,10 @@ extension IntHelper on int {
   }
 }
 
+extension BoolHelper on bool {
+  int get flagInt => this ? 1 : 0;
+}
+
 extension DoubleHelper on double {
   String toCommaString() => NumberFormat("#,###.###").format(this);
 }
