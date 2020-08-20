@@ -8,7 +8,7 @@ class FloatingDialog extends StatelessWidget {
   final EdgeInsets contentPadding;
   final Color backgroundColor;
   final void Function() onClose;
-
+  final EdgeInsetsGeometry verticalMargin;
   const FloatingDialog({
     @required this.child,
     this.onClose,
@@ -17,6 +17,7 @@ class FloatingDialog extends StatelessWidget {
     this.contentPadding = const EdgeInsets.all(24),
     this.widthFactor = 0.8,
     this.backgroundColor = const Color(0x80000000),
+    this.verticalMargin = const EdgeInsets.fromLTRB(0, 48, 0, 48),
   });
 
   @override
@@ -37,8 +38,7 @@ class FloatingDialog extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: constraints.maxWidth * widthFactor, minHeight: constraints.maxHeight),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 48, 0, 48),
-
+                  padding: verticalMargin,
                   /// コンテンツの縦幅は可変にしつつ、親のサイズを画面いっぱいまで伸ばすことで
                   /// コンテンツの高さによらず中央揃えしたい
                   child: Center(

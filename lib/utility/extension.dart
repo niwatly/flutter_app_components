@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart' hide Locator;
 import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -20,6 +21,10 @@ extension IntHelper on int {
     final formatter = DateFormat(format);
     return formatter.format(DateTime.fromMillisecondsSinceEpoch(this * 1000));
   }
+}
+
+extension BoolHelper on bool {
+  int get flagInt => this ? 1 : 0;
 }
 
 extension DoubleHelper on double {
@@ -137,6 +142,14 @@ extension BuildContextEx on BuildContext {
 
   /// Theme.of(context).textTheme への convenience method です
   TextTheme get texts => Theme.of(this).textTheme;
+
+  T readOrWatch<T>(bool inBuild) {
+    if (inBuild) {
+      return watch<T>();
+    } else {
+      return read<T>();
+    }
+  }
 }
 
 extension StateNotifierEx<T> on StateNotifier<T> {
@@ -166,5 +179,10 @@ extension StateNotifierEx<T> on StateNotifier<T> {
     return sc.stream //
         .doOnDone(() => finallyCallback())
         .doOnCancel(() => finallyCallback());
+  }
+
+  Stream<T> get streamAndStartWith {
+    // ignore: invalid_use_of_protected_member
+    return stream.startWith(state);
   }
 }
