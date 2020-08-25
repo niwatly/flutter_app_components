@@ -69,7 +69,7 @@ class UnsuccessfulStatusError implements IApiClientError {
         ? response.body
         : null;
 
-    return "$runtimeType（uri = $url, code = ${status}, body = $body）";
+    return "$runtimeType（uri = $url, code = $status, body = $body）";
   }
 }
 
