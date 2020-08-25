@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_components/inapp_navigation/dialog_route.dart';
-import 'package:flutter_app_components/inapp_navigation/floating_dialog.dart';
+
+import 'dialog_route.dart';
+import 'floating_dialog.dart';
 
 class DialogBuilder extends StatefulWidget {
   final String okLabel;
