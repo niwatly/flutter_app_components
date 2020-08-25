@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'dialog_route.dart';
-import 'floating_dialog.dart';
+import 'package:flutter_app_components/inapp_navigation/dialog_route.dart';
+import 'package:flutter_app_components/inapp_navigation/floating_dialog.dart';
 
 class DialogBuilder extends StatefulWidget {
   final String okLabel;
@@ -14,6 +13,7 @@ class DialogBuilder extends StatefulWidget {
   final TextStyle okStyle;
   final Widget loadingWidget;
   final TextStyle loadingMessageStyle;
+  final Color loadingMessageBackgroundColor;
   final Widget child;
 
   const DialogBuilder({
@@ -27,6 +27,7 @@ class DialogBuilder extends StatefulWidget {
     this.okStyle,
     this.loadingWidget,
     this.loadingMessageStyle,
+    this.loadingMessageBackgroundColor,
     this.child,
     Key key,
   }) : super(key: key);
@@ -154,12 +155,14 @@ class DialogBuilderState extends State<DialogBuilder> {
             WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
           }
 
+          final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
+
           return WillPopScope(
             onWillPop: () async => false,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                widget.loadingWidget ?? CircularProgressIndicator(),
+                widget.loadingWidget ?? const CircularProgressIndicator(),
                 const SizedBox(height: 16),
                 if (message != null && message.isNotEmpty)
                   Padding(
@@ -168,7 +171,7 @@ class DialogBuilderState extends State<DialogBuilder> {
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      color: (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8),
+                      color: color,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         child: Text(
