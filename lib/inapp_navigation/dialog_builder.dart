@@ -122,6 +122,7 @@ class DialogBuilderState extends State<DialogBuilder> {
         builder: (context) => FloatingDialog(
           onClose: () => Navigator.of(context).pop(-1),
           title: title ?? pickTitle,
+          showCloseButton: false,
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
