@@ -187,3 +187,19 @@ extension StateNotifierEx<T> on StateNotifier<T> {
         stream,
       ]);
 }
+
+extension StreamEx<T> on Stream<T> {
+  Stream<List<T>> bufferWhile(Stream<bool> predicate, {bool initialCondition = false}) {
+    final window = Rx.combineLatest2<void, bool, bool>(
+      startWith(null),
+      predicate.startWith(initialCondition),
+      (_, condition) => condition,
+    );
+
+    return buffer(window.where((x) => !x));
+  }
+}
+
+extension BoolStreamEx on Stream<bool> {
+  Stream<bool> not() => map((x) => !x);
+}
