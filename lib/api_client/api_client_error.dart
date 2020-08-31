@@ -11,7 +11,7 @@ class InvalidUriError implements IApiClientError {
 
   final String host;
   final String path;
-  final Map<String, String> query;
+  final Map<String, dynamic> query;
 
   const InvalidUriError(this.host, this.path, this.query);
 
