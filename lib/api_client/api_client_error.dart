@@ -18,7 +18,7 @@ class InvalidUriError implements IApiClientError {
   @override
   String toString() => "$runtimeType（"
       " host = $host, "
-      " path = api/$path, "
+      " path = $path, "
       " query = ${query?.entries?.fold<String>("", (acc, v) => "$acc, (${v.key}: ${v.value})") ?? "null"}, "
       "）";
 }
