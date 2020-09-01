@@ -189,10 +189,10 @@ extension StateNotifierEx<T> on StateNotifier<T> {
 }
 
 extension StreamEx<T> on Stream<T> {
-  Stream<List<T>> bufferWhile(Stream<bool> predicate, {bool initialCondition = false}) {
+  Stream<List<T>> bufferWhile(Stream<bool> predicate) {
     final window = Rx.combineLatest2<void, bool, bool>(
       startWith(null),
-      predicate.startWith(initialCondition),
+      predicate,
       (_, condition) => condition,
     );
 
