@@ -13,12 +13,13 @@ class ForwardNavigationText extends StatelessWidget {
   final EdgeInsets padding;
 
   const ForwardNavigationText({
+    Key key,
     @required this.label,
     this.onTap,
     this.color,
     this.style,
     this.padding = const EdgeInsets.fromLTRB(4, 8, 0, 8),
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
