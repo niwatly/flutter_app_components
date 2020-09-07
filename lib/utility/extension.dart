@@ -181,11 +181,8 @@ extension StateNotifierEx<T> on StateNotifier<T> {
         .doOnCancel(() => finallyCallback());
   }
 
-  Stream<T> get streamAndStartWith => Rx.concat([
-        // ignore: invalid_use_of_protected_member
-        Rx.defer(() => Stream.value(state)),
-        stream,
-      ]);
+  // ignore: invalid_use_of_protected_member
+  Stream<T> get streamAndStartWith => Rx.defer(() => stream.startWith(state));
 }
 
 extension StreamEx<T> on Stream<T> {
