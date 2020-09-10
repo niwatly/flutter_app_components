@@ -9,6 +9,10 @@ abstract class IScreenArguments<T> {
   /// 画面の一致判定や、計測イベントに使用される
   String get screenName;
 
+  /// 画面の名前のフォーマット
+  /// パラメータだけが異なる2つの画面名を同一のもとして判定したい時に使用される
+  String get screenNameFormat;
+
   /// このScreenが画面スタックの最上位になる時に、同じ名前のScreenのpushがリクエストされたら、
   /// pushするのではなくreplaceする
   ///
@@ -33,6 +37,8 @@ extension ScreenArgumentsEx on IScreenArguments {
 
 /// お探しのページは見つかりませんでした
 class RouteNotFoundScreenArguments implements IScreenArguments {
+  static const String name = "/404";
+
   const RouteNotFoundScreenArguments();
 
   @override
@@ -57,9 +63,10 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
       );
 
   @override
-  String get screenName => name;
+  String get screenName => screenNameFormat;
 
-  static const String name = "/404";
+  @override
+  String get screenNameFormat => name;
 
   @override
   bool get isSingleTask => false;
