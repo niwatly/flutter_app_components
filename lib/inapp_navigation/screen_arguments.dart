@@ -24,6 +24,11 @@ abstract class IScreenArguments<T> {
 
 extension ScreenArgumentsEx on IScreenArguments {
   bool get isNotFound => screenName == RouteNotFoundScreenArguments.name;
+
+  RouteSettings get settings => RouteSettings(
+        name: screenName,
+        arguments: this,
+      );
 }
 
 /// お探しのページは見つかりませんでした
