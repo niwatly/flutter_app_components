@@ -7,8 +7,9 @@ class InAppLauncher {
   static Function(dynamic e, StackTrace st) errorCallback;
 
   final InAppRouter router;
+  final List<RegExp> blackListForUnknownUri;
 
-  const InAppLauncher(this.router);
+  const InAppLauncher(this.router, {this.blackListForUnknownUri = const []});
 
   Future<InAppLaunchResult> handleUri({
     @required Uri uri,
@@ -66,6 +67,11 @@ class InAppLauncher {
         }
       }
     } else {
+      for (final e in blackListForUnknownUri) {
+        if (e.hasMatch(uri.toString())) {
+          return InAppLaunchResult.silent();
+        }
+      }
       // 外部アプリ起動のためのCustomUrlSchemeがここにくる（GoogleMapの起動等）
       //
       // アプリ外遷移する（任意のhttpリンクをブラウザで開く）
