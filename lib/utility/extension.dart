@@ -181,8 +181,22 @@ extension StateNotifierEx<T> on StateNotifier<T> {
         .doOnCancel(() => finallyCallback());
   }
 
-  Stream<T> get streamAndStartWith {
-    // ignore: invalid_use_of_protected_member
-    return stream.startWith(state);
+  // ignore: invalid_use_of_protected_member
+  Stream<T> get streamAndStartWith => Rx.defer(() => stream.startWith(state));
+}
+
+extension StreamEx<T> on Stream<T> {
+  Stream<List<T>> bufferWhile(Stream<bool> predicate) {
+    final window = Rx.combineLatest2<void, bool, bool>(
+      startWith(null),
+      predicate,
+      (_, condition) => condition,
+    );
+
+    return buffer(window.where((x) => !x));
   }
+}
+
+extension BoolStreamEx on Stream<bool> {
+  Stream<bool> not() => map((x) => !x);
 }

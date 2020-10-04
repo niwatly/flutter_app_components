@@ -11,14 +11,14 @@ class InvalidUriError implements IApiClientError {
 
   final String host;
   final String path;
-  final Map<String, String> query;
+  final Map<String, dynamic> query;
 
   const InvalidUriError(this.host, this.path, this.query);
 
   @override
   String toString() => "$runtimeType（"
       " host = $host, "
-      " path = api/$path, "
+      " path = $path, "
       " query = ${query?.entries?.fold<String>("", (acc, v) => "$acc, (${v.key}: ${v.value})") ?? "null"}, "
       "）";
 }
@@ -69,7 +69,7 @@ class UnsuccessfulStatusError implements IApiClientError {
         ? response.body
         : null;
 
-    return "$runtimeType（uri = $url, code = ${status}, body = $body）";
+    return "$runtimeType（uri = $url, code = $status, body = $body）";
   }
 }
 
