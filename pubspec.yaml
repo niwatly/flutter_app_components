@@ -23,7 +23,7 @@ dependencies:
 
   # InheritedWidgetを利用した状態管理を楽に行いたい
   # https://pub.dev/packages/provider
-  provider: ^4.3.1
+  provider: ^4.3.2+2
 
   # RxOperatorを使いたい
   # https://pub.dev/packages/rxdart
@@ -44,6 +44,20 @@ dependencies:
   # Textの文字サイズを自動で調整したい
   auto_size_text: ^2.1.0
 
+  # https://pub.dev/packages/in_app_review
+  in_app_review: ^0.2.0+4
+
+  # アプリバージョンとかを取得したい
+  # https://pub.dev/packages/package_info#-installing-tab-
+  package_info: ^0.4.3
+
+  # バージョン値を比較したい
+  # https://pub.dev/packages/version
+  version: ^1.2.0
+
+  # アプリのローカルストレージに値を保存したい
+  # https://pub.dev/packages/shared_preferences
+  shared_preferences: ^0.5.12
 
 dev_dependencies:
   flutter_test:
