@@ -20,18 +20,17 @@ class InAppReviewRestrictor {
 
   Future openStore() async {
     await InAppReview.instance.openStoreListing(appStoreId: appStoreId);
-    _saveLastVersion();
+    await _saveReviewedVersion();
   }
 
   Future requestReview() async {
     await InAppReview.instance.requestReview();
-    _saveLastVersion();
+    await _saveReviewedVersion();
   }
 
   Future<InAppReviewNavigationKind> determineNavigation() async {
     final res = await Future.wait(
       [
-        _getLastVersion(),
         requestReviewVersion,
         PackageInfo.fromPlatform().then((x) => x.version),
         reviewKind,
@@ -39,7 +38,7 @@ class InAppReviewRestrictor {
       ],
     );
 
-    final String _last = res[0];
+    fina _reviewed = await _getReviewedVersions();
     final String _request = res[1];
     final String _current = res[2];
     final InAppReviewNavigationKind kind = res[3];
@@ -55,6 +54,12 @@ class InAppReviewRestrictor {
       return InAppReviewNavigationKind.Silent;
     }
 
+    if (_reviewed == null) {
+      // レビュー済みバージョンの取得に失敗しているので何もしない
+      return InAppReviewNavigationKind.Silent;
+    }
+
+    final reviewed = _reviewed.map((x) => Version.parse(x)).toList(growable: false);
     final request = Version.parse(_request);
     final current = Version.parse(_current);
 
@@ -64,45 +69,57 @@ class InAppReviewRestrictor {
       return InAppReviewNavigationKind.Silent;
     }
 
-    if (_last == null || _last.isEmpty) {
+    if (reviewed.isEmpty) {
       // 要求されているバージョン以上を使っていて、まだ一度もレビューしたことがない
       // 赤
       return kind;
     }
 
-    final last = Version.parse(_last);
-
-    if (last == request) {
+    if (reviewed.contains(request)) {
       // 要求されているバージョンはレビュー済みなので何もしない
       // 黄
       return InAppReviewNavigationKind.Silent;
-    } else if (last < request) {
-      // 過去にレビュー経験があるが、ソレよりも新しいバージョンのレビューがリクエストされている
-      // 緑
-      return kind;
     } else {
-      // lastの値が異常（要求よりも新しいバージョンでレビューしている）
-      // グレー
-      errorCallback?.call(InAppReviewDetermineException.invalidLast(last, request), StackTrace.current);
-      return InAppReviewNavigationKind.Silent;
+      final lastReviewed = reviewed.last;
+      if (lastReviewed < request) {
+        // 過去にレビュー経験があるが、それよりも新しいバージョンのレビューがリクエストされている
+        // 緑
+        return kind;
+      } else {
+        // lastの値が異常（要求よりも新しいバージョンでレビューしている）
+        // グレー
+        errorCallback?.call(InAppReviewDetermineException.invalidLast(lastReviewed, request), StackTrace.current);
+        return InAppReviewNavigationKind.Silent;
+      }
     }
   }
 
-  Future<String> _getLastVersion() async {
+  Future<List<String>> _getReviewedVersions() async {
     try {
       final instance = await SharedPreferences.getInstance();
 
-      return instance.getString(_prefKey);
+      return instance.getStringList(_prefKey) ?? [];
     } catch (e, st) {
       errorCallback?.call(e, st);
       return null;
     }
   }
 
-  Future _saveLastVersion() async {
+  Future _saveReviewedVersion() async {
     try {
+      final versions = await _getReviewedVersions();
+
+      if (versions == null) {
+        return;
+      }
+
       final instance = await SharedPreferences.getInstance();
       final version = await PackageInfo.fromPlatform().then((x) => x.version);
+
+      if (versions.contains(version)) {
+        return;
+      }
+
       instance.setString(_prefKey, version);
     } catch (e, st) {
       errorCallback?.call(e, st);
