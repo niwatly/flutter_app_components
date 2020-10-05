@@ -29,61 +29,61 @@ class InAppReviewRestrictor {
   }
 
   Future<InAppReviewNavigationKind> determineNavigation() async {
-    final res = await Future.wait(
-      [
-        requestReviewVersion,
-        PackageInfo.fromPlatform().then((x) => x.version),
-        reviewKind,
-        InAppReview.instance.isAvailable(),
-      ],
-    );
-
-    final _reviewed = await _getReviewedVersions();
-    final String _request = res[1];
-    final String _current = res[2];
-    final InAppReviewNavigationKind kind = res[3];
-    final bool available = res[4];
+    final available = await InAppReview.instance.isAvailable();
 
     if (!available) {
+      print("InAppReview is not available. determine Silent.");
       // InAppReviewを利用できないので何もしない
       return InAppReviewNavigationKind.Silent;
     }
 
+    final _request = await requestReviewVersion;
+
     if (_request == null || _request.isEmpty) {
+      print("review request version missing. do nothing.");
       // 要求バージョンが存在しない場合は何もしない
       return InAppReviewNavigationKind.Silent;
     }
 
+    final _reviewed = await _getReviewedVersions();
+
     if (_reviewed == null) {
+      print("failed to get reviewed version. do nothing.");
       // レビュー済みバージョンの取得に失敗しているので何もしない
       return InAppReviewNavigationKind.Silent;
     }
 
+    final kind = await reviewKind;
+
     final reviewed = _reviewed.map((x) => Version.parse(x)).toList(growable: false);
     final request = Version.parse(_request);
-    final current = Version.parse(_current);
+    final current = await PackageInfo.fromPlatform().then((x) => Version.parse(x.version));
 
     if (current < request) {
       // 要求されているバージョンよりも古いバージョンを使っているので何もしない
       // 青
+      print("current app version is smaller than review request version. do nothing.");
       return InAppReviewNavigationKind.Silent;
     }
 
     if (reviewed.isEmpty) {
       // 要求されているバージョン以上を使っていて、まだ一度もレビューしたことがない
       // 赤
+      print("current app version can review and not yet. do $kind");
       return kind;
     }
 
     if (reviewed.contains(request)) {
       // 要求されているバージョンはレビュー済みなので何もしない
       // 黄
+      print("current app version already has reviewed. do nothing.");
       return InAppReviewNavigationKind.Silent;
     } else {
       final lastReviewed = reviewed.last;
       if (lastReviewed < request) {
         // 過去にレビュー経験があるが、それよりも新しいバージョンのレビューがリクエストされている
         // 緑
+        print("current app version can re-review and not yet. do $kind");
         return kind;
       } else {
         // lastの値が異常（要求よりも新しいバージョンでレビューしている）
