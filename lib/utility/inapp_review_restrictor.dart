@@ -3,7 +3,8 @@ import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version/version.dart';
 
-const String _prefKey = "flutter_app_components_inapp_review_last";
+const String _prefKeyReviewedVersions = "flutter_app_components_reviewed_versions";
+const String _prefKeyNotNowTime = "flutter_app_components_not_now_time";
 
 class InAppReviewRestrictor {
   static Function(dynamic e, StackTrace st) errorCallback;
@@ -11,11 +12,13 @@ class InAppReviewRestrictor {
   final Future<String> requestReviewVersion;
   final Future<InAppReviewNavigationKind> reviewKind;
   final String appStoreId;
+  final Duration keepSilentFromLastNotNow;
 
   InAppReviewRestrictor({
     this.requestReviewVersion,
     this.reviewKind,
     this.appStoreId,
+    this.keepSilentFromLastNotNow = const Duration(days: 7),
   });
 
   Future openStore() async {
@@ -30,6 +33,12 @@ class InAppReviewRestrictor {
 
   Future denyReview() async {
     await _saveReviewedVersion();
+  }
+
+  Future saveNotNow() async {
+    final instance = await SharedPreferences.getInstance();
+    final str = DateTime.now().toIso8601String();
+    await instance.setString(_prefKeyNotNowTime, str);
   }
 
   Future handleNavigationKind(InAppReviewNavigationKind kind) async {
@@ -51,6 +60,13 @@ class InAppReviewRestrictor {
     if (!available) {
       _log("$runtimeType: InAppReview is not available. determine Silent.");
       // InAppReviewを利用できないので何もしない
+      return InAppReviewNavigationKind.Silent;
+    }
+
+    final lastNotNow = await _getLastNotNow();
+
+    if (lastNotNow != null && DateTime.now().difference(lastNotNow) < keepSilentFromLastNotNow) {
+      // 前回の「あとで」から時間がたっていないので何もしない
       return InAppReviewNavigationKind.Silent;
     }
 
@@ -111,11 +127,28 @@ class InAppReviewRestrictor {
     }
   }
 
+  Future<DateTime> _getLastNotNow() async {
+    final instance = await SharedPreferences.getInstance();
+    final str = instance.getString(_prefKeyNotNowTime);
+
+    if (str == null || str.isEmpty) {
+      return null;
+    }
+    
+    try {
+      return DateTime.parse(str);
+    } catch (e, st) {
+      errorCallback?.call(e, st);
+      await instance.remove(_prefKeyNotNowTime);
+      return null;
+    }
+  }
+
   Future<List<String>> _getReviewedVersions() async {
     try {
       final instance = await SharedPreferences.getInstance();
 
-      return instance.getStringList(_prefKey) ?? [];
+      return instance.getStringList(_prefKeyReviewedVersions) ?? [];
     } catch (e, st) {
       errorCallback?.call(e, st);
       return null;
@@ -137,7 +170,7 @@ class InAppReviewRestrictor {
         return;
       }
 
-      instance.setStringList(_prefKey, [...previousVersions, version]);
+      instance.setStringList(_prefKeyReviewedVersions, [...previousVersions, version]);
     } catch (e, st) {
       errorCallback?.call(e, st);
     }
