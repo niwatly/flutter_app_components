@@ -28,11 +28,24 @@ class InAppReviewRestrictor {
     await _saveReviewedVersion();
   }
 
+  Future handleNavigationKind(InAppReviewNavigationKind kind) async {
+    switch (kind) {
+      case InAppReviewNavigationKind.RequestReview:
+        await requestReview();
+        break;
+      case InAppReviewNavigationKind.OpenStore:
+        await openStore();
+        break;
+      case InAppReviewNavigationKind.Silent:
+        break;
+    }
+  }
+
   Future<InAppReviewNavigationKind> determineNavigation() async {
     final available = await InAppReview.instance.isAvailable();
 
     if (!available) {
-      print("InAppReview is not available. determine Silent.");
+      _log("$runtimeType: InAppReview is not available. determine Silent.");
       // InAppReviewを利用できないので何もしない
       return InAppReviewNavigationKind.Silent;
     }
@@ -40,7 +53,7 @@ class InAppReviewRestrictor {
     final _request = await requestReviewVersion;
 
     if (_request == null || _request.isEmpty) {
-      print("review request version missing. do nothing.");
+      _log("review request version missing. do nothing.");
       // 要求バージョンが存在しない場合は何もしない
       return InAppReviewNavigationKind.Silent;
     }
@@ -48,7 +61,7 @@ class InAppReviewRestrictor {
     final _reviewed = await _getReviewedVersions();
 
     if (_reviewed == null) {
-      print("failed to get reviewed version. do nothing.");
+      _log("failed to get reviewed version. do nothing.");
       // レビュー済みバージョンの取得に失敗しているので何もしない
       return InAppReviewNavigationKind.Silent;
     }
@@ -62,28 +75,28 @@ class InAppReviewRestrictor {
     if (current < request) {
       // 要求されているバージョンよりも古いバージョンを使っているので何もしない
       // 青
-      print("current app version is smaller than review request version. do nothing.");
+      _log("current app version is smaller than review request version. do nothing.");
       return InAppReviewNavigationKind.Silent;
     }
 
     if (reviewed.isEmpty) {
       // 要求されているバージョン以上を使っていて、まだ一度もレビューしたことがない
       // 赤
-      print("current app version can review and not yet. do $kind");
+      _log("current app version can review and not yet. do $kind");
       return kind;
     }
 
     if (reviewed.contains(request)) {
       // 要求されているバージョンはレビュー済みなので何もしない
       // 黄
-      print("current app version already has reviewed. do nothing.");
+      _log("current app version already has reviewed. do nothing.");
       return InAppReviewNavigationKind.Silent;
     } else {
       final lastReviewed = reviewed.last;
       if (lastReviewed < request) {
         // 過去にレビュー経験があるが、それよりも新しいバージョンのレビューがリクエストされている
         // 緑
-        print("current app version can re-review and not yet. do $kind");
+        _log("current app version can re-review and not yet. do $kind");
         return kind;
       } else {
         // lastの値が異常（要求よりも新しいバージョンでレビューしている）
@@ -124,6 +137,10 @@ class InAppReviewRestrictor {
     } catch (e, st) {
       errorCallback?.call(e, st);
     }
+  }
+
+  void _log(String message) {
+    print("$runtimeType: $message");
   }
 }
 
