@@ -28,6 +28,10 @@ class InAppReviewRestrictor {
     await _saveReviewedVersion();
   }
 
+  Future denyReview() async {
+    await _saveReviewedVersion();
+  }
+
   Future handleNavigationKind(InAppReviewNavigationKind kind) async {
     switch (kind) {
       case InAppReviewNavigationKind.RequestReview:
@@ -120,20 +124,20 @@ class InAppReviewRestrictor {
 
   Future _saveReviewedVersion() async {
     try {
-      final versions = await _getReviewedVersions();
+      final previousVersions = await _getReviewedVersions();
 
-      if (versions == null) {
+      if (previousVersions == null) {
         return;
       }
 
       final instance = await SharedPreferences.getInstance();
       final version = await PackageInfo.fromPlatform().then((x) => x.version);
 
-      if (versions.contains(version)) {
+      if (previousVersions.contains(version)) {
         return;
       }
 
-      instance.setString(_prefKey, version);
+      instance.setStringList(_prefKey, [...previousVersions, version]);
     } catch (e, st) {
       errorCallback?.call(e, st);
     }
