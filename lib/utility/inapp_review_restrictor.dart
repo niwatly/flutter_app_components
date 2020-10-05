@@ -38,7 +38,7 @@ class InAppReviewRestrictor {
       ],
     );
 
-    fina _reviewed = await _getReviewedVersions();
+    final _reviewed = await _getReviewedVersions();
     final String _request = res[1];
     final String _current = res[2];
     final InAppReviewNavigationKind kind = res[3];
