@@ -134,7 +134,7 @@ class InAppReviewRestrictor {
     if (str == null || str.isEmpty) {
       return null;
     }
-    
+
     try {
       return DateTime.parse(str);
     } catch (e, st) {
@@ -194,4 +194,19 @@ enum InAppReviewNavigationKind {
   RequestReview,
   OpenStore,
   Silent,
+}
+
+extension InAppReviewNavigationKindEx on InAppReviewNavigationKind {
+  String get jsonValue {
+    switch (this) {
+      case InAppReviewNavigationKind.RequestReview:
+        return "request_review";
+      case InAppReviewNavigationKind.OpenStore:
+        return "open_store";
+      case InAppReviewNavigationKind.Silent:
+        return "silent";
+    }
+
+    return "unknown";
+  }
 }
