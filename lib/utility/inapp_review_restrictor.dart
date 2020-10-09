@@ -64,9 +64,10 @@ class InAppReviewRestrictor {
     }
 
     final lastNotNow = await _getLastNotNow();
-
-    if (lastNotNow != null && DateTime.now().difference(lastNotNow) < keepSilentFromLastNotNow) {
+    final diffFromLastNotNow = DateTime.now().difference(lastNotNow);
+    if (lastNotNow != null && diffFromLastNotNow < keepSilentFromLastNotNow) {
       // 前回の「あとで」から時間がたっていないので何もしない
+      _log("$runtimeType: diff $diffFromLastNotNow is less than $keepSilentFromLastNotNow. determine Silent.");
       return InAppReviewNavigationKind.Silent;
     }
 
