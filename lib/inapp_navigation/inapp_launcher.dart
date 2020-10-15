@@ -26,7 +26,7 @@ class InAppLauncher {
         } else {
           final args = await router.handleUri(uri);
 
-          if (args == null) {
+          if (args is SilentScreenArguments) {
             // 追加で画面を開く必要がない
             // ブラウザで開く必要もないので、何もしない
             return InAppLaunchResult.silent();

@@ -100,7 +100,7 @@ class InAppRouter {
       //背景: RouterはdefaultRouteNameへのroutingに非対応
       //対応: defaultRouteNameがリクエストされたら何もせずに終了する
 
-      return null;
+      return SilentScreenArguments();
     }
 
     IScreenArguments found;

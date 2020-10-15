@@ -75,6 +75,26 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
   bool get isSingleTop => false;
 }
 
+class SilentScreenArguments implements IScreenArguments {
+  @override
+  Route generateRoute() {
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement isSingleTask
+  bool get isSingleTask => throw UnimplementedError();
+
+  @override
+  bool get isSingleTop => throw UnimplementedError();
+
+  @override
+  String get screenName => throw UnimplementedError();
+
+  @override
+  String get screenNameFormat => throw UnimplementedError();
+}
+
 class RouteNotFoundException implements Exception {
   final String message;
 
