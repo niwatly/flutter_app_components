@@ -76,6 +76,8 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
 }
 
 class SilentScreenArguments implements IScreenArguments {
+  const SilentScreenArguments();
+  
   @override
   Route generateRoute() {
     throw UnimplementedError();
