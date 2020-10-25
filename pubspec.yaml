@@ -31,7 +31,7 @@ dependencies:
 
   # 複雑なRoutingを楽に書きたい
   # https://pub.dev/packages/fluro
-  fluro: ^1.6.3
+  fluro: ^1.7.6
 
   # URLを外部ブラウザで開きたい
   # https://pub.dev/packages/url_launcher

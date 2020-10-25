@@ -10,7 +10,7 @@ class RouteState {}
 class InAppRouter {
   static Function(dynamic e, StackTrace st) errorCallback;
 
-  Router _router;
+  FluroRouter _router;
 
   final Map<String, RouteGenerator> routeDefines;
   final String customUrlScheme;
@@ -24,7 +24,8 @@ class InAppRouter {
     this.customUrlScheme,
     this.deepLinkHost,
   }) {
-    _router = Router.appRouter;
+    _router = FluroRouter.appRouter;
+    
 
     final keys = routeDefines.keys.toList();
 
