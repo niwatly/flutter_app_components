@@ -68,8 +68,9 @@ class UnsuccessfulStatusError implements IApiClientError {
     final body = response != null && response.headers["Content-Type"] == "application/json" //
         ? response.body
         : null;
+    final method = response.request.method;
 
-    return "$runtimeType（uri = $url, code = $status, body = $body）";
+    return "$runtimeType（${method.toUpperCase()} $url, code = $status, body = $body）";
   }
 }
 
