@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_components/view/check_box_text.dart';
+import 'package:provider/provider.dart';
 
 import 'dialog_route.dart';
 import 'floating_dialog.dart';
@@ -15,8 +17,10 @@ class DialogBuilder extends StatefulWidget {
   final Widget loadingWidget;
   final TextStyle loadingMessageStyle;
   final Color loadingMessageBackgroundColor;
+  final String doNotShowAgainMessage;
+  
   final Widget child;
-
+  
   const DialogBuilder({
     this.okLabel,
     this.cancelLabel,
@@ -29,10 +33,11 @@ class DialogBuilder extends StatefulWidget {
     this.loadingWidget,
     this.loadingMessageStyle,
     this.loadingMessageBackgroundColor,
+    this.doNotShowAgainMessage,
     this.child,
     Key key,
   }) : super(key: key);
-
+  
   @override
   State<StatefulWidget> createState() => DialogBuilderState();
 }
@@ -44,10 +49,11 @@ class DialogBuilderState extends State<DialogBuilder> {
   String get confirmTitle => widget.confirmTitle ?? "Confirm";
   String get pickTitle => widget.pickTitle ?? "Select one";
   String get askTitle => widget.askTitle ?? "Ask";
-
+  String get doNotShowAgainMessage => widget.doNotShowAgainMessage ?? "Do not show again";
+  
   Route error(
-    String message,
-  ) =>
+      String message,
+      ) =>
       DialogRoute(
         builder: (context) => _createDialog(
           context: context,
@@ -64,10 +70,10 @@ class DialogBuilderState extends State<DialogBuilder> {
           ],
         ),
       );
-
+  
   Route confirm(
-    String message,
-  ) =>
+      String message,
+      ) =>
       DialogRoute(
         builder: (context) => _createDialog(
           context: context,
@@ -84,7 +90,48 @@ class DialogBuilderState extends State<DialogBuilder> {
           ],
         ),
       );
-
+  
+  Route<bool> confirmWithDoNotShowAgain(
+      String message,
+      ) =>
+      DialogRoute<bool>(
+        builder: (context) => ChangeNotifierProvider<_CheckBoxNotifier>(
+          create: (context) => _CheckBoxNotifier(false),
+          builder: (context, _) => AlertDialog(
+            contentPadding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 0.0),
+            title: Text(confirmTitle),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    message,
+                  ),
+                ),
+                const SizedBox(height: 36),
+                CheckBoxText(
+                  checkBoxValue: context.watch<_CheckBoxNotifier>().value,
+                  onChanged: (v) => context.read<_CheckBoxNotifier>().value = v,
+                  label: doNotShowAgainMessage,
+                  affinity: ListTileControlAffinity.leading,
+                ),
+              ],
+            ),
+            actions: [
+              FlatButton(
+                child: Text(
+                  okLabel,
+                  style: widget.okStyle,
+                ),
+                onPressed: () => Navigator.of(context).pop(context.read<_CheckBoxNotifier>().value),
+              ),
+            ],
+          ),
+        ),
+      );
+  
   Route<bool> ask({
     String title,
     String message,
@@ -112,12 +159,12 @@ class DialogBuilderState extends State<DialogBuilder> {
           ],
         ),
       );
-
+  
   Route<int> pick(
-    List<String> candidates, {
-    String title,
-    String message,
-  }) =>
+      List<String> candidates, {
+        String title,
+        String message,
+      }) =>
       DialogRoute<int>(
         builder: (context) => FloatingDialog(
           onClose: () => Navigator.of(context).pop(-1),
@@ -144,7 +191,7 @@ class DialogBuilderState extends State<DialogBuilder> {
           ),
         ),
       );
-
+  
   Route loading<T>({
     Future<T> future,
     String message,
@@ -156,9 +203,9 @@ class DialogBuilderState extends State<DialogBuilder> {
           if (snapshot.connectionState == ConnectionState.done) {
             WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
           }
-
+          
           final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
-
+          
           return WillPopScope(
             onWillPop: () async => false,
             child: Column(
@@ -191,7 +238,7 @@ class DialogBuilderState extends State<DialogBuilder> {
       barrierDismissible: false,
     );
   }
-
+  
   AlertDialog _createDialog({
     BuildContext context,
     String title,
@@ -205,9 +252,11 @@ class DialogBuilderState extends State<DialogBuilder> {
         ),
         actions: actions,
       );
-
+  
   @override
   Widget build(BuildContext context) {
     return widget.child;
   }
 }
+
+class _CheckBoxNotifier = ValueNotifier<bool> with Type;
