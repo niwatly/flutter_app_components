@@ -10,6 +10,8 @@ import 'package:path_provider/path_provider.dart';
 import 'extension.dart';
 
 class MultipartFileHelper {
+  static Function (dynamic e, StackTrace st) onErrorCallback;
+  
   static Future<MultipartFile> createMultipartFileWithoutExif({
     @required String multipartFieldKey,
     @required String multipartFilename,
@@ -147,7 +149,7 @@ class MultipartFileHelper {
       // 問題: ファイル形式を知るのが難しい
       // 対応: デコーダが見つかればデコーダ、見つからなければファイル名で形式を決める（結局バグると思うがやらないよりましかな？程度）
       final ex = Exception("decorder not found");
-      //recordError(ex, StackTrace.current, params: {"filetype_by_filename": filePathForDecoderNotFound});
+      onErrorCallback?.call(ex, StackTrace.current);
       return EncodeResult(input, filePathForDecoderNotFound);
     } else if (decoder is image.GifDecoder) {
       // GifアニメーションをdecodeImageするとアニメーションが失われてしまうので何もせずに終了する
@@ -179,7 +181,7 @@ class MultipartFileHelper {
     } catch (e, st) {
       // 背景: findDecoderForDataはJpegとして判定したが、JpegDecoder.decodeImageを実行するとエラーになるデータがある
       // 対応: エラーが出たら何もせずに終了する
-      //recordError(e, st, params: {"filetype_by_filename": type});
+      onErrorCallback?.call(e, st);
       return EncodeResult(input, filePathForDecoderNotFound);
     }
   }
