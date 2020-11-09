@@ -12,7 +12,8 @@ class RadioBoxText<T> extends StatelessWidget {
   final EdgeInsets padding;
   final ListTileControlAffinity affinity;
   final bool expandBetweenCheckAndLabel;
-  
+  final TextStyle descriptionTextStyle;
+
   const RadioBoxText({
     @required this.label,
     @required this.onChanged,
@@ -25,8 +26,9 @@ class RadioBoxText<T> extends StatelessWidget {
     this.padding,
     this.affinity = ListTileControlAffinity.trailing,
     this.expandBetweenCheckAndLabel = true,
+    this.descriptionTextStyle,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final radio = Radio<T>(
@@ -43,10 +45,10 @@ class RadioBoxText<T> extends StatelessWidget {
           children: [
             /// radio (if leading)
             if (affinity == ListTileControlAffinity.leading) radio else const SizedBox(width: 16),
-            
+
             /// leading
             if (leading != null) leading,
-            
+
             /// label
             _FlexibleOrExpand(
               expand: expandBetweenCheckAndLabel,
@@ -59,8 +61,8 @@ class RadioBoxText<T> extends StatelessWidget {
                     maxLines: 2,
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.bodyText2.apply(
-                      color: disable ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyText2.color,
-                    ),
+                          color: disable ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyText2.color,
+                        ),
                   ),
                   const SizedBox(height: 2),
                   if (description != null)
@@ -68,15 +70,15 @@ class RadioBoxText<T> extends StatelessWidget {
                       description,
                       maxLines: 5,
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.caption,
+                      style: descriptionTextStyle ?? Theme.of(context).textTheme.caption,
                     ),
                 ],
               ),
             ),
-            
+
             /// secondary
             if (secondary != null) secondary,
-            
+
             /// radio (if trailing)
             if (affinity == ListTileControlAffinity.trailing) radio else const SizedBox(width: 16),
           ],
@@ -89,12 +91,12 @@ class RadioBoxText<T> extends StatelessWidget {
 class _FlexibleOrExpand extends StatelessWidget {
   final bool expand;
   final Widget child;
-  
+
   const _FlexibleOrExpand({
     this.expand,
     this.child,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     if (expand) {

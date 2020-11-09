@@ -11,7 +11,8 @@ class CheckBoxText extends StatelessWidget {
   final EdgeInsets padding;
   final ListTileControlAffinity affinity;
   final bool expandBetweenCheckAndLabel;
-  
+  final TextStyle descriptionTextStyle;
+
   const CheckBoxText({
     @required this.label,
     @required this.onChanged,
@@ -23,8 +24,9 @@ class CheckBoxText extends StatelessWidget {
     this.description,
     this.disable = false,
     this.affinity = ListTileControlAffinity.trailing,
+    this.descriptionTextStyle,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final checkbox = Checkbox(
@@ -40,10 +42,10 @@ class CheckBoxText extends StatelessWidget {
           children: [
             /// checkbox (if leading)
             if (affinity == ListTileControlAffinity.leading) checkbox else const SizedBox(width: 16),
-            
+
             /// leading
             if (leading != null) leading,
-            
+
             /// label
             _FlexibleOrExpand(
               expand: expandBetweenCheckAndLabel,
@@ -56,8 +58,8 @@ class CheckBoxText extends StatelessWidget {
                     maxLines: 2,
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.bodyText2.apply(
-                      color: disable ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyText2.color,
-                    ),
+                          color: disable ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyText2.color,
+                        ),
                   ),
                   const SizedBox(height: 2),
                   if (description != null)
@@ -65,15 +67,15 @@ class CheckBoxText extends StatelessWidget {
                       description,
                       maxLines: 5,
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.caption,
+                      style: descriptionTextStyle ?? Theme.of(context).textTheme.caption,
                     ),
                 ],
               ),
             ),
-            
+
             /// secondary
             if (secondary != null) secondary,
-            
+
             /// checkbox (if trailing)
             if (affinity == ListTileControlAffinity.trailing) checkbox else const SizedBox(width: 16),
           ],
@@ -86,12 +88,12 @@ class CheckBoxText extends StatelessWidget {
 class _FlexibleOrExpand extends StatelessWidget {
   final bool expand;
   final Widget child;
-  
+
   const _FlexibleOrExpand({
     this.expand,
     this.child,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     if (expand) {
