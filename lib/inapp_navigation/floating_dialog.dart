@@ -29,74 +29,76 @@ class FloatingDialog extends StatelessWidget {
       backgroundColor: backgroundColor,
       
       /// 枠外タップでダイアログを消したい
-      body: GestureDetector(
-        onTap: onClose ?? () => Navigator.of(context).pop(),
-        child: LayoutBuilder(
-          /// コンテンツの高さが画面幅を超えるときはスクロールさせたい
-          builder: (context, constraints) => SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-            
-            /// コンテンツの横幅を0.8倍にして中央に表示したい
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: constraints.maxWidth * widthFactor, minHeight: constraints.maxHeight),
-                child: Padding(
-                  padding: verticalMargin,
-                  
-                  /// コンテンツの縦幅は可変にしつつ、親のサイズを画面いっぱいまで伸ばすことで
-                  /// コンテンツの高さによらず中央揃えしたい
-                  child: Center(
-                    /// コンテンツがクリックされてもダイアログを消したくない（Scaffold直下のGestureDetectorまで伝搬してしまう）
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Material(
-                        borderRadius: cornerRadius,
-                        color: DialogTheme.of(context).backgroundColor,
-                        child: ClipRRect(
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: onClose ?? () => Navigator.of(context).pop(),
+          child: LayoutBuilder(
+            /// コンテンツの高さが画面幅を超えるときはスクロールさせたい
+            builder: (context, constraints) => SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+              
+              /// コンテンツの横幅を0.8倍にして中央に表示したい
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: constraints.maxWidth * widthFactor, minHeight: constraints.maxHeight),
+                  child: Padding(
+                    padding: verticalMargin,
+                    
+                    /// コンテンツの縦幅は可変にしつつ、親のサイズを画面いっぱいまで伸ばすことで
+                    /// コンテンツの高さによらず中央揃えしたい
+                    child: Center(
+                      /// コンテンツがクリックされてもダイアログを消したくない（Scaffold直下のGestureDetectorまで伝搬してしまう）
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Material(
                           borderRadius: cornerRadius,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (showCloseButton || title != null)
-                                Row(
-                                  children: [
-                                    if (showCloseButton)
-                                      IconButton(
-                                        padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
-                                        icon: const Icon(
-                                          Icons.close,
+                          color: DialogTheme.of(context).backgroundColor,
+                          child: ClipRRect(
+                            borderRadius: cornerRadius,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (showCloseButton || title != null)
+                                  Row(
+                                    children: [
+                                      if (showCloseButton)
+                                        IconButton(
+                                          padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
+                                          icon: const Icon(
+                                            Icons.close,
+                                          ),
+                                          onPressed: onClose ?? () => Navigator.of(context).pop(),
                                         ),
-                                        onPressed: onClose ?? () => Navigator.of(context).pop(),
-                                      ),
-                                    if (title != null) //
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: Text(
-                                            title,
-                                            maxLines: 2,
-                                            textAlign: TextAlign.left,
-                                            style: DialogTheme.of(context).titleTextStyle,
+                                      if (title != null) //
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Text(
+                                              title,
+                                              maxLines: 2,
+                                              textAlign: TextAlign.left,
+                                              style: DialogTheme.of(context).titleTextStyle,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                  ],
-                                )
-                              else
-                                SizedBox(height: contentPadding.top),
-                              
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: contentPadding.left,
-                                  right: contentPadding.right,
+                                    ],
+                                  )
+                                else
+                                  SizedBox(height: contentPadding.top),
+                                
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: contentPadding.left,
+                                    right: contentPadding.right,
+                                  ),
+                                  child: child,
                                 ),
-                                child: child,
-                              ),
-                              SizedBox(
-                                height: contentPadding.bottom,
-                              ),
-                            ],
+                                SizedBox(
+                                  height: contentPadding.bottom,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
