@@ -32,8 +32,8 @@ class RadioBoxText<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radio = Radio<T>(
-      value: radioCurrentValue,
-      groupValue: radioMyValue,
+      value: radioMyValue,
+      groupValue: radioCurrentValue,
       onChanged: disable ? null : (v) => onChanged(v),
     );
     return InkWell(
