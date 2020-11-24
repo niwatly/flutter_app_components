@@ -45,15 +45,15 @@ dependencies:
   auto_size_text: ^2.1.0
 
   # https://pub.dev/packages/in_app_review
-  in_app_review: ^1.0.1+1
+  in_app_review: ^1.0.3
 
   # アプリバージョンとかを取得したい
   # https://pub.dev/packages/package_info#-installing-tab-
-  package_info: ^0.4.3
+  package_info: ^0.4.3+2
 
   # 一時ディレクトリを取得するのに使用
   # https://pub.dev/packages/path_provider
-  path_provider: ^1.6.22
+  path_provider: ^1.6.24
 
   # バージョン値を比較したい
   # https://pub.dev/packages/version
@@ -61,11 +61,15 @@ dependencies:
 
   # アプリのローカルストレージに値を保存したい
   # https://pub.dev/packages/shared_preferences
-  shared_preferences: ^0.5.12+2
+  shared_preferences: ^0.5.12+4
 
   # 画像からexifを削除したい
   # https://pub.dev/packages/image
-  image: ^2.1.18
+  image: ^2.1.19
+
+  # 指定したWidgetにフォーカスするOverlay形式のUI表現を楽に作りたい
+  # https://pub.dev/packages/tutorial_coach_mark
+  tutorial_coach_mark: ^0.5.1
 
 dev_dependencies:
   flutter_test:
