@@ -3,15 +3,16 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image/image.dart' as image;
 import 'package:path_provider/path_provider.dart';
+
 import 'extension.dart';
 
 class MultipartFileHelper {
-  static Function (dynamic e, StackTrace st) onErrorCallback;
-  
+  static Function(dynamic e, StackTrace st) onErrorCallback;
+
   static Future<MultipartFile> createMultipartFileWithoutExif({
     @required String multipartFieldKey,
     @required String multipartFilename,

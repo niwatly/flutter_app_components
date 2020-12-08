@@ -18,9 +18,9 @@ class DialogBuilder extends StatefulWidget {
   final TextStyle loadingMessageStyle;
   final Color loadingMessageBackgroundColor;
   final String doNotShowAgainMessage;
-  
+
   final Widget child;
-  
+
   const DialogBuilder({
     this.okLabel,
     this.cancelLabel,
@@ -37,7 +37,7 @@ class DialogBuilder extends StatefulWidget {
     this.child,
     Key key,
   }) : super(key: key);
-  
+
   @override
   State<StatefulWidget> createState() => DialogBuilderState();
 }
@@ -50,10 +50,10 @@ class DialogBuilderState extends State<DialogBuilder> {
   String get pickTitle => widget.pickTitle ?? "Select one";
   String get askTitle => widget.askTitle ?? "Ask";
   String get doNotShowAgainMessage => widget.doNotShowAgainMessage ?? "Do not show again";
-  
+
   Route error(
-      String message,
-      ) =>
+    String message,
+  ) =>
       DialogRoute(
         builder: (context) => _createDialog(
           context: context,
@@ -70,10 +70,10 @@ class DialogBuilderState extends State<DialogBuilder> {
           ],
         ),
       );
-  
+
   Route confirm(
-      String message,
-      ) =>
+    String message,
+  ) =>
       DialogRoute(
         builder: (context) => _createDialog(
           context: context,
@@ -90,10 +90,10 @@ class DialogBuilderState extends State<DialogBuilder> {
           ],
         ),
       );
-  
+
   Route<bool> confirmWithDoNotShowAgain(
-      String message,
-      ) =>
+    String message,
+  ) =>
       DialogRoute<bool>(
         builder: (context) => ChangeNotifierProvider<_CheckBoxNotifier>(
           create: (context) => _CheckBoxNotifier(false),
@@ -131,7 +131,7 @@ class DialogBuilderState extends State<DialogBuilder> {
           ),
         ),
       );
-  
+
   Route<bool> ask({
     String title,
     String message,
@@ -159,12 +159,12 @@ class DialogBuilderState extends State<DialogBuilder> {
           ],
         ),
       );
-  
+
   Route<int> pick(
-      List<String> candidates, {
-        String title,
-        String message,
-      }) =>
+    List<String> candidates, {
+    String title,
+    String message,
+  }) =>
       DialogRoute<int>(
         builder: (context) => FloatingDialog(
           onClose: () => Navigator.of(context).pop(-1),
@@ -191,7 +191,7 @@ class DialogBuilderState extends State<DialogBuilder> {
           ),
         ),
       );
-  
+
   Route loading<T>({
     Future<T> future,
     String message,
@@ -203,9 +203,9 @@ class DialogBuilderState extends State<DialogBuilder> {
           if (snapshot.connectionState == ConnectionState.done) {
             WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
           }
-          
+
           final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
-          
+
           return WillPopScope(
             onWillPop: () async => false,
             child: Column(
@@ -238,7 +238,7 @@ class DialogBuilderState extends State<DialogBuilder> {
       barrierDismissible: false,
     );
   }
-  
+
   AlertDialog _createDialog({
     BuildContext context,
     String title,
@@ -252,7 +252,7 @@ class DialogBuilderState extends State<DialogBuilder> {
         ),
         actions: actions,
       );
-  
+
   @override
   Widget build(BuildContext context) {
     return widget.child;

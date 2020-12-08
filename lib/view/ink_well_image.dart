@@ -5,12 +5,12 @@ import 'package:flutter_app_components/view/trace_stack.dart';
 class InkWellImage extends StatelessWidget {
   final WidgetBuilder imageBuilder;
   final Future Function() onTap;
-  
+
   const InkWellImage({
     this.imageBuilder,
     this.onTap,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return TraceStack(

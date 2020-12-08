@@ -37,8 +37,7 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
     Rx.merge([
       _requestLifetimeRefreshSub.flatMap((x) => x).map((x) => RefreshConfig()),
       _requestConfigRefreshSub.flatMap((x) => x),
-    ]).listen((x) => requestLifetimeRefresh(config: x))
-      ..addTo(_compositeSubscription);
+    ]).listen((x) => requestLifetimeRefresh(config: x)).addTo(_compositeSubscription);
   }
 
   @override
@@ -99,7 +98,7 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
       // リフレッシュ命令を処理中なので更新しない
       return false;
     }
-    
+
     if (config.resetLifetime) {
       // 強制ロードが要求されたので更新する
       return true;

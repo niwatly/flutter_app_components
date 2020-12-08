@@ -125,7 +125,7 @@ class _Notifier extends ValueNotifier<_State> {
     //     : この間を無視しないと、3ページ目を読み込んだ直後に4ページ目も読み込まれてしまう
     // 対応: 少し待つ
     await Future.delayed(const Duration(milliseconds: 200));
-    
+
     if (disposed) {
       return;
     }

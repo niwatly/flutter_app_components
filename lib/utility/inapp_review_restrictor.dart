@@ -67,7 +67,7 @@ class InAppReviewRestrictor {
 
     if (lastNotNow != null) {
       final diffFromLastNotNow = DateTime.now().difference(lastNotNow);
-      
+
       if (lastNotNow != null && diffFromLastNotNow < keepSilentFromLastNotNow) {
         // 前回の「あとで」から時間がたっていないので何もしない
         _log("$runtimeType: diff $diffFromLastNotNow is less than $keepSilentFromLastNotNow. determine Silent.");

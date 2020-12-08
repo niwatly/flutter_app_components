@@ -26,7 +26,6 @@ class InAppRouter {
     this.deepLinkHost,
   }) {
     _router = FluroRouter.appRouter;
-    
 
     final keys = routeDefines.keys.toList();
 

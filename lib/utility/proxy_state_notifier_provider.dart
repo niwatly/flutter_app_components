@@ -6,39 +6,39 @@ import 'package:state_notifier/state_notifier.dart';
 class ProxyStateNotifier<T> extends StateNotifier<T> with LocatorMixin {
   final T Function(Locator locator) create;
   final UpdateShouldNotify<T> updateShouldNotify;
-  
+
   ProxyStateNotifier({
     T initialValue,
     @required this.create,
     this.updateShouldNotify,
   }) : super(initialValue);
-  
+
   @override
   void initState() {
     super.initState();
-    
+
     _updateState(read);
   }
-  
+
   @override
   void update(T Function<T>() watch) {
     super.update(watch);
-    
+
     _updateState(watch);
   }
-  
+
   void _updateState(Locator locator) {
     final oldState = state;
     final newState = create(locator);
-    
+
     var shouldNotify = false;
-    
+
     if (updateShouldNotify != null) {
       shouldNotify = updateShouldNotify(oldState, newState);
     } else {
       shouldNotify = oldState != newState;
     }
-    
+
     if (shouldNotify) {
       state = newState;
     }
