@@ -36,11 +36,14 @@ class CursorRefreshController<C, V extends ICursorable<V, C>, E> extends Refresh
         isRefreshing: false,
         initialRefreshCompleted: true,
       );
-    } on E catch (e) {
+    } on E catch (e, st) {
       yield currentState = currentState.copyWith(
         error: e,
         isRefreshing: false,
       );
+      if (RefreshController.notifyErrorEvenExpected) {
+        RefreshController.errorCallback?.call(e, st);
+      }
     } catch (e, st) {
       RefreshController.errorCallback?.call(e, st);
     }

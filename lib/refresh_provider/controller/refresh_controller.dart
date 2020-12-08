@@ -11,6 +11,7 @@ part 'simple_refresh_controller.dart';
 
 abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>> {
   static Function(dynamic e, StackTrace st) errorCallback;
+  static bool notifyErrorEvenExpected = false;
 
   Duration lifetime;
 

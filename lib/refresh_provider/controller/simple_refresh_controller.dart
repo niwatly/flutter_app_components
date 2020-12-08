@@ -39,11 +39,14 @@ class SimpleRefreshController<V, E> extends RefreshController<V, E> {
         isRefreshing: false,
         initialRefreshCompleted: true,
       );
-    } on E catch (e) {
+    } on E catch (e, st) {
       yield currentState = currentState.copyWith(
         error: e,
         isRefreshing: false,
       );
+      if (RefreshController.notifyErrorEvenExpected) {
+        RefreshController.errorCallback?.call(e, st);
+      }
     } catch (e, st) {
       RefreshController.errorCallback?.call(e, st);
     }

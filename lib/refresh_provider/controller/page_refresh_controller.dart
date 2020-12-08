@@ -47,11 +47,15 @@ class PageRefreshController<V extends IPagiable<V>, E> extends RefreshController
 
       // ページングに成功したのでページ番号を更新する
       currentPage = nextPage;
-    } on E catch (e) {
+    } on E catch (e, st) {
       yield currentState = currentState.copyWith(
         error: e,
         isRefreshing: false,
       );
+
+      if (RefreshController.notifyErrorEvenExpected) {
+        RefreshController.errorCallback?.call(e, st);
+      }
     } catch (e, st) {
       RefreshController.errorCallback?.call(e, st);
     }
