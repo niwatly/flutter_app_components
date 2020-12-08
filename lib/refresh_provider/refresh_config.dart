@@ -10,8 +10,16 @@ class RefreshConfig {
   });
 }
 
-abstract class IPagiable<T> {
-  T merge(T newOne);
+abstract class IContinuable<R> {
+  R merge(R newOne);
+}
+
+abstract class IPagiable<R> implements IContinuable<R> {
   bool get hasMore;
   int get page;
+}
+
+abstract class ICursorable<R, C> implements IContinuable<R> {
+  bool get hasMore;
+  C get cursor;
 }
