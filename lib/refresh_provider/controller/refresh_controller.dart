@@ -5,9 +5,9 @@ import 'package:state_notifier/state_notifier.dart';
 import '../refresh_config.dart';
 import '../refresh_state.dart';
 
-part 'simple_refresh_controller.dart';
-part 'page_refresh_controller.dart';
 part 'cursor_refresh_controller.dart';
+part 'page_refresh_controller.dart';
+part 'simple_refresh_controller.dart';
 
 abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>> {
   static Function(dynamic e, StackTrace st) errorCallback;
