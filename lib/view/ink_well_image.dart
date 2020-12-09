@@ -7,7 +7,7 @@ import 'package:flutter_app_components/view/trace_stack.dart';
 class InkWellImage extends StatelessWidget {
   final WidgetBuilder imageBuilder;
   final FutureOr Function() onTap;
-  final Alignemnt alignment;
+  final Alignment alignment;
 
   const InkWellImage({
     this.imageBuilder,
