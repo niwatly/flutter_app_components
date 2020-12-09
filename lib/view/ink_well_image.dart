@@ -7,15 +7,18 @@ import 'package:flutter_app_components/view/trace_stack.dart';
 class InkWellImage extends StatelessWidget {
   final WidgetBuilder imageBuilder;
   final FutureOr Function() onTap;
+  final Alignemnt alignment;
 
   const InkWellImage({
     this.imageBuilder,
     this.onTap,
+    this.alignment = Alignment.center,
   });
 
   @override
   Widget build(BuildContext context) {
     return TraceStack(
+      alignment: alignment,
       children: [
         TraceStackChild.base(
           child: imageBuilder(context),
