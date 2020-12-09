@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_components/view/lazy_future_builder.dart';
 import 'package:flutter_app_components/view/trace_stack.dart';
 
 class InkWellImage extends StatelessWidget {
   final WidgetBuilder imageBuilder;
-  final Future Function() onTap;
+  final FutureOr Function() onTap;
 
   const InkWellImage({
     this.imageBuilder,
