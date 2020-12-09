@@ -23,15 +23,15 @@ dependencies:
 
   # InheritedWidgetを利用した状態管理を楽に行いたい
   # https://pub.dev/packages/provider
-  provider: ^4.3.2+2
+  provider: ^4.3.2+3
 
   # RxOperatorを使いたい
   # https://pub.dev/packages/rxdart
-  rxdart: ^0.24.1
+  rxdart: ^0.25.0
 
   # 複雑なRoutingを楽に書きたい
   # https://pub.dev/packages/fluro
-  fluro: ^1.7.7
+  fluro: ^1.7.8
 
   # URLを外部ブラウザで開きたい
   # https://pub.dev/packages/url_launcher
@@ -45,7 +45,7 @@ dependencies:
   auto_size_text: ^2.1.0
 
   # https://pub.dev/packages/in_app_review
-  in_app_review: ^1.0.3
+  in_app_review: ^1.0.4
 
   # アプリバージョンとかを取得したい
   # https://pub.dev/packages/package_info#-installing-tab-
