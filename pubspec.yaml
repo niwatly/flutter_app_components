@@ -44,6 +44,10 @@ dependencies:
   # Textの文字サイズを自動で調整したい
   auto_size_text: ^2.1.0
 
+  # providerの代替
+  # http://pub.dev/packages/riverpod
+  flutter_riverpod: ^0.12.1
+
   # https://pub.dev/packages/in_app_review
   in_app_review: ^1.0.4
 
