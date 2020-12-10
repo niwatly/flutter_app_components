@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/all.dart';
 
 import 'controller/refresh_controller.dart';
 import 'refresh_state.dart';
@@ -35,16 +34,13 @@ class RefreshSelector<V, E> extends StatelessWidget {
   /// [onValue]と[onError]と[onLoading]をStackで重ねるときのfitパラメータ
   final StackFit fit;
 
-  /// [RefreshController] の生成方法
-  ///
-  /// 指定されなかった場合は、すでに上位で[RefreshController]が宣言されていると仮定し、[StateNotifierProvider]の宣言をSkipする
-  final RefreshController<V, E> Function(BuildContext context) controller;
+  final StateNotifierProvider<RefreshController<V, E>> refreshControllerProvider;
 
   const RefreshSelector({
     @required this.onValue,
+    @required this.refreshControllerProvider,
     this.onError,
     this.onLoading,
-    this.controller,
     this.enablePullRefresh = false,
     this.disableLoading = false,
     this.fit = StackFit.passthrough,
@@ -52,55 +48,59 @@ class RefreshSelector<V, E> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget ret = Stack(
-      fit: fit,
-      children: [
-        Selector<RefreshState<V, E>, E>(
-          selector: (context, x) => x.value == null ? x.error : null,
-          builder: (context, value, child) => value != null && onError != null ? onError(context, value) : const SizedBox(width: 0, height: 0),
-        ),
-        Selector<RefreshState<V, E>, V>(
-          selector: (context, x) => x.value,
-          builder: (context, value, child) => value != null ? onValue(context, value) : const SizedBox(width: 0, height: 0),
-        ),
-        if (!disableLoading)
-          Selector<RefreshState<V, E>, bool>(
-            selector: (context, x) => x.isRefreshing,
-            builder: (context, value, child) => AnimatedOpacity(
-              opacity: value ? 1 : 0,
-              duration: const Duration(milliseconds: 200),
-              child: Offstage(
-                offstage: !value,
-                child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
-              ),
+    return Consumer(
+      builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget child) {
+        Widget ret = Stack(
+          fit: fit,
+          children: [
+            Consumer(
+              builder: (context, watch, child) {
+                final errorValue = watch<E>(refreshControllerProvider.state.select<E>((x) => x.value == null ? x.error : null));
+                return errorValue != null && onError != null ? onError(context, errorValue) : const SizedBox(width: 0, height: 0);
+              },
             ),
-          ),
-      ],
+            Consumer(
+              builder: (context, watch, child) {
+                final value = watch<V>(refreshControllerProvider.state.select<V>((x) => x.value));
+                return value != null ? onValue(context, value) : const SizedBox(width: 0, height: 0);
+              },
+            ),
+            if (!disableLoading)
+              Consumer(
+                builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget child) {
+                  final isRefreshing = watch<bool>(refreshControllerProvider.state.select((value) => value.isRefreshing));
+                  return AnimatedOpacity(
+                    opacity: isRefreshing ? 1 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Offstage(
+                      offstage: !isRefreshing,
+                      child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
+                    ),
+                  );
+                },
+              ),
+          ],
+        );
+
+        if (enablePullRefresh) {
+          ret = _Refresh<V, E>(ret, watch<RefreshController>(refreshControllerProvider));
+        }
+        return ret;
+      },
     );
-
-    if (enablePullRefresh) {
-      ret = _Refresh<V, E>(ret);
-    }
-
-    if (controller != null) {
-      ret = StateNotifierProvider<RefreshController<V, E>, RefreshState<V, E>>.value(
-        value: controller(context),
-        child: ret,
-      );
-    }
-
-    return ret;
   }
 }
 
 class _Refresh<V, E> extends StatelessWidget {
   final Widget child;
-  const _Refresh(this.child);
+  final RefreshController<V, E> controller;
+
+  const _Refresh(this.child, this.controller);
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => context.read<RefreshController<V, E>>().requestCleanRefresh(silent: true),
+      onRefresh: () => controller.requestCleanRefresh(silent: true),
       child: child,
     );
   }
