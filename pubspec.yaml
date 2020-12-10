@@ -27,7 +27,7 @@ dependencies:
 
   # RxOperatorを使いたい
   # https://pub.dev/packages/rxdart
-  rxdart: ^0.24.1
+  rxdart: ^0.25.0
 
   # 複雑なRoutingを楽に書きたい
   # https://pub.dev/packages/fluro
