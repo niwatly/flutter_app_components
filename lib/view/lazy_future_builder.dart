@@ -24,6 +24,10 @@ class LazyFutureBuilder extends StatelessWidget {
               return;
             }
 
+            if (futureBuilder == null) {
+              return;
+            }
+
             try {
               notifier.value = true;
               await futureBuilder();
