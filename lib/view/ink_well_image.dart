@@ -23,17 +23,18 @@ class InkWellImage extends StatelessWidget {
         TraceStackChild.base(
           child: imageBuilder(context),
         ),
-        TraceStackChild.follow(
-          child: LazyFutureBuilder(
-            futureBuilder: onTap,
-            builder: (context, futureBuilder, isFutureBuilding) => Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                onTap: futureBuilder,
+        if (onTap != null)
+          TraceStackChild.follow(
+            child: LazyFutureBuilder(
+              futureBuilder: onTap,
+              builder: (context, futureBuilder, isFutureBuilding) => Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  onTap: futureBuilder,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
