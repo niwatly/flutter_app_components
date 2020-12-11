@@ -55,20 +55,23 @@ class RefreshSelector<V, E> extends StatelessWidget {
           children: [
             Consumer(
               builder: (context, watch, child) {
-                final errorValue = watch<E>(refreshControllerProvider.state.select<E>((x) => x.value == null ? x.error : null));
+                final state = watch(refreshControllerProvider.state);
+                final errorValue = state.value == null ? state.error : null;
                 return errorValue != null && onError != null ? onError(context, errorValue) : const SizedBox(width: 0, height: 0);
               },
             ),
             Consumer(
               builder: (context, watch, child) {
-                final value = watch<V>(refreshControllerProvider.state.select<V>((x) => x.value));
+                final state = watch(refreshControllerProvider.state);
+                final value = state.value;
                 return value != null ? onValue(context, value) : const SizedBox(width: 0, height: 0);
               },
             ),
             if (!disableLoading)
               Consumer(
                 builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget child) {
-                  final isRefreshing = watch<bool>(refreshControllerProvider.state.select((value) => value.isRefreshing));
+                  final state = watch(refreshControllerProvider.state);
+                  final isRefreshing = state.isRefreshing;
                   return AnimatedOpacity(
                     opacity: isRefreshing ? 1 : 0,
                     duration: const Duration(milliseconds: 200),
