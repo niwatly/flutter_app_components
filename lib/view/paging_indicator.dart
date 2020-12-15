@@ -53,10 +53,12 @@ class PaginationIndicator extends StatelessWidget {
             top: reverse ? 0 : null,
             child: Selector<_Notifier, bool>(
               selector: (context, x) => x.value == _State.Loading,
-              builder: (context, value, child) => Offstage(
-                offstage: !value,
-                child: defaultOnLoading(context),
-              ),
+              builder: (context, value, child) {
+                if (value) {
+                  return defaultOnLoading(context);
+                }
+                return SizedBox.shrink();
+              },
             ),
           ),
         ],
