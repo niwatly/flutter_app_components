@@ -75,10 +75,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
                   return AnimatedOpacity(
                     opacity: isRefreshing ? 1 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: Offstage(
-                      offstage: !isRefreshing,
-                      child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
-                    ),
+                    child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
                   );
                 },
               ),
