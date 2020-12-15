@@ -66,14 +66,13 @@ class RefreshSelector<V, E> extends StatelessWidget {
         if (!disableLoading)
           Selector<RefreshState<V, E>, bool>(
             selector: (context, x) => x.isRefreshing,
-            builder: (context, value, child) => AnimatedOpacity(
-              opacity: value ? 1 : 0,
-              duration: const Duration(milliseconds: 200),
-              child: Offstage(
-                offstage: !value,
+            builder: (context, value, child) {
+              return AnimatedOpacity(
+                duration: Duration(milliseconds: 200),
+                opacity: value ? 1 : 0,
                 child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
-              ),
-            ),
+              );
+            },
           ),
       ],
     );
@@ -95,6 +94,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
 
 class _Refresh<V, E> extends StatelessWidget {
   final Widget child;
+
   const _Refresh(this.child);
 
   @override
