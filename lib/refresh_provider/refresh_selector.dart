@@ -67,10 +67,11 @@ class RefreshSelector<V, E> extends StatelessWidget {
           Selector<RefreshState<V, E>, bool>(
             selector: (context, x) => x.isRefreshing,
             builder: (context, value, child) {
-              if (!value) {
-                return SizedBox.shrink();
-              }
-              return onLoading != null ? onLoading(context) : defaultOnLoading(context);
+              return AnimatedOpacity(
+                duration: Duration(milliseconds: 200),
+                opacity: value ? 1 : 0,
+                child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
+              );
             },
           ),
       ],
