@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:state_notifier/state_notifier.dart';
 
-typedef ViewModelStateWatcher<T> = T Function(T currentState, Locator locator);
+typedef ViewModelStateWatcher<T> = T Function(T currentState, T Function<T>(AlwaysAliveProviderBase<Object, T>) locator);
 
 /// EntityデータとUIの仲介役となるViewModelを生成します
 ///
@@ -9,29 +11,18 @@ typedef ViewModelStateWatcher<T> = T Function(T currentState, Locator locator);
 /// 通常のStateNotifierよりも少しだけ便利です。
 ///
 /// UIからの入力を[ViewModel]で受け取りたい場合は、継承して使用してください
-class ViewModel<T> extends StateNotifier<T> with LocatorMixin {
+class ViewModel<T> extends StateNotifier<T> {
   final ViewModelStateWatcher<T> stateWatcher;
 
   ViewModel({
     T initialState,
     this.stateWatcher,
-  }) : super(initialState);
-
-  @override
-  void initState() {
-    super.initState();
-
-    _tryUpdateState(read);
+    @required ProviderReference ref,
+  }) : super(initialState){
+    _tryUpdateState(ref.watch);
   }
 
-  @override
-  void update(T Function<T>() watch) {
-    super.update(watch);
-
-    _tryUpdateState(watch);
-  }
-
-  void _tryUpdateState(Locator locator) {
+  void _tryUpdateState(T Function<T>(AlwaysAliveProviderBase<Object, T>) locator) {
     if (stateWatcher == null) {
       return;
     }
