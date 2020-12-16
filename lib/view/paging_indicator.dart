@@ -57,7 +57,7 @@ class PaginationIndicator extends StatelessWidget {
                 return AnimatedOpacity(
                   opacity: value ? 1 : 0,
                   duration: const Duration(milliseconds: 200),
-                  child: defaultOnLoading(context),
+                  child: TickerMode(enabled: value, child: defaultOnLoading(context)),
                 );
               },
             ),

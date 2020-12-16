@@ -72,10 +72,14 @@ class RefreshSelector<V, E> extends StatelessWidget {
                 builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget child) {
                   final state = watch(refreshControllerProvider.state);
                   final isRefreshing = state.isRefreshing;
+                  final child = onLoading != null ? onLoading(context) : defaultOnLoading(context);
                   return AnimatedOpacity(
                     opacity: isRefreshing ? 1 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
+                    child: TickerMode(
+                      enabled: isRefreshing,
+                      child: child,
+                    ),
                   );
                 },
               ),
