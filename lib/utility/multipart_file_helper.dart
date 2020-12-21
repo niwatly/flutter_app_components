@@ -13,13 +13,14 @@ import 'extension.dart';
 class MultipartFileHelper {
   static Function(dynamic e, StackTrace st) onErrorCallback;
 
-  static Future<MultipartFile> createMultipartFileWithoutExif({
+  static Future<MultipartFileInfo> createMultipartFileWithoutExif({
     @required String multipartFieldKey,
     @required String multipartFilename,
     String filePath,
     File file,
     Uint8List bytes,
     ImageProvider imageProvider,
+    int maxSize = 480,
   }) async {
     Uint8List input;
     String fileTypeByFilePath;
@@ -61,11 +62,12 @@ class MultipartFileHelper {
       input,
       filePathForDecoderNotFound: fileTypeByFilePath,
       fromImageProvider: byteDataFromImageProvider,
+      maxSize: maxSize,
     );
 
-    final filename = "${await getTemporaryDirectory().then((x) => x.path)}/$multipartFilename.${result.filetype}";
+    final filename = "${await getTemporaryDirectory().then((x) => x.path)}/$multipartFilename.${result.fileType}";
 
-    print("create multipart file. filetype = ${result.filetype}, field = $multipartFieldKey, fielname = $filename");
+    print("create multipart file. filetype = ${result.fileType}, field = $multipartFieldKey, fielname = $filename");
 
     // MultipartFileを作成
     final multipartFile = MultipartFile.fromBytes(
@@ -79,35 +81,53 @@ class MultipartFileHelper {
       // Note: ファイル名の重複による想定外のエラーを避けるため、ちゃんとした名前で送る
       filename: filename,
       // ContentType
-      contentType: MediaType("image", result.filetype),
+      contentType: MediaType("image", result.fileType),
     );
 
-    return multipartFile;
+    return MultipartFileInfo(multipartFile, result);
   }
 
-  static Future<EncodeResult> _removeExifAndEncodeIfNeed(
+  static Future<EncodeInfo> _removeExifAndEncodeIfNeed(
     List<int> input, {
     String filePathForDecoderNotFound,
     bool fromImageProvider,
+    int maxSize,
   }) async {
-    final decodeAndResize = (List<int> input, image.Decoder decoder) {
-      const maxSize = 960;
+    int beforeResizeLength;
+    int beforeResizeWidth;
+    int beforeResizeHeight;
+    int afterResizeLength;
+    int afterResizeWidth;
+    int afterResizeHeight;
+    var resizeDone = false;
+    String decoderName;
 
+    final decodeAndResize = (List<int> input, image.Decoder decoder) {
       print("decode by ${decoder.runtimeType}.");
 
       // デコードする
       final decoded = decoder.decodeImage(input);
+
+      beforeResizeLength = decoded.length;
+      beforeResizeWidth = decoded.width;
+      beforeResizeHeight = decoded.height;
 
       // 画像が大きいときはリサイズする
       image.Image resized;
       if (decoded.width > maxSize || decoded.height > maxSize) {
         // 横長画像
         resized = decoded.width > decoded.height //
-            ? image.copyResize(decoded, width: 960) // 横長なのでwidthを揃える
-            : image.copyResize(decoded, height: 960); // 縦長なのでheightを揃える
+            ? image.copyResize(decoded, width: maxSize) // 横長なのでwidthを揃える
+            : image.copyResize(decoded, height: maxSize); // 縦長なのでheightを揃える
+
+        resizeDone = true;
       } else {
         resized = decoded;
       }
+
+      afterResizeLength = resized.length;
+      afterResizeWidth = resized.width;
+      afterResizeHeight = resized.height;
 
       // 回転方向を補正してからExifを削除する
       //
@@ -126,8 +146,10 @@ class MultipartFileHelper {
       // 問題: そのまま処理を続けるとJpegDecoder.decodeImageでExceptionが図れる
       // 対応: ImageProvider経由でExif削除を行うときは常にPngDecoderを使う
       decoder = image.PngDecoder();
+      decoderName = "force png";
     } else {
       decoder = image.findDecoderForData(input);
+      decoderName = "find ${decoder?.fileType}";
     }
 
     if (decoder == null && filePathForDecoderNotFound != null) {
@@ -137,6 +159,7 @@ class MultipartFileHelper {
 
       print("findDecoderForData failed. try to get decoder from filename.");
       decoder = image.getDecoderForNamedImage(filePathForDecoderNotFound);
+      decoderName = "by filename ${decoder?.fileType}";
     }
 
     if (decoder == null) {
@@ -149,13 +172,13 @@ class MultipartFileHelper {
       // 背景: HEIC等、デコーダが用意されていないファイル形式がある
       // 問題: ファイル形式を知るのが難しい
       // 対応: デコーダが見つかればデコーダ、見つからなければファイル名で形式を決める（結局バグると思うがやらないよりましかな？程度）
-      final ex = Exception("decorder not found");
+      final ex = Exception("decoder not found");
       onErrorCallback?.call(ex, StackTrace.current);
-      return EncodeResult(input, filePathForDecoderNotFound);
+      return EncodeInfo(bytes: input, fileType: filePathForDecoderNotFound);
     } else if (decoder is image.GifDecoder) {
       // GifアニメーションをdecodeImageするとアニメーションが失われてしまうので何もせずに終了する
       // （別途decodeAnimationというメソッドが用意されているが、これに対してリサイズはできなさそう）（Frameごとにresizeすれば良い？）
-      return EncodeResult(input, "gif");
+      return EncodeInfo(bytes: input, fileType: "gif");
     }
 
     final type = decoder.fileType ?? filePathForDecoderNotFound;
@@ -178,21 +201,73 @@ class MultipartFileHelper {
           break;
       }
 
-      return EncodeResult(encoded, type);
+      return EncodeInfo(
+        bytes: encoded,
+        fileType: type,
+        resizeDone: resizeDone,
+        beforeResizeLength: beforeResizeLength,
+        beforeResizeWidth: beforeResizeWidth,
+        beforeResizeHeight: beforeResizeHeight,
+        afterResizeLength: afterResizeLength,
+        afterResizeWidth: afterResizeWidth,
+        afterResizeHeight: afterResizeHeight,
+        decoderName: decoderName,
+      );
     } catch (e, st) {
       // 背景: findDecoderForDataはJpegとして判定したが、JpegDecoder.decodeImageを実行するとエラーになるデータがある
       // 対応: エラーが出たら何もせずに終了する
       onErrorCallback?.call(e, st);
-      return EncodeResult(input, filePathForDecoderNotFound);
+      return EncodeInfo(
+        bytes: input,
+        fileType: filePathForDecoderNotFound,
+        resizeDone: resizeDone,
+        beforeResizeLength: beforeResizeLength,
+        beforeResizeWidth: beforeResizeWidth,
+        beforeResizeHeight: beforeResizeHeight,
+        afterResizeLength: afterResizeLength,
+        afterResizeWidth: afterResizeWidth,
+        afterResizeHeight: afterResizeHeight,
+        decoderName: decoderName,
+        decodeException: e,
+      );
     }
   }
 }
 
-class EncodeResult {
+class EncodeInfo {
   final Uint8List bytes;
-  final String filetype;
+  final String fileType;
+  final int beforeResizeLength;
+  final int beforeResizeWidth;
+  final int beforeResizeHeight;
+  final int afterResizeLength;
+  final int afterResizeWidth;
+  final int afterResizeHeight;
 
-  const EncodeResult(this.bytes, this.filetype);
+  final bool resizeDone;
+  final String decoderName;
+  final dynamic decodeException;
+
+  EncodeInfo({
+    @required this.bytes,
+    @required this.fileType,
+    this.beforeResizeLength,
+    this.beforeResizeWidth,
+    this.beforeResizeHeight,
+    this.afterResizeLength,
+    this.afterResizeWidth,
+    this.afterResizeHeight,
+    this.resizeDone = false,
+    this.decoderName,
+    this.decodeException,
+  });
+}
+
+class MultipartFileInfo {
+  final MultipartFile file;
+  final EncodeInfo encodeInfo;
+
+  const MultipartFileInfo(this.file, this.encodeInfo);
 }
 
 extension _DecorderEx on image.Decoder {
