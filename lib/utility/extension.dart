@@ -39,6 +39,7 @@ extension DateHelper on DateTime {
 
   String toJsonString() => toUtc().toIso8601String();
 
+  /// 過去の日付に対して、現在時刻と比較し、良い感じの「〜〜前」を計算する
   String toElapsedString() {
     final now = DateTime.now();
     final diff = now.difference(this);
@@ -59,6 +60,28 @@ extension DateHelper on DateTime {
       return toFormatString(format: "MM月dd日");
     } else {
       return toFormatString(format: "yy年MM月dd日");
+    }
+  }
+
+  /// 未来の日付に対して、現在時刻と比較し、良い感じの「後〜〜」を計算する
+  String toRemainingString() {
+    final now = DateTime.now();
+    final diff = difference(now);
+
+    if (diff.isNegative) {
+      return "";
+    }
+
+    if (diff.inDays < 1) {
+      return "本日";
+    } else if (diff.inDays < 6) {
+      return "後${diff.inDays}日";
+    } else {
+      if (year == now.year) {
+        return toFormatString(format: "MM月dd日");
+      } else {
+        return toFormatString(format: "yy年MM月dd日");
+      }
     }
   }
 }
