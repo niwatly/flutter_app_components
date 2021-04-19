@@ -114,7 +114,7 @@ class InAppReviewRestrictor {
     if (reviewed.contains(request)) {
       // 要求されているバージョンはレビュー済みなので何もしない
       // 黄
-      _log("current app version already has reviewed. do nothing.");
+      _log("current app version already has been reviewed. do nothing.");
       return InAppReviewNavigationKind.Silent;
     } else {
       final lastReviewed = reviewed.last;
@@ -124,9 +124,8 @@ class InAppReviewRestrictor {
         _log("current app version can re-review and not yet. do $kind");
         return kind;
       } else {
-        // lastの値が異常（要求よりも新しいバージョンでレビューしている）
-        // グレー
-        errorCallback?.call(InAppReviewDetermineException.invalidLast(lastReviewed, request), StackTrace.current);
+        // レビューが要求されたバージョンではレビューしなかったが、その次のバージョンでレビューした
+        _log("review request version has been reviewed on old app version. do nothing.");
         return InAppReviewNavigationKind.Silent;
       }
     }
