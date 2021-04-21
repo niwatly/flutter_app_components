@@ -21,9 +21,12 @@ class InAppReviewRestrictor {
     this.keepSilentFromLastNotNow = const Duration(days: 7),
   });
 
-  Future openStore() async {
+  Future openStore({saveCurrentVersionAsReviewed = true}) async {
     await InAppReview.instance.openStoreListing(appStoreId: appStoreId);
-    await _saveReviewedVersion();
+
+    if (saveCurrentVersionAsReviewed) {
+      await _saveReviewedVersion();
+    }
   }
 
   Future requestReview() async {
