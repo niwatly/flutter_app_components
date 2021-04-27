@@ -35,7 +35,7 @@ dependencies:
 
   # URLを外部ブラウザで開きたい
   # https://pub.dev/packages/url_launcher
-  url_launcher: ^5.4.10
+  url_launcher: ^6.0.0
 
   # Http通信したい
   # https://pub.dev/packages/http
@@ -49,7 +49,7 @@ dependencies:
   flutter_riverpod: ^0.12.1
 
   # https://pub.dev/packages/in_app_review
-  in_app_review: ^1.0.4
+  in_app_review: ^2.0.2
 
   # アプリバージョンとかを取得したい
   # https://pub.dev/packages/package_info#-installing-tab-
@@ -57,7 +57,7 @@ dependencies:
 
   # 一時ディレクトリを取得するのに使用
   # https://pub.dev/packages/path_provider
-  path_provider: ^1.6.24
+  path_provider: ^2.0.1
 
   # バージョン値を比較したい
   # https://pub.dev/packages/version
@@ -65,7 +65,7 @@ dependencies:
 
   # アプリのローカルストレージに値を保存したい
   # https://pub.dev/packages/shared_preferences
-  shared_preferences: ^0.5.12+4
+  shared_preferences: ^2.0.5
 
   # 画像からexifを削除したい
   # https://pub.dev/packages/image
