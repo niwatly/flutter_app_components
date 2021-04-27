@@ -39,7 +39,7 @@ dependencies:
 
   # Http通信したい
   # https://pub.dev/packages/http
-  http: ^0.12.2
+  http: ^0.13.1
 
   # Textの文字サイズを自動で調整したい
   auto_size_text: ^2.1.0

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DialogRoute;
 
 class DialogRoute<T> extends PopupRoute<T> {
   final WidgetBuilder builder;

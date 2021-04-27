@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DialogRoute;
 import 'package:flutter_app_components/view/check_box_text.dart';
 import 'package:provider/provider.dart';
 
