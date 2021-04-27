@@ -69,7 +69,7 @@ dependencies:
 
   # 画像からexifを削除したい
   # https://pub.dev/packages/image
-  image: ^2.1.19
+  image: ^3.0.2
 
   # 指定したWidgetにフォーカスするOverlay形式のUI表現を楽に作りたい
   # https://pub.dev/packages/tutorial_coach_mark
