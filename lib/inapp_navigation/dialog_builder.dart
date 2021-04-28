@@ -92,14 +92,15 @@ class DialogBuilderState extends State<DialogBuilder> {
       );
 
   Route<bool> confirmWithDoNotShowAgain(
-    String message,
-  ) =>
+    String message, {
+    String title,
+  }) =>
       DialogRoute<bool>(
         builder: (context) => ChangeNotifierProvider<_CheckBoxNotifier>(
           create: (context) => _CheckBoxNotifier(false),
           builder: (context, _) => AlertDialog(
             contentPadding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 0.0),
-            title: Text(confirmTitle),
+            title: Text(title ?? confirmTitle),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
