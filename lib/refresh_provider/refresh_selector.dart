@@ -34,7 +34,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
   /// [onValue]と[onError]と[onLoading]をStackで重ねるときのfitパラメータ
   final StackFit fit;
 
-  final StateNotifierProvider<RefreshController<V, E>> refreshControllerProvider;
+  final StateNotifierProvider<RefreshController<V, E>, RefreshState<V, E>> refreshControllerProvider;
 
   const RefreshSelector({
     @required this.onValue,
@@ -55,14 +55,14 @@ class RefreshSelector<V, E> extends StatelessWidget {
           children: [
             Consumer(
               builder: (context, watch, child) {
-                final state = watch(refreshControllerProvider.state);
+                final state = watch(refreshControllerProvider);
                 final errorValue = state.value == null ? state.error : null;
                 return errorValue != null && onError != null ? onError(context, errorValue) : const SizedBox(width: 0, height: 0);
               },
             ),
             Consumer(
               builder: (context, watch, child) {
-                final state = watch(refreshControllerProvider.state);
+                final state = watch(refreshControllerProvider);
                 final value = state.value;
                 return value != null ? onValue(context, value) : const SizedBox(width: 0, height: 0);
               },
@@ -70,7 +70,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
             if (!disableLoading)
               Consumer(
                 builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget child) {
-                  final state = watch(refreshControllerProvider.state);
+                  final state = watch(refreshControllerProvider);
                   final isRefreshing = state.isRefreshing;
                   final child = onLoading != null ? onLoading(context) : defaultOnLoading(context);
                   return AnimatedOpacity(
@@ -87,7 +87,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
         );
 
         if (enablePullRefresh) {
-          ret = _Refresh<V, E>(ret, watch<RefreshController>(refreshControllerProvider));
+          ret = _Refresh<V, E>(ret, watch<RefreshController>(refreshControllerProvider.notifier));
         }
         return ret;
       },
