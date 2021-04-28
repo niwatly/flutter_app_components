@@ -13,7 +13,7 @@ part of 'refresh_controller.dart';
 ///   - まだ一度も通信が行われていなければ通信を実行する
 ///   - コンテンツの寿命を無視して通信を実行する
 ///   - ページングする（[PageRefreshController]を参照）
-class SimpleRefreshController<V, E> extends RefreshController<V, E> {
+class SimpleRefreshController<V, E extends Object> extends RefreshController<V, E> {
   Future<V> Function() refresher;
 
   SimpleRefreshController({

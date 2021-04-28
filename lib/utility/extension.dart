@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 extension StringHelper on String? {
-  bool get isNullOrEmpty => this == null || isEmpty;
+  bool get isNullOrEmpty => this == null || (this != null && this!.isEmpty);
 }
 
 extension IntHelper on int {
@@ -76,6 +76,7 @@ extension MapHelper<K, V> on Map<K, V> {
 extension IterableHelper<T> on Iterable<T> {
   //nullable
   T? get firstOrNull => isNotEmpty ? first : null;
+
   T? get lastOrNull => isNotEmpty ? last : null;
 }
 
@@ -109,9 +110,10 @@ extension ObjectHelper<T extends Object> on T {
   }
 }
 
-extension ImageProviderHelper<T> on ImageProvider<T> {
+extension ImageProviderHelper<T extends Object> on ImageProvider<T> {
   /// ImageProviderをImageInfoに変換します
-  Future<ImageInfo> toImageInfo({Duration timeout = const Duration(seconds: 10)}) async {
+  Future<ImageInfo> toImageInfo(
+      {Duration timeout = const Duration(seconds: 10)}) async {
     final stream = resolve(const ImageConfiguration());
 
     final subject = ReplaySubject<ImageInfo>(maxSize: 1);
@@ -185,8 +187,8 @@ extension StateNotifierEx<T> on StateNotifier<T> {
   Stream<T> get streamAndStartWith => Rx.defer(() => stream.startWith(state));
 }
 
-extension StreamEx<T> on Stream<T> {
-  Stream<List<T>> bufferWhile(Stream<bool> predicate) {
+extension StreamEx<T> on Stream<T?> {
+  Stream<List<T?>> bufferWhile(Stream<bool> predicate) {
     final window = Rx.combineLatest2<void, bool, bool>(
       startWith(null),
       predicate,

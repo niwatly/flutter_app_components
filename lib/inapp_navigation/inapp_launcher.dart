@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import 'inapp_router.dart';
 import 'screen_arguments.dart';
 

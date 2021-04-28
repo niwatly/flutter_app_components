@@ -51,7 +51,7 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
           title: const Text("エラー"),
           content: const Text("お探しのページは見つかりませんでした"),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
                 "OK",

@@ -3,7 +3,8 @@ import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version/version.dart';
 
-const String _prefKeyReviewedVersions = "flutter_app_components_reviewed_versions";
+const String _prefKeyReviewedVersions =
+    "flutter_app_components_reviewed_versions";
 const String _prefKeyNotNowTime = "flutter_app_components_not_now_time";
 
 class InAppReviewRestrictor {
@@ -68,16 +69,17 @@ class InAppReviewRestrictor {
     if (lastNotNow != null) {
       final diffFromLastNotNow = DateTime.now().difference(lastNotNow);
 
-      if (lastNotNow != null && diffFromLastNotNow < keepSilentFromLastNotNow) {
+      if (diffFromLastNotNow < keepSilentFromLastNotNow) {
         // 前回の「あとで」から時間がたっていないので何もしない
-        _log("$runtimeType: diff $diffFromLastNotNow is less than $keepSilentFromLastNotNow. determine Silent.");
+        _log(
+            "$runtimeType: diff $diffFromLastNotNow is less than $keepSilentFromLastNotNow. determine Silent.");
         return InAppReviewNavigationKind.Silent;
       }
     }
 
     final _request = await requestReviewVersion!;
 
-    if (_request == null || _request.isEmpty) {
+    if (_request.isEmpty) {
       _log("review request version missing. do nothing.");
       // 要求バージョンが存在しない場合は何もしない
       return InAppReviewNavigationKind.Silent;
@@ -93,14 +95,17 @@ class InAppReviewRestrictor {
 
     final kind = await reviewKind!;
 
-    final reviewed = _reviewed.map((x) => Version.parse(x)).toList(growable: false);
+    final reviewed =
+        _reviewed.map((x) => Version.parse(x)).toList(growable: false);
     final request = Version.parse(_request);
-    final current = await PackageInfo.fromPlatform().then((x) => Version.parse(x.version));
+    final current =
+        await PackageInfo.fromPlatform().then((x) => Version.parse(x.version));
 
     if (current < request) {
       // 要求されているバージョンよりも古いバージョンを使っているので何もしない
       // 青
-      _log("current app version is smaller than review request version. do nothing.");
+      _log(
+          "current app version is smaller than review request version. do nothing.");
       return InAppReviewNavigationKind.Silent;
     }
 
@@ -126,7 +131,9 @@ class InAppReviewRestrictor {
       } else {
         // lastの値が異常（要求よりも新しいバージョンでレビューしている）
         // グレー
-        errorCallback?.call(InAppReviewDetermineException.invalidLast(lastReviewed, request), StackTrace.current);
+        errorCallback?.call(
+            InAppReviewDetermineException.invalidLast(lastReviewed, request),
+            StackTrace.current);
         return InAppReviewNavigationKind.Silent;
       }
     }
@@ -175,7 +182,8 @@ class InAppReviewRestrictor {
         return;
       }
 
-      instance.setStringList(_prefKeyReviewedVersions, [...previousVersions, version]);
+      instance.setStringList(
+          _prefKeyReviewedVersions, [...previousVersions, version]);
     } catch (e, st) {
       errorCallback?.call(e, st);
     }
@@ -189,7 +197,9 @@ class InAppReviewRestrictor {
 class InAppReviewDetermineException implements Exception {
   final String message;
 
-  InAppReviewDetermineException.invalidLast(Version last, Version request) : message = "last review version($last) must be smaller than request version($request)";
+  InAppReviewDetermineException.invalidLast(Version last, Version request)
+      : message =
+            "last review version($last) must be smaller than request version($request)";
 
   @override
   String toString() => "$runtimeType($message)";
@@ -211,7 +221,5 @@ extension InAppReviewNavigationKindEx on InAppReviewNavigationKind {
       case InAppReviewNavigationKind.Silent:
         return "silent";
     }
-
-    return "unknown";
   }
 }

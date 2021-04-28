@@ -1,6 +1,6 @@
 part of 'refresh_controller.dart';
 
-class PageRefreshController<V extends IPagiable<V>, E> extends RefreshController<V, E> {
+class PageRefreshController<V extends IPagiable<V>, E extends Object> extends RefreshController<V, E> {
   int? _currentPageInstance;
   int defaultPage;
 

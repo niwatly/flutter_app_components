@@ -58,14 +58,14 @@ class RefreshSelector<V, E> extends StatelessWidget {
                 final state = watch(refreshControllerProvider);
                 final errorValue = state.value == null ? state.error : null;
                 return errorValue != null && onError != null ? onError!(context, errorValue) : const SizedBox(width: 0, height: 0);
-              } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?),
+              },
             ),
             Consumer(
               builder: (context, watch, child) {
                 final state = watch(refreshControllerProvider);
                 final value = state.value;
                 return value != null ? onValue(context, value) : const SizedBox(width: 0, height: 0);
-              } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?),
+              },
             ),
             if (!disableLoading)
               Consumer(

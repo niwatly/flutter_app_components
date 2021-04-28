@@ -41,13 +41,18 @@ class MultipartFileHelper {
       fileTypeByFilePath = filePath;
     } else if (imageProvider != null) {
       // ImageProviderが与えられたので、ImageInfoに変換してからバイトデータに変換して使う
-      final imageInfo = await imageProvider.toImageInfo(timeout: const Duration(seconds: 20));
+      final imageInfo =
+          await imageProvider.toImageInfo(timeout: const Duration(seconds: 20));
 
       // 中間ファイルをByteデータにする
       //
       // Note: PNGに変換している
       // Note: なぜPNGに変換するの？ -> ImageProviderからバイト配列を得る方法はそれしかなさそうだから
-      final byteData = await (imageInfo.image.toByteData(format: ImageByteFormat.png) as FutureOr<ByteData>);
+      final byteData =
+          await (imageInfo.image.toByteData(format: ImageByteFormat.png));
+      if (byteData == null) {
+        throw Exception("cannot create multipartfile as all inputs are null");
+      }
 
       input = byteData.buffer.asUint8List();
       fileTypeByFilePath = "png";
@@ -63,9 +68,11 @@ class MultipartFileHelper {
       fromImageProvider: byteDataFromImageProvider,
     );
 
-    final filename = "${await getTemporaryDirectory().then((x) => x.path)}/$multipartFilename.${result.filetype}";
+    final filename =
+        "${await getTemporaryDirectory().then((x) => x.path)}/$multipartFilename.${result.filetype}";
 
-    print("create multipart file. filetype = ${result.filetype}, field = $multipartFieldKey, fielname = $filename");
+    print(
+        "create multipart file. filetype = ${result.filetype}, field = $multipartFieldKey, fielname = $filename");
 
     // MultipartFileを作成
     final multipartFile = MultipartFile.fromBytes(

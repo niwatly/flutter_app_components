@@ -46,7 +46,7 @@ class TextSpanBuilder {
       return;
     }
 
-    final regexp = RegExp("(${(linkRegExpPatterns ?? defaultLinkRegExpPatterns).join("|")})");
+    final regexp = RegExp("(${(linkRegExpPatterns).join("|")})");
     final matches = regexp.allMatches(text);
 
     if (matches.isEmpty) {

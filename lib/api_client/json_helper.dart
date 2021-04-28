@@ -3,9 +3,6 @@ import 'api_client_error.dart';
 extension JsonObjectHelper on Map<String, dynamic> {
   // ignore: avoid_init_to_null
   T? _get<T>(String key, {T? defaultValue = null}) {
-    if (this == null) {
-      throw JsonNullSourceFoundError(key);
-    }
     final res = this[key];
 
     if (res is T) {

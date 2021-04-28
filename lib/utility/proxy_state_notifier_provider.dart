@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart' hide Locator;
 import 'package:state_notifier/state_notifier.dart';
@@ -17,14 +16,14 @@ class ProxyStateNotifier<T> extends StateNotifier<T?> with LocatorMixin {
   void initState() {
     super.initState();
 
-    _updateState(read as T Function<T>());
+    _updateState(read);
   }
 
   @override
   void update(T Function<T>() watch) {
     super.update(watch);
 
-    _updateState(watch as T Function<T>());
+    _updateState(watch);
   }
 
   void _updateState(Locator locator) {
@@ -48,9 +47,9 @@ class ProxyStateNotifier<T> extends StateNotifier<T?> with LocatorMixin {
 /// 型を毎回記述するのが面倒だった
 StateNotifierProvider proxyStateNotifierProvider<T>({
   required T Function(Locator locator) create,
-  UpdateShouldNotify<T>? updateShouldNotify,
+  UpdateShouldNotify<T?>? updateShouldNotify,
 }) {
-  return StateNotifierProvider<ProxyStateNotifier<T>, T>(
+  return StateNotifierProvider<ProxyStateNotifier<T>, T?>(
     create: (context) => ProxyStateNotifier<T>(
       create: create,
       updateShouldNotify: updateShouldNotify,

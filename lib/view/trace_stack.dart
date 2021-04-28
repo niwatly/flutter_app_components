@@ -7,11 +7,11 @@ class TraceStack extends StatelessWidget {
   final List<TraceStackChild>? children;
   final StackFit fit;
   final AlignmentGeometry alignment;
-  final Overflow clip;
+  final Clip clip;
 
   const TraceStack({
     this.children,
-    this.clip = Overflow.clip,
+    this.clip = Clip.hardEdge,
     this.fit = StackFit.loose,
     this.alignment = AlignmentDirectional.topStart,
   });
@@ -25,7 +25,7 @@ class TraceStack extends StatelessWidget {
       child: Stack(
         fit: fit,
         alignment: alignment,
-        overflow: clip,
+        clipBehavior: clip,
         children: children!,
       ),
     );
