@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LazyFutureBuilder extends StatelessWidget {
-  final FutureOr Function() futureBuilder;
+  final FutureOr Function()? futureBuilder;
   final Widget Function(BuildContext context, Future Function() futureBuilder, bool isFutureBuilding) builder;
 
   const LazyFutureBuilder({
-    @required this.futureBuilder,
-    @required this.builder,
+    required this.futureBuilder,
+    required this.builder,
   });
 
   @override
@@ -26,7 +26,7 @@ class LazyFutureBuilder extends StatelessWidget {
 
             try {
               notifier.value = true;
-              await futureBuilder();
+              await futureBuilder!();
             } finally {
               if (!notifier.disposed) {
                 notifier.value = false;

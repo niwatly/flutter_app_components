@@ -2,50 +2,47 @@ import 'dart:async';
 
 import 'package:http/http.dart';
 
-typedef UriBuilder = Uri Function(String path, Map<String, dynamic> query);
+typedef UriBuilder = Uri Function(String path, Map<String, dynamic>? query);
 
 abstract class IApiClient {
   Future<Response> get(
     String path, {
-    Map<String, dynamic> query,
+    Map<String, dynamic>? query,
   });
 
   Future<Response> post(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   });
 
   Future<Response> put(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   });
 
   Future<Response> delete(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   });
 
   Future<Response> patch(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   });
 
   void close();
 }
 
 String makeQueryWithSquareBlanketsArrayParameters(Map<String, dynamic /*String|Iterable<String>*/ > queryParameters) {
-  if (queryParameters == null) {
-    return null;
-  }
 
   final result = StringBuffer();
   var separator = "";
 
-  void writeParameter(String key, String value, bool array) {
+  void writeParameter(String key, String? value, bool array) {
     result.write(separator);
     separator = "&";
     result.write(Uri.encodeQueryComponent(key));
@@ -58,7 +55,7 @@ String makeQueryWithSquareBlanketsArrayParameters(Map<String, dynamic /*String|I
     }
   }
 
-  String convertToString(dynamic value) {
+  String? convertToString(dynamic value) {
     if (value is String) {
       return value;
     } else if (value is bool || value is int) {

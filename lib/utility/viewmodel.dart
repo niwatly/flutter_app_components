@@ -12,13 +12,13 @@ typedef ViewModelStateWatcher<T> = T Function(
 /// 通常のStateNotifierよりも少しだけ便利です。
 ///
 /// UIからの入力を[ViewModel]で受け取りたい場合は、継承して使用してください
-class ViewModel<T> extends StateNotifier<T> {
-  final ViewModelStateWatcher<T> stateWatcher;
+class ViewModel<T> extends StateNotifier<T?> {
+  final ViewModelStateWatcher<T?>? stateWatcher;
 
   ViewModel({
-    T initialState,
+    T? initialState,
     this.stateWatcher,
-    @required ProviderReference ref,
+    required ProviderReference ref,
   }) : super(initialState) {
     _tryUpdateState(ref.watch);
   }
@@ -29,9 +29,9 @@ class ViewModel<T> extends StateNotifier<T> {
       return;
     }
 
-    final oldState = state;
+    final T? oldState = state;
 
-    final newState = stateWatcher(state, locator);
+    final newState = stateWatcher!(state, locator as T Function<T>(AlwaysAliveProviderBase<Object, T>));
 
     if (oldState != newState) {
       state = newState;

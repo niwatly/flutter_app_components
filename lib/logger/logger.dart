@@ -2,7 +2,7 @@ import 'package:stack_trace/stack_trace.dart' show Trace;
 
 abstract class ILogger {
   void info(dynamic msg);
-  void warning(dynamic msg, {StackTrace st});
+  void warning(dynamic msg, {StackTrace? st});
 }
 
 class PrintLogger implements ILogger {
@@ -12,11 +12,11 @@ class PrintLogger implements ILogger {
   }
 
   @override
-  void warning(dynamic msg, {StackTrace st}) {
+  void warning(dynamic msg, {StackTrace? st}) {
     _output(msg, "WARN", st: st);
   }
 
-  void _output(dynamic msg, String label, {StackTrace st}) {
+  void _output(dynamic msg, String label, {StackTrace? st}) {
     //Traceの最上段はここ（PrintLoggerの_outputメソッドの1行目）であり、2段目は呼び出し元（info, warning, etc, ...） なので、3段目を取得する
     final trace = Trace.current(2);
 
@@ -37,5 +37,5 @@ class SilentLogger implements ILogger {
   void info(dynamic msg) {}
 
   @override
-  void warning(dynamic msg, {StackTrace st}) {}
+  void warning(dynamic msg, {StackTrace? st}) {}
 }

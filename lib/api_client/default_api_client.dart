@@ -9,20 +9,20 @@ import 'api_client.dart';
 import 'api_client_error.dart';
 
 class DefaultApiClient with IApiClient {
-  static Function(int statusCode, Uri uri) onResponseReceived;
+  static Function(int statusCode, Uri uri)? onResponseReceived;
 
   final bool useHttp;
   final String host;
-  final int port;
-  final FutureOr<Map<String, String>> headersFuture;
-  Map<String, String> _headers;
-  Client _client;
+  final int? port;
+  final FutureOr<Map<String, String>>? headersFuture;
+  Map<String, String>? _headers;
+  late Client _client;
 
-  UriBuilder _uriBuilder;
+  late UriBuilder _uriBuilder;
 
   DefaultApiClient({
     this.useHttp = true,
-    @required this.host,
+    required this.host,
     this.port,
     this.headersFuture,
   }) {
@@ -66,8 +66,8 @@ class DefaultApiClient with IApiClient {
     }
   }
 
-  Future<BaseRequest> _createBaseRequest(String method, Uri uri, {Map<String, dynamic> body}) async {
-    final headers = _headers ??= await headersFuture;
+  Future<BaseRequest> _createBaseRequest(String method, Uri uri, {Map<String, dynamic>? body}) async {
+    final headers = (_headers ??= await headersFuture)!;
 
     return Request(method, uri)
       ..encoding = const Utf8Codec()
@@ -79,8 +79,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> post(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   }) async {
     final request = await _createBaseRequest("POST", _uriBuilder(path, query), body: body);
 
@@ -90,8 +90,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> put(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   }) async {
     final request = await _createBaseRequest("PUT", _uriBuilder(path, query), body: body);
 
@@ -101,8 +101,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> delete(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   }) async {
     final request = await _createBaseRequest("DELETE", _uriBuilder(path, query), body: body);
 
@@ -112,7 +112,7 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> get(
     String path, {
-    Map<String, dynamic> query,
+    Map<String, dynamic>? query,
   }) async {
     final request = await _createBaseRequest("GET", _uriBuilder(path, query));
 
@@ -122,8 +122,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> patch(
     String path, {
-    Map<String, dynamic> query,
-    Map<String, dynamic> body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
   }) async {
     final request = await _createBaseRequest("PATCH", _uriBuilder(path, query));
 

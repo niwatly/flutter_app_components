@@ -16,10 +16,10 @@ class RefreshSelector<V, E> extends StatelessWidget {
   final Widget Function(BuildContext context, V value) onValue;
 
   /// [RefreshState.hasError]時のWidgetのBuilder
-  final Widget Function(BuildContext context, E error) onError;
+  final Widget Function(BuildContext context, E error)? onError;
 
   /// [RefreshState.isRefreshing]中のWidgetのBuilder
-  final Widget Function(BuildContext context) onLoading;
+  final Widget Function(BuildContext context)? onLoading;
 
   /// 下位Widgetを[RefreshIndicator]でラップするかどうか
   /// [RefreshIndicator.onRefresh]の設定値が冗長になりがちなので、そこの記述量を抑えたい
@@ -37,8 +37,8 @@ class RefreshSelector<V, E> extends StatelessWidget {
   final StateNotifierProvider<RefreshController<V, E>, RefreshState<V, E>> refreshControllerProvider;
 
   const RefreshSelector({
-    @required this.onValue,
-    @required this.refreshControllerProvider,
+    required this.onValue,
+    required this.refreshControllerProvider,
     this.onError,
     this.onLoading,
     this.enablePullRefresh = false,
@@ -49,7 +49,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget child) {
+      builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget? child) {
         Widget ret = Stack(
           fit: fit,
           children: [
@@ -57,22 +57,22 @@ class RefreshSelector<V, E> extends StatelessWidget {
               builder: (context, watch, child) {
                 final state = watch(refreshControllerProvider);
                 final errorValue = state.value == null ? state.error : null;
-                return errorValue != null && onError != null ? onError(context, errorValue) : const SizedBox(width: 0, height: 0);
-              },
+                return errorValue != null && onError != null ? onError!(context, errorValue) : const SizedBox(width: 0, height: 0);
+              } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?),
             ),
             Consumer(
               builder: (context, watch, child) {
                 final state = watch(refreshControllerProvider);
                 final value = state.value;
                 return value != null ? onValue(context, value) : const SizedBox(width: 0, height: 0);
-              },
+              } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?),
             ),
             if (!disableLoading)
               Consumer(
-                builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget child) {
+                builder: (BuildContext context, T Function<T>(ProviderBase<Object, T>) watch, Widget? child) {
                   final state = watch(refreshControllerProvider);
                   final isRefreshing = state.isRefreshing;
-                  final child = onLoading != null ? onLoading(context) : defaultOnLoading(context);
+                  final child = onLoading != null ? onLoading!(context) : defaultOnLoading(context);
                   return AnimatedOpacity(
                     opacity: isRefreshing ? 1 : 0,
                     duration: const Duration(milliseconds: 200),
@@ -87,7 +87,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
         );
 
         if (enablePullRefresh) {
-          ret = _Refresh<V, E>(ret, watch<RefreshController>(refreshControllerProvider.notifier));
+          ret = _Refresh<V?, E?>(ret, watch<RefreshController>(refreshControllerProvider.notifier) as RefreshController<V?, E?>);
         }
         return ret;
       },

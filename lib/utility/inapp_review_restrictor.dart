@@ -7,11 +7,11 @@ const String _prefKeyReviewedVersions = "flutter_app_components_reviewed_version
 const String _prefKeyNotNowTime = "flutter_app_components_not_now_time";
 
 class InAppReviewRestrictor {
-  static Function(dynamic e, StackTrace st) errorCallback;
+  static Function(dynamic e, StackTrace st)? errorCallback;
 
-  final Future<String> requestReviewVersion;
-  final Future<InAppReviewNavigationKind> reviewKind;
-  final String appStoreId;
+  final Future<String>? requestReviewVersion;
+  final Future<InAppReviewNavigationKind>? reviewKind;
+  final String? appStoreId;
   final Duration keepSilentFromLastNotNow;
 
   InAppReviewRestrictor({
@@ -75,7 +75,7 @@ class InAppReviewRestrictor {
       }
     }
 
-    final _request = await requestReviewVersion;
+    final _request = await requestReviewVersion!;
 
     if (_request == null || _request.isEmpty) {
       _log("review request version missing. do nothing.");
@@ -91,7 +91,7 @@ class InAppReviewRestrictor {
       return InAppReviewNavigationKind.Silent;
     }
 
-    final kind = await reviewKind;
+    final kind = await reviewKind!;
 
     final reviewed = _reviewed.map((x) => Version.parse(x)).toList(growable: false);
     final request = Version.parse(_request);
@@ -132,7 +132,7 @@ class InAppReviewRestrictor {
     }
   }
 
-  Future<DateTime> _getLastNotNow() async {
+  Future<DateTime?> _getLastNotNow() async {
     final instance = await SharedPreferences.getInstance();
     final str = instance.getString(_prefKeyNotNowTime);
 
@@ -149,7 +149,7 @@ class InAppReviewRestrictor {
     }
   }
 
-  Future<List<String>> _getReviewedVersions() async {
+  Future<List<String>?> _getReviewedVersions() async {
     try {
       final instance = await SharedPreferences.getInstance();
 

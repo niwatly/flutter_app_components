@@ -104,7 +104,7 @@ class RouteNotFoundException implements Exception {
 
   RouteNotFoundException.cannotExtractPath(Uri uri) : message = "Cannot extract path. uri = $uri";
 
-  RouteNotFoundException.noMatch(String path) : message = "No routes matched. path = $path";
+  RouteNotFoundException.noMatch(String? path) : message = "No routes matched. path = $path";
 
   @override
   String toString() => message;

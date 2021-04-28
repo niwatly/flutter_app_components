@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' hide DialogRoute;
 
 class DialogRoute<T> extends PopupRoute<T> {
-  final WidgetBuilder builder;
+  final WidgetBuilder? builder;
   DialogRoute({
-    RouteSettings settings,
+    RouteSettings? settings,
     this.builder,
     this.barrierDismissible = true,
   }) : super(settings: settings);
@@ -12,7 +12,7 @@ class DialogRoute<T> extends PopupRoute<T> {
   final bool barrierDismissible;
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   Color get barrierColor => const Color(0x80000000);
@@ -22,7 +22,7 @@ class DialogRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-    return builder(context);
+    return builder!(context);
   }
 
   @override

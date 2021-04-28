@@ -11,18 +11,18 @@ import 'package:path_provider/path_provider.dart';
 import 'extension.dart';
 
 class MultipartFileHelper {
-  static Function(dynamic e, StackTrace st) onErrorCallback;
+  static Function(dynamic e, StackTrace st)? onErrorCallback;
 
   static Future<MultipartFile> createMultipartFileWithoutExif({
-    @required String multipartFieldKey,
-    @required String multipartFilename,
-    String filePath,
-    File file,
-    Uint8List bytes,
-    ImageProvider imageProvider,
+    required String multipartFieldKey,
+    required String multipartFilename,
+    String? filePath,
+    File? file,
+    Uint8List? bytes,
+    ImageProvider? imageProvider,
   }) async {
     Uint8List input;
-    String fileTypeByFilePath;
+    String? fileTypeByFilePath;
     bool byteDataFromImageProvider = false;
 
     if (bytes != null) {
@@ -47,7 +47,7 @@ class MultipartFileHelper {
       //
       // Note: PNGに変換している
       // Note: なぜPNGに変換するの？ -> ImageProviderからバイト配列を得る方法はそれしかなさそうだから
-      final byteData = await imageInfo.image.toByteData(format: ImageByteFormat.png);
+      final byteData = await (imageInfo.image.toByteData(format: ImageByteFormat.png) as FutureOr<ByteData>);
 
       input = byteData.buffer.asUint8List();
       fileTypeByFilePath = "png";
@@ -79,7 +79,7 @@ class MultipartFileHelper {
       // Note: ファイル名の重複による想定外のエラーを避けるため、ちゃんとした名前で送る
       filename: filename,
       // ContentType
-      contentType: MediaType("image", result.filetype),
+      contentType: MediaType("image", result.filetype!),
     );
 
     return multipartFile;
@@ -87,8 +87,8 @@ class MultipartFileHelper {
 
   static Future<EncodeResult> _removeExifAndEncodeIfNeed(
     List<int> input, {
-    String filePathForDecoderNotFound,
-    bool fromImageProvider,
+    String? filePathForDecoderNotFound,
+    required bool fromImageProvider,
   }) async {
     final decodeAndResize = (List<int> input, image.Decoder decoder) {
       const maxSize = 960;
@@ -96,7 +96,7 @@ class MultipartFileHelper {
       print("decode by ${decoder.runtimeType}.");
 
       // デコードする
-      final decoded = decoder.decodeImage(input);
+      final decoded = decoder.decodeImage(input)!;
 
       // 画像が大きいときはリサイズする
       image.Image resized;
@@ -119,7 +119,7 @@ class MultipartFileHelper {
       return baked;
     };
 
-    image.Decoder decoder;
+    image.Decoder? decoder;
 
     if (fromImageProvider) {
       // 背景: ImageProviderをPng形式のバイトデータに変換した後、image.findDecoderForDataにかけると、Jpegとして判定されてしまう
@@ -151,11 +151,11 @@ class MultipartFileHelper {
       // 対応: デコーダが見つかればデコーダ、見つからなければファイル名で形式を決める（結局バグると思うがやらないよりましかな？程度）
       final ex = Exception("decorder not found");
       onErrorCallback?.call(ex, StackTrace.current);
-      return EncodeResult(input, filePathForDecoderNotFound);
+      return EncodeResult(input as Uint8List, filePathForDecoderNotFound);
     } else if (decoder is image.GifDecoder) {
       // GifアニメーションをdecodeImageするとアニメーションが失われてしまうので何もせずに終了する
       // （別途decodeAnimationというメソッドが用意されているが、これに対してリサイズはできなさそう）（Frameごとにresizeすれば良い？）
-      return EncodeResult(input, "gif");
+      return EncodeResult(input as Uint8List, "gif");
     }
 
     final type = decoder.fileType ?? filePathForDecoderNotFound;
@@ -169,12 +169,12 @@ class MultipartFileHelper {
         case "jpg":
         case "jpeg":
           print("encode by JpegEncoder.");
-          encoded = image.encodeJpg(decodedImage);
+          encoded = image.encodeJpg(decodedImage) as Uint8List;
           break;
         case "png":
         default:
           print("encode by PngEncoder.");
-          encoded = image.encodePng(decodedImage);
+          encoded = image.encodePng(decodedImage) as Uint8List;
           break;
       }
 
@@ -183,20 +183,20 @@ class MultipartFileHelper {
       // 背景: findDecoderForDataはJpegとして判定したが、JpegDecoder.decodeImageを実行するとエラーになるデータがある
       // 対応: エラーが出たら何もせずに終了する
       onErrorCallback?.call(e, st);
-      return EncodeResult(input, filePathForDecoderNotFound);
+      return EncodeResult(input as Uint8List, filePathForDecoderNotFound);
     }
   }
 }
 
 class EncodeResult {
   final Uint8List bytes;
-  final String filetype;
+  final String? filetype;
 
   const EncodeResult(this.bytes, this.filetype);
 }
 
 extension _DecorderEx on image.Decoder {
-  String get fileType {
+  String? get fileType {
     switch (runtimeType) {
       case image.JpegDecoder:
         return "jpg";

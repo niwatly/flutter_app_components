@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 class FloatingDialog extends StatelessWidget {
   final Widget child;
   final double widthFactor;
-  final String title;
+  final String? title;
   final bool showCloseButton;
   final BorderRadius cornerRadius;
   final EdgeInsets contentPadding;
   final Color backgroundColor;
-  final void Function() onClose;
+  final void Function()? onClose;
   final EdgeInsetsGeometry verticalMargin;
 
   const FloatingDialog({
-    @required this.child,
+    required this.child,
     this.onClose,
     this.title,
     this.showCloseButton = true,
@@ -75,7 +75,7 @@ class FloatingDialog extends StatelessWidget {
                                           child: Padding(
                                             padding: const EdgeInsets.all(16),
                                             child: Text(
-                                              title,
+                                              title!,
                                               maxLines: 2,
                                               textAlign: TextAlign.left,
                                               style: DialogTheme.of(context).titleTextStyle,

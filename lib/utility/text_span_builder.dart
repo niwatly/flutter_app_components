@@ -9,9 +9,9 @@ class TextSpanBuilder {
   static const defaultLinkRegExpPatterns = [urlRegExpPattern, phoneNumberRegExpPattern, emailRegExpPattern];
 
   final List<String> linkRegExpPatterns;
-  final TextStyle style;
-  final TextStyle linkStyle;
-  final void Function(String url) onUrlTapCallback;
+  final TextStyle? style;
+  final TextStyle? linkStyle;
+  final void Function(String? url)? onUrlTapCallback;
 
   TextSpanBuilder({
     this.linkRegExpPatterns = defaultLinkRegExpPatterns,
@@ -24,14 +24,14 @@ class TextSpanBuilder {
     final elements = _generateElements(text);
 
     final textSpans = elements.map((x) {
-      final recognizer = x.isLink && onUrlTapCallback != null
+      final recognizer = x.isLink! && onUrlTapCallback != null
           ? (TapGestureRecognizer() //
-            ..onTap = () => onUrlTapCallback(x.text))
+            ..onTap = () => onUrlTapCallback!(x.text))
           : null;
 
       return TextSpan(
         text: x.text,
-        style: x.isLink ? linkStyle : style,
+        style: x.isLink! ? linkStyle : style,
         recognizer: recognizer,
       );
     });
@@ -71,12 +71,12 @@ class TextSpanBuilder {
 }
 
 class _Element {
-  final bool isLink;
-  final String text;
+  final bool? isLink;
+  final String? text;
 
   _Element({this.isLink, this.text});
 
   _Element.text(String text) : this(isLink: false, text: text);
 
-  _Element.link(String link) : this(isLink: true, text: link);
+  _Element.link(String? link) : this(isLink: true, text: link);
 }
