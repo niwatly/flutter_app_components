@@ -60,7 +60,7 @@ class DialogBuilderState extends State<DialogBuilder> {
           title: errorTitle,
           body: message,
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 okLabel,
                 style: widget.okStyle,
@@ -80,7 +80,7 @@ class DialogBuilderState extends State<DialogBuilder> {
           title: confirmTitle,
           body: message,
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 okLabel,
                 style: widget.okStyle,
@@ -120,7 +120,7 @@ class DialogBuilderState extends State<DialogBuilder> {
               ],
             ),
             actions: [
-              FlatButton(
+              TextButton(
                 child: Text(
                   okLabel,
                   style: widget.okStyle,
@@ -142,14 +142,14 @@ class DialogBuilderState extends State<DialogBuilder> {
           title: title ?? askTitle,
           body: message!,
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 cancelLabel,
                 style: widget.cancelStyle,
               ),
               onPressed: () => Navigator.of(context).pop(false),
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 okLabel,
                 style: widget.okStyle,
