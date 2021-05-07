@@ -17,6 +17,7 @@ class ScrollableAlign extends StatelessWidget {
   final bool disableGrowEffect;
   final bool reverse;
   final bool scrollBarIsAlwaysShown;
+  final ScrollPhysics parentScrollPhysics;
 
   const ScrollableAlign({
     this.alignment = Alignment.topCenter,
@@ -29,6 +30,7 @@ class ScrollableAlign extends StatelessWidget {
     this.unfocusWhenTapped = false,
     this.disableGrowEffect = false,
     this.reverse = false,
+    this.parentScrollPhysics,
   });
 
   @override
@@ -37,7 +39,7 @@ class ScrollableAlign extends StatelessWidget {
       builder: (context, constraints) => SingleChildScrollView(
         padding: padding,
         reverse: reverse,
-        physics: const AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(parent: parentScrollPhysics),
         controller: controller,
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: constraints.maxHeight),
