@@ -13,6 +13,7 @@ class RadioBoxText<T> extends StatelessWidget {
   final ListTileControlAffinity affinity;
   final bool expandBetweenCheckAndLabel;
   final TextStyle descriptionTextStyle;
+  final TextStyle labelTextStyle;
 
   const RadioBoxText({
     @required this.label,
@@ -27,6 +28,7 @@ class RadioBoxText<T> extends StatelessWidget {
     this.affinity = ListTileControlAffinity.trailing,
     this.expandBetweenCheckAndLabel = true,
     this.descriptionTextStyle,
+    this.labelTextStyle,
   });
 
   @override
@@ -36,12 +38,14 @@ class RadioBoxText<T> extends StatelessWidget {
       groupValue: radioCurrentValue,
       onChanged: disable ? null : (v) => onChanged(v),
     );
+    final _labelTextStyle = (labelTextStyle ?? Theme.of(context).textTheme.bodyText2);
     return InkWell(
       onTap: () => disable ? null : onChanged(radioMyValue),
       splashColor: Colors.transparent,
       child: Padding(
         padding: padding ?? const EdgeInsets.all(0),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             /// radio (if leading)
             if (affinity == ListTileControlAffinity.leading) radio else const SizedBox(width: 16),
@@ -60,9 +64,9 @@ class RadioBoxText<T> extends StatelessWidget {
                     label,
                     maxLines: 2,
                     textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.bodyText2.apply(
-                          color: disable ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyText2.color,
-                        ),
+                    style: _labelTextStyle.apply(
+                      color: disable ? Theme.of(context).disabledColor : _labelTextStyle.color,
+                    ),
                   ),
                   const SizedBox(height: 2),
                   if (description != null)
