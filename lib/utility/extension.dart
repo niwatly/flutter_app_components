@@ -32,58 +32,7 @@ extension DoubleHelper on double {
 }
 
 extension DateHelper on DateTime {
-  String toFormatString({String format = "M/d"}) {
-    final formatter = DateFormat(format, "ja");
-    return formatter.format(toLocal());
-  }
-
   String toJsonString() => toUtc().toIso8601String();
-
-  /// 過去の日付に対して、現在時刻と比較し、良い感じの「〜〜前」を計算する
-  String toElapsedString() {
-    final now = DateTime.now();
-    final diff = now.difference(this);
-
-    if (diff.isNegative) {
-      return "";
-    }
-
-    if (diff.inSeconds < 60) {
-      return "${diff.inSeconds}秒前";
-    } else if (diff.inMinutes < 60) {
-      return "${diff.inMinutes}分前";
-    } else if (diff.inHours < 48) {
-      return "${diff.inHours}時間前";
-    } else if (diff.inDays < 14) {
-      return "${diff.inDays}日前";
-    } else if (year == now.year) {
-      return toFormatString(format: "MM月dd日");
-    } else {
-      return toFormatString(format: "yy年MM月dd日");
-    }
-  }
-
-  /// 未来の日付に対して、現在時刻と比較し、良い感じの「後〜〜」を計算する
-  String toRemainingString() {
-    final now = DateTime.now();
-    final diff = difference(now);
-
-    if (diff.isNegative) {
-      return "";
-    }
-
-    if (diff.inDays < 1) {
-      return "本日";
-    } else if (diff.inDays < 6) {
-      return "後${diff.inDays}日";
-    } else {
-      if (year == now.year) {
-        return toFormatString(format: "MM月dd日");
-      } else {
-        return toFormatString(format: "yy年MM月dd日");
-      }
-    }
-  }
 }
 
 extension MapHelper<K, V> on Map<K, V> {
