@@ -60,7 +60,20 @@ class UnsuccessfulStatusError implements IApiClientError {
 
   const UnsuccessfulStatusError(this.response);
 
-  bool get isContentJson => response?.headers["Content-Type"]?.contains("application/json") == true;
+  bool get isContentJson {
+    if (response == null) {
+      return false;
+    }
+
+    final type = response.headers["Content-Type"] ?? response.headers["content-type"];
+
+    if (type == null) {
+      return false;
+    }
+
+    return type.contains("application/json");
+  }
+
   @override
   String toString() {
     final url = response?.request?.url;
