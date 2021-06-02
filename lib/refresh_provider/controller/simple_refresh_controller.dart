@@ -38,6 +38,7 @@ class SimpleRefreshController<V, E> extends RefreshController<V, E> {
         value: value,
         isRefreshing: false,
         initialRefreshCompleted: true,
+        lastRefreshedAt: DateTime.now(),
       );
     } on E catch (e, st) {
       yield currentState = currentState.copyWith(

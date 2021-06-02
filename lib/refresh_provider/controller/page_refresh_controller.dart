@@ -43,6 +43,7 @@ class PageRefreshController<V extends IPagiable<V>, E> extends RefreshController
         value: value,
         isRefreshing: false,
         initialRefreshCompleted: true,
+        lastRefreshedAt: DateTime.now(),
       );
 
       // ページングに成功したのでページ番号を更新する

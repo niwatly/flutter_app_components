@@ -35,6 +35,7 @@ class CursorRefreshController<C, V extends ICursorable<V, C>, E> extends Refresh
         value: value,
         isRefreshing: false,
         initialRefreshCompleted: true,
+        lastRefreshedAt: DateTime.now(),
       );
     } on E catch (e, st) {
       yield currentState = currentState.copyWith(
