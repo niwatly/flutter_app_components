@@ -127,37 +127,6 @@ extension BuildContextEx on BuildContext {
 }
 
 extension StateNotifierEx<T> on StateNotifier<T> {
-  /// Deprecated
-  ///
-  /// StateNotifierの更新を監視し、更新のたびに値を送出するStreamを生成します
-  ///
-  /// StateNotifierがdisposeされたときにStreamもCloseされるべきですが、その実装はありません。
-  /// 代わりに、StreamController.broadcastに備わっている「購読数が0になったらcloseする」機能を利用します
-  ///
-  /// このメソッドで生成されたStreamの購読者は、必ずStateNotifierのdisposeと同じタイミングでcancelしてください
-  Stream<T> asStream() {
-    // ignore: close_sinks
-    final sc = StreamController<T>.broadcast();
-
-    VoidCallback? removeListener;
-
-    final op = CancelableOperation.fromFuture(
-      Future.microtask(() {
-        // StateNotifierのinitStateでaddListenerすると警告が出るので少しだけ待つ
-        removeListener = addListener((x) => sc.add(x));
-      }),
-    );
-
-    final finallyCallback = () {
-      op.cancel();
-      removeListener?.call();
-    };
-
-    return sc.stream //
-        .doOnDone(() => finallyCallback())
-        .doOnCancel(() => finallyCallback());
-  }
-
   // ignore: invalid_use_of_protected_member
   Stream<T> get streamAndStartWith => Rx.defer(() => stream.startWith(state));
 }
