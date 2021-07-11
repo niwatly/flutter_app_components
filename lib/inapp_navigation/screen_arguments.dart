@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'dialog_route.dart';
-
 abstract class IScreenArguments<T> {
   Route<T> generateRoute();
 

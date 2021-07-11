@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_components/view/check_box_text.dart';
 import 'package:provider/provider.dart';
 
-import 'dialog_route.dart';
 import 'floating_dialog.dart';
 
 class DialogBuilder extends StatefulWidget {
