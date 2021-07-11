@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark_widget.dart';
+// ignore: implementation_imports
+import 'package:tutorial_coach_mark/src/widgets/tutorial_coach_mark_widget.dart';
 
 class TutorialCoachMarkOverlay {
   final OverlayState overlay;
   final List<TargetFocus> targets;
-  final Function(TargetFocus) onClickTarget;
-  final Function() onFinish;
+  final Function(TargetFocus) onClickTarget; //optional
+  final Function(TargetFocus) onClickOverlay; //optional
+  final Function() onFinish; //optional
   final double paddingFocus;
-  final Function() onClickSkip;
+  final Function() onSkip; //optional
   final AlignmentGeometry alignSkip;
   final String textSkip;
   final TextStyle textStyleSkip;
@@ -16,23 +18,29 @@ class TutorialCoachMarkOverlay {
   final Color colorShadow;
   final double opacityShadow;
   final GlobalKey<TutorialCoachMarkWidgetState> _widgetKey = GlobalKey();
+  final Duration focusAnimationDuration;
+  final Duration pulseAnimationDuration;
+  final Widget skipWidget; //optional
 
   OverlayEntry _overlayEntry;
 
-  TutorialCoachMarkOverlay(
-    this.overlay, {
-    this.targets = const [],
-    this.colorShadow = Colors.black,
-    this.onClickTarget,
-    this.onFinish,
-    this.paddingFocus = 10,
-    this.onClickSkip,
-    this.alignSkip = Alignment.bottomRight,
-    this.textSkip = "SKIP",
-    this.textStyleSkip = const TextStyle(color: Colors.white),
-    this.hideSkip = false,
-    this.opacityShadow = 0.8,
-  }) : assert(targets != null, opacityShadow >= 0 && opacityShadow <= 1);
+  TutorialCoachMarkOverlay(this.overlay,
+      {this.targets, //required
+      this.colorShadow = Colors.black,
+      this.onClickTarget,
+      this.onClickOverlay,
+      this.onFinish,
+      this.paddingFocus = 10,
+      this.onSkip,
+      this.alignSkip = Alignment.bottomRight,
+      this.textSkip = "SKIP",
+      this.textStyleSkip = const TextStyle(color: Colors.white),
+      this.hideSkip = false,
+      this.opacityShadow = 0.8,
+      this.focusAnimationDuration = const Duration(milliseconds: 600),
+      this.pulseAnimationDuration = const Duration(milliseconds: 500),
+      this.skipWidget})
+      : assert(targets != null, opacityShadow >= 0 && opacityShadow <= 1);
 
   OverlayEntry _buildOverlay() {
     return OverlayEntry(builder: (context) {
@@ -41,7 +49,7 @@ class TutorialCoachMarkOverlay {
         targets: targets,
         clickTarget: onClickTarget,
         paddingFocus: paddingFocus,
-        clickSkip: skip,
+        onClickSkip: skip,
         alignSkip: alignSkip,
         textSkip: textSkip,
         textStyleSkip: textStyleSkip,
@@ -68,8 +76,8 @@ class TutorialCoachMarkOverlay {
   }
 
   void skip() {
-    if (onClickSkip != null) {
-      onClickSkip();
+    if (onSkip != null) {
+      onSkip();
     }
 
     _removeOverlay();
