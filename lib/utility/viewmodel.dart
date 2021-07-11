@@ -33,7 +33,7 @@ class ViewModel<T> extends StateNotifier<T?> with LocatorMixin {
 
   void _tryUpdateState(Locator locator) {
     final watcher = stateWatcher;
-    
+
     if (watcher == null) {
       return;
     }

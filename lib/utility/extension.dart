@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:core';
 
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart' hide Locator;

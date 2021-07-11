@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
-import '../refresh_config.dart';
 import '../../utility/extension.dart';
+import '../refresh_config.dart';
 import '../refresh_state.dart';
 
 part 'cursor_refresh_controller.dart';

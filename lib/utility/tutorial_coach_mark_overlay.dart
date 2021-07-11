@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 // ignore: implementation_imports
 import 'package:tutorial_coach_mark/src/widgets/tutorial_coach_mark_widget.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class TutorialCoachMarkOverlay {
   final OverlayState overlay;
