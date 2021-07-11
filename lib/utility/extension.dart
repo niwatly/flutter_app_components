@@ -9,6 +9,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 extension StringHelper on String? {
+  // Deprecated
   bool get isNullOrEmpty => this?.isNotEmpty != true;
 }
 
@@ -46,7 +47,6 @@ extension MapHelper<K, V> on Map<K, V> {
 }
 
 extension IterableHelper<T> on Iterable<T> {
-  //nullable
   T? get firstOrNull => isNotEmpty ? first : null;
   T? get lastOrNull => isNotEmpty ? last : null;
 }
@@ -125,6 +125,8 @@ extension BuildContextEx on BuildContext {
 }
 
 extension StateNotifierEx<T> on StateNotifier<T> {
+  /// Deprecated
+  ///
   /// StateNotifierの更新を監視し、更新のたびに値を送出するStreamを生成します
   ///
   /// StateNotifierがdisposeされたときにStreamもCloseされるべきですが、その実装はありません。

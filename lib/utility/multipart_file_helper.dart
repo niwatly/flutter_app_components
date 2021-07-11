@@ -54,7 +54,7 @@ class MultipartFileHelper {
       fileTypeByFilePath = "png";
       byteDataFromImageProvider = true;
     } else {
-      throw Exception("cannot create multipartfile as all inputs are null");
+      throw Exception("cannot create multipart file as all inputs are null");
     }
 
     // Byteデータから回転情報を削除する
@@ -67,7 +67,7 @@ class MultipartFileHelper {
 
     final filename = "${await getTemporaryDirectory().then((x) => x.path)}/$multipartFilename.${result.fileType}";
 
-    print("create multipart file. filetype = ${result.fileType}, field = $multipartFieldKey, fielname = $filename");
+    print("create multipart file. filetype = ${result.fileType}, field = $multipartFieldKey, filename = $filename");
 
     // MultipartFileを作成
     final multipartFile = MultipartFile.fromBytes(
@@ -164,7 +164,7 @@ class MultipartFileHelper {
 
     if (decoder == null) {
       // デコーダが存在しない（.HEIC等）ので何もせずに終わる
-      print("ImageConvertHelper: decorded not found. nothing to do.");
+      print("ImageConvertHelper: decoded not found. nothing to do.");
 
       // 背景: ファイル形式を知る方法は2つある（ファイル名等とデコード情報）
       // 背景: ImagePickerにはファイル形式をjpgに書き換えてしまうバグがあるので、ファイル名からファイル形式を知る方法は使えない（2020/08/14 現在）（https://github.com/flutter/flutter/issues/47719）

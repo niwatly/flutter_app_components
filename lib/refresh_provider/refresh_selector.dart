@@ -8,7 +8,7 @@ import 'refresh_state.dart';
 /// [RefreshState] を3つ状態に分けて、状態ごとにUIを出し分ける
 ///
 /// また、[RefreshSelector.onValue]で与えられたWidgetは[RefreshState.isSuccess]のときにしかBuildしない。これにより、無駄なnullチェックを省略できる
-class RefreshSelector<V, E> extends StatelessWidget {
+class RefreshSelector<V extends Object, E extends Object> extends StatelessWidget {
   /// デフォルトのローディング表示用Widget
   /// 同じ設定を何度もコンストラクタで渡すのが面倒なので、static変数で1つだけ用意する
   static Widget Function(BuildContext context) defaultOnLoading = (context) => const CircularProgressIndicator();
@@ -92,7 +92,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
   }
 }
 
-class _Refresh<V, E> extends StatelessWidget {
+class _Refresh<V extends Object, E extends Object> extends StatelessWidget {
   final Widget child;
 
   const _Refresh(this.child);

@@ -24,14 +24,14 @@ class TextSpanBuilder {
     final elements = _generateElements(text);
 
     final textSpans = elements.map((x) {
-      final recognizer = x.isLink! && onUrlTapCallback != null
+      final recognizer = x.isLink != null && onUrlTapCallback != null
           ? (TapGestureRecognizer() //
             ..onTap = () => onUrlTapCallback!(x.text))
           : null;
 
       return TextSpan(
         text: x.text,
-        style: x.isLink! ? linkStyle : style,
+        style: x.isLink != null ? linkStyle : style,
         recognizer: recognizer,
       );
     });
@@ -46,7 +46,7 @@ class TextSpanBuilder {
       return;
     }
 
-    final regexp = RegExp("(${(linkRegExpPatterns ?? defaultLinkRegExpPatterns).join("|")})");
+    final regexp = RegExp("(${(linkRegExpPatterns).join("|")})");
     final matches = regexp.allMatches(text);
 
     if (matches.isEmpty) {

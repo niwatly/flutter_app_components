@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -9,7 +8,7 @@ part 'cursor_refresh_controller.dart';
 part 'page_refresh_controller.dart';
 part 'simple_refresh_controller.dart';
 
-abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>> {
+abstract class RefreshController<V extends Object, E extends Object> extends StateNotifier<RefreshState<V, E>> {
   static Function(dynamic e, StackTrace st)? errorCallback;
   static bool notifyErrorEvenExpected = false;
 

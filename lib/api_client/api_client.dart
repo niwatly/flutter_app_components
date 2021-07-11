@@ -7,41 +7,37 @@ typedef UriBuilder = Uri Function(String path, Map<String, dynamic>? query);
 abstract class IApiClient {
   Future<Response> get(
     String path, {
-    Map<String, dynamic>? query,
+    Map<String, dynamic> query = const {},
   });
 
   Future<Response> post(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   });
 
   Future<Response> put(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   });
 
   Future<Response> delete(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   });
 
   Future<Response> patch(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   });
 
   void close();
 }
 
-String? makeQueryWithSquareBlanketsArrayParameters(Map<String, dynamic /*String|Iterable<String>*/ > queryParameters) {
-  if (queryParameters == null) {
-    return null;
-  }
-
+String makeQueryWithSquareBlanketsArrayParameters(Map<String, dynamic /*String|Iterable<String>*/ > queryParameters) {
   final result = StringBuffer();
   var separator = "";
 
@@ -58,7 +54,7 @@ String? makeQueryWithSquareBlanketsArrayParameters(Map<String, dynamic /*String|
     }
   }
 
-  String? convertToString(dynamic value) {
+  String convertToString(dynamic value) {
     if (value is String) {
       return value;
     } else if (value is bool || value is int) {

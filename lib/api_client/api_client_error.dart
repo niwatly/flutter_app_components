@@ -19,7 +19,7 @@ class InvalidUriError implements IApiClientError {
   String toString() => "$runtimeType（"
       " host = $host, "
       " path = $path, "
-      " query = ${query?.entries?.fold<String>("", (acc, v) => "$acc, (${v.key}: ${v.value})") ?? "null"}, "
+      " query = ${query?.entries.fold<String>("", (acc, v) => "$acc, (${v.key}: ${v.value})") ?? "null"}, "
       "）";
 }
 
@@ -61,10 +61,6 @@ class UnsuccessfulStatusError implements IApiClientError {
   const UnsuccessfulStatusError(this.response);
 
   bool get isContentJson {
-    if (response == null) {
-      return false;
-    }
-
     final type = response.headers["Content-Type"] ?? response.headers["content-type"];
 
     if (type == null) {
@@ -76,12 +72,12 @@ class UnsuccessfulStatusError implements IApiClientError {
 
   @override
   String toString() {
-    final url = response?.request?.url;
-    final status = response?.statusCode?.toString() ?? null;
+    final url = response.request?.url;
+    final status = response.statusCode.toString();
     final body = isContentJson ? response.body : null;
-    final method = response.request!.method;
+    final method = response.request?.method.toUpperCase() ?? null;
 
-    return "$runtimeType（${method.toUpperCase()} $url, code = $status, body = $body）";
+    return "$runtimeType（$method $url, code = $status, body = $body）";
   }
 }
 

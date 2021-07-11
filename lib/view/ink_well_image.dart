@@ -10,7 +10,7 @@ class InkWellImage extends StatelessWidget {
   final Alignment alignment;
 
   const InkWellImage({
-    this.imageBuilder,
+    required this.imageBuilder,
     this.onTap,
     this.alignment = Alignment.center,
   });
@@ -26,7 +26,7 @@ class InkWellImage extends StatelessWidget {
         if (onTap != null)
           TraceStackChild.follow(
             child: LazyFutureBuilder(
-              futureBuilder: onTap,
+              futureBuilder: onTap!,
               builder: (context, futureBuilder, isFutureBuilding) => Material(
                 type: MaterialType.transparency,
                 child: InkWell(

@@ -40,7 +40,7 @@ class TutorialCoachMarkOverlay {
       this.focusAnimationDuration = const Duration(milliseconds: 600),
       this.pulseAnimationDuration = const Duration(milliseconds: 500),
       this.skipWidget})
-      : assert(targets != null, opacityShadow >= 0 && opacityShadow <= 1);
+      : assert(opacityShadow >= 0 && opacityShadow <= 1);
 
   OverlayEntry _buildOverlay() {
     return OverlayEntry(builder: (context) {
@@ -83,8 +83,8 @@ class TutorialCoachMarkOverlay {
     _removeOverlay();
   }
 
-  void next() => _widgetKey?.currentState?.next();
-  void previous() => _widgetKey?.currentState?.previous();
+  void next() => _widgetKey.currentState?.next();
+  void previous() => _widgetKey.currentState?.previous();
 
   void _removeOverlay() {
     _overlayEntry?.remove();

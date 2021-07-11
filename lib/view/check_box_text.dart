@@ -5,7 +5,7 @@ class CheckBoxText extends StatelessWidget {
   final String? description;
   final Widget? leading;
   final Widget? secondary;
-  final Function(bool? newValue) onChanged;
+  final Function(bool newValue) onChanged;
   final bool checkBoxValue;
   final bool disable;
   final EdgeInsets? padding;
@@ -31,7 +31,7 @@ class CheckBoxText extends StatelessWidget {
   Widget build(BuildContext context) {
     final checkbox = Checkbox(
       value: checkBoxValue,
-      onChanged: disable ? null : (v) => onChanged(v),
+      onChanged: disable ? null : (v) => onChanged(v ?? false),
     );
     return InkWell(
       onTap: () => disable ? null : onChanged(!checkBoxValue),
@@ -41,7 +41,10 @@ class CheckBoxText extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             /// checkbox (if leading)
-            if (affinity == ListTileControlAffinity.leading) checkbox else const SizedBox(width: 16),
+            if (affinity == ListTileControlAffinity.leading) //
+              checkbox
+            else
+              const SizedBox(width: 16),
 
             /// leading
             if (leading != null) leading!,
@@ -77,7 +80,10 @@ class CheckBoxText extends StatelessWidget {
             if (secondary != null) secondary!,
 
             /// checkbox (if trailing)
-            if (affinity == ListTileControlAffinity.trailing) checkbox else const SizedBox(width: 16),
+            if (affinity == ListTileControlAffinity.trailing) //
+              checkbox
+            else
+              const SizedBox(width: 16),
           ],
         ),
       ),
@@ -86,23 +92,23 @@ class CheckBoxText extends StatelessWidget {
 }
 
 class _FlexibleOrExpand extends StatelessWidget {
-  final bool? expand;
-  final Widget? child;
+  final bool expand;
+  final Widget child;
 
   const _FlexibleOrExpand({
-    this.expand,
-    this.child,
+    required this.expand,
+    required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (expand!) {
+    if (expand) {
       return Expanded(
-        child: child!,
+        child: child,
       );
     } else {
       return Flexible(
-        child: child!,
+        child: child,
       );
     }
   }

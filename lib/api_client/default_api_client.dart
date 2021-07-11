@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 import 'api_client.dart';
@@ -16,8 +15,8 @@ class DefaultApiClient with IApiClient {
   final int? port;
   final FutureOr<Map<String, String>>? headersFuture;
   Map<String, String>? _headers;
-  late Client _client;
 
+  late Client _client;
   late UriBuilder _uriBuilder;
 
   DefaultApiClient({
@@ -79,8 +78,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> post(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) async {
     final request = await _createBaseRequest("POST", _uriBuilder(path, query), body: body);
 
@@ -90,8 +89,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> put(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) async {
     final request = await _createBaseRequest("PUT", _uriBuilder(path, query), body: body);
 
@@ -101,8 +100,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> delete(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) async {
     final request = await _createBaseRequest("DELETE", _uriBuilder(path, query), body: body);
 
@@ -112,7 +111,7 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> get(
     String path, {
-    Map<String, dynamic>? query,
+    Map<String, dynamic> query = const {},
   }) async {
     final request = await _createBaseRequest("GET", _uriBuilder(path, query));
 
@@ -122,8 +121,8 @@ class DefaultApiClient with IApiClient {
   @override
   Future<Response> patch(
     String path, {
-    Map<String, dynamic>? query,
-    Map<String, dynamic>? body,
+    Map<String, dynamic> query = const {},
+    Map<String, dynamic> body = const {},
   }) async {
     final request = await _createBaseRequest("PATCH", _uriBuilder(path, query));
 

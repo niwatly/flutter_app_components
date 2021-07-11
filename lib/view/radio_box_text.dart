@@ -93,23 +93,23 @@ class RadioBoxText<T> extends StatelessWidget {
 }
 
 class _FlexibleOrExpand extends StatelessWidget {
-  final bool? expand;
-  final Widget? child;
+  final bool expand;
+  final Widget child;
 
   const _FlexibleOrExpand({
-    this.expand,
-    this.child,
+    required this.expand,
+    required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (expand!) {
+    if (expand) {
       return Expanded(
-        child: child!,
+        child: child,
       );
     } else {
       return Flexible(
-        child: child!,
+        child: child,
       );
     }
   }

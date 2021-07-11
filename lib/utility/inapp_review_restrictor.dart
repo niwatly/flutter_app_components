@@ -71,14 +71,14 @@ class InAppReviewRestrictor {
     if (lastNotNow != null) {
       final diffFromLastNotNow = DateTime.now().difference(lastNotNow);
 
-      if (lastNotNow != null && diffFromLastNotNow < keepSilentFromLastNotNow) {
+      if (diffFromLastNotNow < keepSilentFromLastNotNow) {
         // 前回の「あとで」から時間がたっていないので何もしない
         _log("$runtimeType: diff $diffFromLastNotNow is less than $keepSilentFromLastNotNow. determine Silent.");
         return InAppReviewNavigationKind.Silent;
       }
     }
 
-    final _request = await requestReviewVersion!;
+    final _request = await requestReviewVersion;
 
     if (_request == null || _request.isEmpty) {
       _log("review request version missing. do nothing.");
@@ -213,7 +213,5 @@ extension InAppReviewNavigationKindEx on InAppReviewNavigationKind {
       case InAppReviewNavigationKind.Silent:
         return "silent";
     }
-
-    return "unknown";
   }
 }

@@ -7,7 +7,7 @@ import 'lazy_future_builder.dart';
 
 class ForwardNavigationText extends StatelessWidget {
   final String label;
-  final FutureOr Function()? onTap;
+  final FutureOr Function() onTap;
   final Color? color;
   final TextStyle? style;
   final EdgeInsets padding;
@@ -15,7 +15,7 @@ class ForwardNavigationText extends StatelessWidget {
   const ForwardNavigationText({
     Key? key,
     required this.label,
-    this.onTap,
+    required this.onTap,
     this.color,
     this.style,
     this.padding = const EdgeInsets.fromLTRB(4, 12, 0, 12),

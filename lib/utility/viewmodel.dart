@@ -21,24 +21,26 @@ class ViewModel<T> extends StateNotifier<T?> with LocatorMixin {
   void initState() {
     super.initState();
 
-    _tryUpdateState(read as T Function<T>());
+    _tryUpdateState(read);
   }
 
   @override
   void update(T Function<T>() watch) {
     super.update(watch);
 
-    _tryUpdateState(watch as T Function<T>());
+    _tryUpdateState(watch);
   }
 
   void _tryUpdateState(Locator locator) {
-    if (stateWatcher == null) {
+    final watcher = stateWatcher;
+    
+    if (watcher == null) {
       return;
     }
 
     final T? oldState = state;
 
-    final newState = stateWatcher!(state, locator);
+    final newState = watcher(state, locator);
 
     if (oldState != newState) {
       state = newState;

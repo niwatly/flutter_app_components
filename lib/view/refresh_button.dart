@@ -35,9 +35,14 @@ class _State extends State<RefreshButton> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return LazyFutureBuilder(
       futureBuilder: () async {
+        final refresh = widget.onRefresh;
+
+        if (refresh == null) {
+          return;
+        }
         _controller.repeat();
         try {
-          await widget.onRefresh!();
+          await refresh();
         } finally {
           _controller.stop();
         }

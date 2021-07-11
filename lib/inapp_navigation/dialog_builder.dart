@@ -60,7 +60,7 @@ class DialogBuilderState extends State<DialogBuilder> {
           title: errorTitle,
           body: message,
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 okLabel,
                 style: widget.okStyle,
@@ -81,7 +81,7 @@ class DialogBuilderState extends State<DialogBuilder> {
           title: confirmTitle,
           body: message,
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 okLabel,
                 style: widget.okStyle,
@@ -116,14 +116,14 @@ class DialogBuilderState extends State<DialogBuilder> {
                 const SizedBox(height: 36),
                 CheckBoxText(
                   checkBoxValue: context.watch<_CheckBoxNotifier>().value,
-                  onChanged: (v) => context.read<_CheckBoxNotifier>().value = v ?? false,
+                  onChanged: (v) => context.read<_CheckBoxNotifier>().value = v,
                   label: doNotShowAgainMessage,
                   affinity: ListTileControlAffinity.leading,
                 ),
               ],
             ),
             actions: [
-              FlatButton(
+              TextButton(
                 child: Text(
                   okLabel,
                   style: widget.okStyle,
@@ -146,14 +146,14 @@ class DialogBuilderState extends State<DialogBuilder> {
           title: title ?? askTitle,
           body: message!,
           actions: [
-            FlatButton(
+            TextButton(
               child: Text(
                 cancelLabel,
                 style: widget.cancelStyle,
               ),
               onPressed: () => Navigator.of(context).pop(false),
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 okLabel,
                 style: widget.okStyle,
