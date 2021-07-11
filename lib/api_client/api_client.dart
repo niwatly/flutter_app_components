@@ -78,5 +78,6 @@ String makeQueryWithSquareBlanketsArrayParameters(Map<String, dynamic /*String|I
       }
     }
   });
+
   return result.toString();
 }

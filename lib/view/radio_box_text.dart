@@ -38,7 +38,13 @@ class RadioBoxText<T> extends StatelessWidget {
       groupValue: radioCurrentValue,
       onChanged: disable ? null : (v) => onChanged(v),
     );
+    // なんでおまえnullなんだ...
+    // ignore: avoid-non-null-assertion
     final _labelTextStyle = (labelTextStyle ?? Theme.of(context).textTheme.bodyText2!);
+    final _leading = leading;
+    final _secondary = secondary;
+    final _desc = description;
+
     return InkWell(
       onTap: () => disable ? null : onChanged(radioMyValue),
       splashColor: Colors.transparent,
@@ -51,7 +57,7 @@ class RadioBoxText<T> extends StatelessWidget {
             if (affinity == ListTileControlAffinity.leading) radio else const SizedBox(width: 16),
 
             /// leading
-            if (leading != null) leading!,
+            if (_leading != null) _leading,
 
             /// label
             _FlexibleOrExpand(
@@ -69,9 +75,9 @@ class RadioBoxText<T> extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 2),
-                  if (description != null)
+                  if (_desc != null)
                     Text(
-                      description!,
+                      _desc,
                       maxLines: 5,
                       textAlign: TextAlign.left,
                       style: descriptionTextStyle ?? Theme.of(context).textTheme.caption,
@@ -81,7 +87,7 @@ class RadioBoxText<T> extends StatelessWidget {
             ),
 
             /// secondary
-            if (secondary != null) secondary!,
+            if (_secondary != null) _secondary,
 
             /// radio (if trailing)
             if (affinity == ListTileControlAffinity.trailing) radio else const SizedBox(width: 16),

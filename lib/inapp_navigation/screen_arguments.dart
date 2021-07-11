@@ -61,6 +61,7 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
               ],
             ),
           );
+
           return child;
         },
       );

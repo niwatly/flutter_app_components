@@ -63,23 +63,17 @@ class TutorialCoachMarkOverlay {
 
   void show() {
     if (_overlayEntry == null) {
-      _overlayEntry = _buildOverlay();
-      overlay.insert(_overlayEntry!);
+      overlay.insert(_overlayEntry = _buildOverlay());
     }
   }
 
   void finish() {
-    if (onFinish != null) {
-      onFinish!();
-    }
+    onFinish?.call();
     _removeOverlay();
   }
 
   void skip() {
-    if (onSkip != null) {
-      onSkip!();
-    }
-
+    onSkip?.call();
     _removeOverlay();
   }
 

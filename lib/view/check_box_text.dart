@@ -33,6 +33,13 @@ class CheckBoxText extends StatelessWidget {
       value: checkBoxValue,
       onChanged: disable ? null : (v) => onChanged(v ?? false),
     );
+    final _leading = leading;
+    final _secondary = secondary;
+    final _desc = description;
+    // なんでおまえnullableなんだ...
+    // ignore: avoid-non-null-assertion
+    final bodyText2 = Theme.of(context).textTheme.bodyText2!;
+
     return InkWell(
       onTap: () => disable ? null : onChanged(!checkBoxValue),
       child: Padding(
@@ -47,7 +54,7 @@ class CheckBoxText extends StatelessWidget {
               const SizedBox(width: 16),
 
             /// leading
-            if (leading != null) leading!,
+            if (_leading != null) _leading,
 
             /// label
             _FlexibleOrExpand(
@@ -60,14 +67,14 @@ class CheckBoxText extends StatelessWidget {
                     label,
                     maxLines: 2,
                     textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.bodyText2!.apply(
-                          color: disable ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyText2!.color,
-                        ),
+                    style: bodyText2.apply(
+                      color: disable ? Theme.of(context).disabledColor : bodyText2.color,
+                    ),
                   ),
                   const SizedBox(height: 2),
-                  if (description != null)
+                  if (_desc != null)
                     Text(
-                      description!,
+                      _desc,
                       maxLines: 5,
                       textAlign: TextAlign.left,
                       style: descriptionTextStyle ?? Theme.of(context).textTheme.caption,
@@ -77,7 +84,7 @@ class CheckBoxText extends StatelessWidget {
             ),
 
             /// secondary
-            if (secondary != null) secondary!,
+            if (_secondary != null) _secondary,
 
             /// checkbox (if trailing)
             if (affinity == ListTileControlAffinity.trailing) //

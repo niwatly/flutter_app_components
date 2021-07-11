@@ -32,8 +32,11 @@ class Unfocus extends StatelessWidget {
         builder: (context, child) => NotificationListener<UserScrollNotification>(
           onNotification: (notification) {
             context.read<_ScrollDirectionNotifier>().value = notification.direction;
+
             return false;
           },
+          // すぐ下でchildをしている
+          // ignore: avoid-non-null-assertion
           child: child!,
         ),
         child: ret,

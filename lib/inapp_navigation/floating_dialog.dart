@@ -25,6 +25,8 @@ class FloatingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _title = title;
+
     return Scaffold(
       backgroundColor: backgroundColor,
 
@@ -70,12 +72,12 @@ class FloatingDialog extends StatelessWidget {
                                           ),
                                           onPressed: onClose ?? () => Navigator.of(context).pop(),
                                         ),
-                                      if (title != null) //
+                                      if (_title != null) //
                                         Expanded(
                                           child: Padding(
                                             padding: const EdgeInsets.all(16),
                                             child: Text(
-                                              title!,
+                                              _title,
                                               maxLines: 2,
                                               textAlign: TextAlign.left,
                                               style: DialogTheme.of(context).titleTextStyle,

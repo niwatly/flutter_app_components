@@ -73,6 +73,7 @@ class InAppLauncher {
       // 外部アプリ起動のためのCustomUrlSchemeがここにくる（GoogleMapの起動等）
       //
       // アプリ外遷移する（任意のhttpリンクをブラウザで開く）
+
       return InAppLaunchResult.browser(uri);
     }
   }

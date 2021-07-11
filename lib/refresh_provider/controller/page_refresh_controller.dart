@@ -7,7 +7,7 @@ class PageRefreshController<V extends IPagiable<V>, E extends Object> extends Re
   int get currentPage => _currentPageInstance ?? defaultPage;
   set currentPage(value) => _currentPageInstance = value;
 
-  int get nextPage => _currentPageInstance != null ? _currentPageInstance! + 1 : defaultPage;
+  int get nextPage => _currentPageInstance?.let((x) => x + 1) ?? defaultPage;
 
   Future<V> Function(int page) refresher;
 
@@ -33,14 +33,21 @@ class PageRefreshController<V extends IPagiable<V>, E extends Object> extends Re
     }
 
     try {
-      var value = await refresher(nextPage);
+      V newValue;
 
       if (config.stack) {
-        value = currentState.value!.merge(value);
+        // config.stackが指定されている = 1回以上Refreshが成功していて、次のページをリクエストしている
+        // ignore: avoid-non-null-assertion
+        final currentValue = currentState.value!;
+
+        final value = await refresher(nextPage);
+        newValue = currentValue.merge(value);
+      } else {
+        newValue = await refresher(nextPage);
       }
 
       yield currentState = currentState.copyWith(
-        value: value,
+        value: newValue,
         isRefreshing: false,
         initialRefreshCompleted: true,
         lastRefreshedAt: DateTime.now(),

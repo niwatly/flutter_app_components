@@ -50,6 +50,8 @@ class MultipartFileHelper {
       // Note: なぜPNGに変換するの？ -> ImageProviderからバイト配列を得る方法はそれしかなさそうだから
       final byteData = await imageInfo.image.toByteData(format: ImageByteFormat.png);
 
+      // toByteDataの定義を見ていくとnot-nullな値をnullableで返却してるメソッドがいる
+      // ignore: avoid-non-null-assertion
       input = byteData!.buffer.asUint8List();
       fileTypeByFilePath = "png";
       byteDataFromImageProvider = true;
@@ -81,6 +83,7 @@ class MultipartFileHelper {
       // Note: ファイル名の重複による想定外のエラーを避けるため、ちゃんとした名前で送る
       filename: filename,
       // ContentType
+      // FIXME: fileTypeがnullになるエラーがたまに報告されている（nullable対応前から）
       contentType: MediaType("image", result.fileType!),
     );
 
@@ -91,7 +94,7 @@ class MultipartFileHelper {
     List<int> input, {
     String? filePathForDecoderNotFound,
     required bool fromImageProvider,
-    int? maxSize,
+    required int maxSize,
   }) async {
     int? beforeResizeLength;
     int? beforeResizeWidth;
@@ -106,6 +109,8 @@ class MultipartFileHelper {
       print("decode by ${decoder.runtimeType}.");
 
       // デコードする
+      // Note: これまでにnullになったことはない
+      // ignore: avoid-non-null-assertion
       final decoded = decoder.decodeImage(input)!;
 
       beforeResizeLength = decoded.length;
@@ -114,7 +119,7 @@ class MultipartFileHelper {
 
       // 画像が大きいときはリサイズする
       image.Image resized;
-      if (decoded.width > maxSize! || decoded.height > maxSize) {
+      if (decoded.width > maxSize || decoded.height > maxSize) {
         // 横長画像
         resized = decoded.width > decoded.height //
             ? image.copyResize(decoded, width: maxSize, interpolation: image.Interpolation.cubic) // 横長なのでwidthを揃える
@@ -174,6 +179,7 @@ class MultipartFileHelper {
       // 対応: デコーダが見つかればデコーダ、見つからなければファイル名で形式を決める（結局バグると思うがやらないよりましかな？程度）
       final ex = Exception("decoder not found");
       onErrorCallback?.call(ex, StackTrace.current);
+
       return EncodeInfo(bytes: input as Uint8List, fileType: filePathForDecoderNotFound);
     } else if (decoder is image.GifDecoder) {
       // GifアニメーションをdecodeImageするとアニメーションが失われてしまうので何もせずに終了する
@@ -214,9 +220,10 @@ class MultipartFileHelper {
         decoderName: decoderName,
       );
     } catch (e, st) {
+      onErrorCallback?.call(e, st);
+
       // 背景: findDecoderForDataはJpegとして判定したが、JpegDecoder.decodeImageを実行するとエラーになるデータがある
       // 対応: エラーが出たら何もせずに終了する
-      onErrorCallback?.call(e, st);
       return EncodeInfo(
         bytes: input as Uint8List,
         fileType: filePathForDecoderNotFound,
@@ -292,6 +299,7 @@ extension _DecorderEx on image.Decoder {
       case image.WebPDecoder:
         return "webp";
     }
+
     return null;
   }
 }

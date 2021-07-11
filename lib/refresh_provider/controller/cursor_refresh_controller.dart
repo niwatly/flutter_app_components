@@ -21,18 +21,21 @@ class CursorRefreshController<C extends Object, V extends ICursorable<V, C>, E e
     }
 
     try {
-      final cursor = config.stack //
-          ? currentState.value!.cursor
-          : initialCursor;
-
-      var value = await refresher(cursor);
+      V newValue;
 
       if (config.stack) {
-        value = currentState.value!.merge(value);
+        // config.stackが指定されている = 1回以上Refreshが成功していて、次のページをリクエストしている
+        // ignore: avoid-non-null-assertion
+        final currentValue = currentState.value!;
+
+        final value = await refresher(currentValue.cursor);
+        newValue = currentValue.merge(value);
+      } else {
+        newValue = await refresher(initialCursor);
       }
 
       yield currentState = currentState.copyWith(
-        value: value,
+        value: newValue,
         isRefreshing: false,
         initialRefreshCompleted: true,
         lastRefreshedAt: DateTime.now(),

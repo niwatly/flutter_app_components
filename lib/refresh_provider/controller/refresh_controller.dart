@@ -2,6 +2,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 import '../refresh_config.dart';
+import '../../utility/extension.dart';
 import '../refresh_state.dart';
 
 part 'cursor_refresh_controller.dart';
@@ -103,22 +104,27 @@ abstract class RefreshController<V extends Object, E extends Object> extends Sta
       // 強制ロードが要求されたので更新する
       return true;
     }
-    if (_lastLoadTime == null) {
+
+    final _lastLoad = _lastLoadTime;
+    if (_lastLoad == null) {
       // まだ一度もリフレッシュしていないので更新する
       return true;
     }
-    if (lifetime == null) {
+
+    final _lifetime = lifetime;
+    if (_lifetime == null) {
       // ライフタイムが指定されていないので更新する
       return true;
     }
 
     final now = DateTime.now();
-    final diff = now.difference(_lastLoadTime!);
-    final needLoad = diff.compareTo(lifetime!) == 1;
+    final diff = now.difference(_lastLoad);
+    final needLoad = diff.compareTo(_lifetime) == 1;
 
     if (!needLoad) {
-      print("Skip refresh. lifetime will be over after ${(lifetime! - diff).inSeconds} seconds.");
+      print("Skip refresh. lifetime will be over after ${(_lifetime - diff).inSeconds} seconds.");
     }
+
     return needLoad;
   }
 }

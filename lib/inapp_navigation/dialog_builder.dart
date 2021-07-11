@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_components/view/check_box_text.dart';
 import 'package:provider/provider.dart';
 
+import '../utility/extension.dart';
 import 'floating_dialog.dart';
 
 class DialogBuilder extends StatefulWidget {
@@ -18,9 +19,11 @@ class DialogBuilder extends StatefulWidget {
   final Color? loadingMessageBackgroundColor;
   final String? doNotShowAgainMessage;
 
-  final Widget? child;
+  final Widget child;
 
   const DialogBuilder({
+    Key? key,
+    required this.child,
     this.okLabel,
     this.cancelLabel,
     this.confirmTitle,
@@ -33,8 +36,6 @@ class DialogBuilder extends StatefulWidget {
     this.loadingMessageStyle,
     this.loadingMessageBackgroundColor,
     this.doNotShowAgainMessage,
-    this.child,
-    Key? key,
   }) : super(key: key);
 
   @override
@@ -55,8 +56,7 @@ class DialogBuilderState extends State<DialogBuilder> {
   ) =>
       DialogRoute(
         context: context,
-        builder: (context) => _createDialog(
-          context: context,
+        builder: (context) => _MyDialog(
           title: errorTitle,
           body: message,
           actions: [
@@ -76,8 +76,7 @@ class DialogBuilderState extends State<DialogBuilder> {
   ) =>
       DialogRoute(
         context: context,
-        builder: (context) => _createDialog(
-          context: context,
+        builder: (context) => _MyDialog(
           title: confirmTitle,
           body: message,
           actions: [
@@ -137,14 +136,13 @@ class DialogBuilderState extends State<DialogBuilder> {
 
   Route<bool> ask({
     String? title,
-    String? message,
+    required String message,
   }) =>
       DialogRoute<bool>(
         context: context,
-        builder: (context) => _createDialog(
-          context: context,
+        builder: (context) => _MyDialog(
           title: title ?? askTitle,
-          body: message!,
+          body: message,
           actions: [
             TextButton(
               child: Text(
@@ -207,7 +205,7 @@ class DialogBuilderState extends State<DialogBuilder> {
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context).pop());
+            WidgetsBinding.instance?.let((x) => x.addPostFrameCallback((_) => Navigator.of(context).pop()));
           }
 
           final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
@@ -245,23 +243,36 @@ class DialogBuilderState extends State<DialogBuilder> {
     );
   }
 
-  AlertDialog _createDialog({
-    BuildContext? context,
-    String? title,
-    required String body,
-    List<Widget>? actions,
-  }) =>
-      AlertDialog(
-        title: title?.isNotEmpty == true ? Text(title!) : null,
-        content: Text(
-          body,
-        ),
-        actions: actions,
-      );
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
+
+class _MyDialog extends StatelessWidget {
+  final String? title;
+  final String body;
+  final List<Widget> actions;
+
+  _MyDialog({
+    this.title,
+    required this.body,
+    this.actions = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
-    return widget.child!;
+    final _title = title;
+
+    final titleWidget = _title != null && _title.isNotEmpty ? Text(_title) : null;
+
+    return AlertDialog(
+      title: titleWidget,
+      content: Text(
+        body,
+      ),
+      actions: actions,
+    );
   }
 }
 

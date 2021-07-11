@@ -57,7 +57,11 @@ class RefreshSelector<V extends Object, E extends Object> extends StatelessWidge
       children: [
         Selector<RefreshState<V, E>, E?>(
           selector: (context, x) => x.value == null ? x.error : null,
-          builder: (context, value, child) => value != null && onError != null ? onError!(context, value) : const SizedBox(width: 0, height: 0),
+          builder: (context, value, child) {
+            final _onError = onError;
+
+            return value != null && _onError != null ? _onError(context, value) : const SizedBox(width: 0, height: 0);
+          },
         ),
         Selector<RefreshState<V, E>, V?>(
           selector: (context, x) => x.value,
@@ -67,10 +71,12 @@ class RefreshSelector<V extends Object, E extends Object> extends StatelessWidge
           Selector<RefreshState<V, E>, bool>(
             selector: (context, x) => x.isRefreshing,
             builder: (context, value, child) {
+              final _onLoading = onLoading;
+
               return AnimatedOpacity(
                 duration: Duration(milliseconds: 200),
                 opacity: value ? 1 : 0,
-                child: onLoading != null ? onLoading!(context) : defaultOnLoading(context),
+                child: _onLoading != null ? _onLoading(context) : defaultOnLoading(context),
               );
             },
           ),
@@ -81,9 +87,11 @@ class RefreshSelector<V extends Object, E extends Object> extends StatelessWidge
       ret = _Refresh<V, E>(ret);
     }
 
-    if (controller != null) {
+    final _controller = controller;
+
+    if (_controller != null) {
       ret = StateNotifierProvider<RefreshController<V, E>, RefreshState<V, E>>.value(
-        value: controller!(context),
+        value: _controller(context),
         child: ret,
       );
     }

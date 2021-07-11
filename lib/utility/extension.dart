@@ -20,6 +20,7 @@ extension IntHelper on int {
 
   String toDateStringByUnixSeconds({String format = "M/dd"}) {
     final formatter = DateFormat(format);
+
     return formatter.format(DateTime.fromMillisecondsSinceEpoch(this * 1000));
   }
 }
@@ -71,6 +72,7 @@ extension ListHelper<T> on Iterable<T> {
 
   String toFoldString({String delimiter = ", "}) => fold("", (acc, v) {
         final prefix = acc.isNotEmpty ? "$acc$delimiter" : "";
+
         return "$prefix$v";
       });
 }
@@ -150,6 +152,7 @@ extension StateNotifierEx<T> on StateNotifier<T> {
       op.cancel();
       removeListener?.call();
     };
+
     return sc.stream //
         .doOnDone(() => finallyCallback())
         .doOnCancel(() => finallyCallback());

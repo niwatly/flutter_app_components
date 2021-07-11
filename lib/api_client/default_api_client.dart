@@ -14,6 +14,10 @@ class DefaultApiClient with IApiClient {
   final String host;
   final int? port;
   final FutureOr<Map<String, String>>? headersFuture;
+
+  // null: headersFutureの展開が終わっていない
+  // 空: 展開したが空だった or 空が展開された
+  // 値あり: 値あり
   Map<String, String>? _headers;
 
   late Client _client;
@@ -66,13 +70,11 @@ class DefaultApiClient with IApiClient {
   }
 
   Future<BaseRequest> _createBaseRequest(String method, Uri uri, {Map<String, dynamic>? body}) async {
-    final headers = (_headers ??= await headersFuture)!;
-
     return Request(method, uri)
       ..encoding = const Utf8Codec()
       ..headers['content-type'] = 'application/json'
       ..body = body != null ? jsonEncode(body) : "{}"
-      ..headers.addAll(headers);
+      ..headers.addAll(await _ensureHeader());
   }
 
   @override
@@ -132,6 +134,21 @@ class DefaultApiClient with IApiClient {
   @override
   void close() {
     _client.close();
+  }
+
+  Future<Map<String, String>> _ensureHeader() async {
+    final previous = _headers;
+    if (previous != null) {
+      return previous;
+    }
+
+    final future = headersFuture;
+
+    if (future == null) {
+      return _headers = {};
+    }
+
+    return _headers = await future;
   }
 
   @override

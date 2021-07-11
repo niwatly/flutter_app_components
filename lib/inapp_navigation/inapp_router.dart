@@ -82,7 +82,7 @@ class InAppRouter {
 
     //logger.info("extracted path $path");
 
-    if (path.isNullOrEmpty) {
+    if (path == null || path.isEmpty) {
       // pathの解析に失敗したのでRouteNotFound
       // e.g. 無効な文字列
       // e.g. 無効なscheme
@@ -94,7 +94,7 @@ class InAppRouter {
     return handlePath(path);
   }
 
-  Future<IScreenArguments> handlePath(String? path) async {
+  Future<IScreenArguments> handlePath(String path) async {
     if (path == Navigator.defaultRouteName) {
       //背景: defaultRouteNameへの遷移がリクエストされたらアプリを立ち上げたい（開く画面は特に気にしない）
       //背景: handleUriメソッドを呼べるということは既に何かしらの画面を開いている
@@ -106,7 +106,7 @@ class InAppRouter {
 
     IScreenArguments found;
 
-    final match = _router.match(path!);
+    final match = _router.match(path);
 
     if (match == null) {
       errorCallback?.call(RouteNotFoundException.noMatch(path), StackTrace.current);

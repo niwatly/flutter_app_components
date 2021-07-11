@@ -24,10 +24,13 @@ class TextSpanBuilder {
     final elements = _generateElements(text);
 
     final textSpans = elements.map((x) {
-      final recognizer = x.isLink != null && onUrlTapCallback != null
-          ? (TapGestureRecognizer() //
-            ..onTap = () => onUrlTapCallback!(x.text))
-          : null;
+      GestureRecognizer? recognizer = null;
+
+      final callback = onUrlTapCallback;
+      if (x.isLink != null && callback != null) {
+        recognizer = TapGestureRecognizer() //
+          ..onTap = () => callback(x.text);
+      }
 
       return TextSpan(
         text: x.text,
@@ -51,6 +54,7 @@ class TextSpanBuilder {
 
     if (matches.isEmpty) {
       yield _Element.text(text);
+
       return;
     }
 

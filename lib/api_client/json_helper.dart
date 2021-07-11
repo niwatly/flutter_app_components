@@ -64,7 +64,11 @@ extension JsonObjectHelper on Map<String, dynamic> {
   }
 
   //non-nullable
-  List<T> array<T>(String key, T selector(dynamic v)) => _get<List<dynamic>>(key, defaultValue: [])!.map((x) => selector(x)).toList(growable: false);
+  List<T> array<T>(String key, T selector(dynamic v)) {
+    final list = _get<List<dynamic>>(key) ?? [];
+
+    return list.map((x) => selector(x)).toList(growable: false);
+  }
 }
 
 class IJsonError implements IApiClientError {

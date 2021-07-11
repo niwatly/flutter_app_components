@@ -23,7 +23,9 @@ class ForwardNavigationText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _style = style ?? Theme.of(context).textTheme.bodyText2;
+    // なんでおまえnullableなんだ...
+    // ignore: avoid-non-null-assertion
+    final _style = style ?? Theme.of(context).textTheme.bodyText2!;
 
     return Align(
       alignment: Alignment.centerRight,
@@ -44,7 +46,7 @@ class ForwardNavigationText extends StatelessWidget {
                       maxLines: 1,
                       minFontSize: 4,
                       textAlign: TextAlign.right,
-                      style: _style!.apply(
+                      style: _style.apply(
                         decoration: TextDecoration.underline,
                         color: color,
                       ),

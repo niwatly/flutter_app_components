@@ -44,6 +44,7 @@ class PaginationIndicator extends StatelessWidget {
               if (needLoad) {
                 notifier.igniteAndWaitUntilFinished(onPagination);
               }
+
               return needLoad;
             },
             child: this.child,
