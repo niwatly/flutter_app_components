@@ -1,0 +1,12 @@
+analyzer:
+  plugins:
+    - dart_code_metrics
+
+dart_code_metrics:
+  rules:
+    # https://github.com/dart-code-checker/dart-code-metrics/blob/master/doc/rules/avoid-non-null-assertion.md
+    - avoid-non-null-assertion
+    # https://github.com/dart-code-checker/dart-code-metrics/blob/master/doc/rules/newline-before-return.md
+    - newline-before-return
+    # https://github.com/dart-code-checker/dart-code-metrics/blob/master/doc/rules/avoid-returning-widgets.md
+    - avoid-returning-widgets
