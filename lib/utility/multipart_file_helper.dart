@@ -48,9 +48,9 @@ class MultipartFileHelper {
       //
       // Note: PNGに変換している
       // Note: なぜPNGに変換するの？ -> ImageProviderからバイト配列を得る方法はそれしかなさそうだから
-      final byteData = await (imageInfo.image.toByteData(format: ImageByteFormat.png) as FutureOr<ByteData>);
+      final byteData = await imageInfo.image.toByteData(format: ImageByteFormat.png);
 
-      input = byteData.buffer.asUint8List();
+      input = byteData!.buffer.asUint8List();
       fileTypeByFilePath = "png";
       byteDataFromImageProvider = true;
     } else {

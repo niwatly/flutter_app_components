@@ -54,6 +54,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String message,
   ) =>
       DialogRoute(
+        context: context,
         builder: (context) => _createDialog(
           context: context,
           title: errorTitle,
@@ -74,6 +75,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String message,
   ) =>
       DialogRoute(
+        context: context,
         builder: (context) => _createDialog(
           context: context,
           title: confirmTitle,
@@ -95,6 +97,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String? title,
   }) =>
       DialogRoute<bool>(
+        context: context,
         builder: (context) => ChangeNotifierProvider<_CheckBoxNotifier>(
           create: (context) => _CheckBoxNotifier(false),
           builder: (context, _) => AlertDialog(
@@ -113,7 +116,7 @@ class DialogBuilderState extends State<DialogBuilder> {
                 const SizedBox(height: 36),
                 CheckBoxText(
                   checkBoxValue: context.watch<_CheckBoxNotifier>().value,
-                  onChanged: (v) => context.read<_CheckBoxNotifier>().value = v,
+                  onChanged: (v) => context.read<_CheckBoxNotifier>().value = v ?? false,
                   label: doNotShowAgainMessage,
                   affinity: ListTileControlAffinity.leading,
                 ),
@@ -137,6 +140,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String? message,
   }) =>
       DialogRoute<bool>(
+        context: context,
         builder: (context) => _createDialog(
           context: context,
           title: title ?? askTitle,
@@ -166,6 +170,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String? message,
   }) =>
       DialogRoute<int>(
+        context: context,
         builder: (context) => FloatingDialog(
           onClose: () => Navigator.of(context).pop(-1),
           title: title ?? pickTitle,
@@ -197,6 +202,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String? message,
   }) {
     return DialogRoute(
+      context: context,
       builder: (context) => FutureBuilder(
         future: future,
         builder: (context, snapshot) {

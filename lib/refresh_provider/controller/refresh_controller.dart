@@ -64,18 +64,18 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
     }
   }
 
-  Future<V> requestSilentRefresh() => requestCleanRefresh(silent: true);
+  Future requestSilentRefresh() => requestCleanRefresh(silent: true);
 
-  Future<V> requestCleanRefresh({silent = false}) async {
+  Future requestCleanRefresh({silent = false}) async {
     final config = RefreshConfig(silent: silent);
 
-    return await (_mayRefresh(config) as FutureOr<V>);
+    return await _mayRefresh(config);
   }
 
-  Future<V> requestMoreRefresh() async {
+  Future requestMoreRefresh() async {
     final config = RefreshConfig(silent: true, stack: true);
 
-    return await (_mayRefresh(config) as FutureOr<V>);
+    return await _mayRefresh(config);
   }
 
   Future _mayRefresh(RefreshConfig config) async {

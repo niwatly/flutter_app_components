@@ -40,24 +40,29 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
   const RouteNotFoundScreenArguments();
 
   @override
-  Route generateRoute() => DialogRoute(
+  Route generateRoute() => RawDialogRoute(
         settings: RouteSettings(name: screenName),
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          title: const Text("エラー"),
-          content: const Text("お探しのページは見つかりませんでした"),
-          actions: [
-            FlatButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                "OK",
-                style: Theme.of(context).textTheme.subtitle1,
+        pageBuilder: (BuildContext buildContext, Animation<double> anim, Animation<double> secondAnim) {
+          final child = Builder(
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
+              title: const Text("エラー"),
+              content: const Text("お探しのページは見つかりませんでした"),
+              actions: [
+                FlatButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "OK",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+          return child;
+        },
       );
 
   @override
