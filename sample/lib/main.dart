@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       home: PaginationIndicator(
         onPagination: () async {},
         hasMore: false,
-        child: MyHomePage(title: 'Flutter Demo Home Page'),
+        child: MyHomePage(title: 'Flutter Home Page'),
       ),
     );
   }

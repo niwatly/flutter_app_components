@@ -17,9 +17,9 @@ class SimpleRefreshController<V, E> extends RefreshController<V, E> {
   Future<V> Function() refresher;
 
   SimpleRefreshController({
-    @required this.refresher,
-    RefreshState<V, E> initialState,
-    Duration lifetime,
+    required this.refresher,
+    RefreshState<V, E>? initialState,
+    Duration? lifetime,
   }) : super._(
           lifetime: lifetime,
           initialState: initialState,

@@ -7,17 +7,17 @@ import 'unfocus.dart';
 ///
 /// ※ physicsをAlwaysScrollableScrollPhysicsにしなければ発生しないが、常時PullToRefresh可能な状態を実現するためにはAlwaysScrollableScrollPhysicsが必要
 class ScrollableAlign extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
   final Alignment alignment;
-  final EdgeInsets padding;
-  final ScrollController controller;
+  final EdgeInsets? padding;
+  final ScrollController? controller;
   final bool showScrollBar;
   final bool unfocusWhenScrollStarted;
   final bool unfocusWhenTapped;
   final bool disableGrowEffect;
   final bool reverse;
   final bool scrollBarIsAlwaysShown;
-  final ScrollPhysics parentScrollPhysics;
+  final ScrollPhysics? parentScrollPhysics;
 
   const ScrollableAlign({
     this.alignment = Alignment.topCenter,

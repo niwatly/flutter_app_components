@@ -1,14 +1,14 @@
 part of 'refresh_controller.dart';
 
 class CursorRefreshController<C, V extends ICursorable<V, C>, E> extends RefreshController<V, E> {
-  Future<V> Function(C cursor) refresher;
-  C initialCursor;
+  Future<V> Function(C? cursor) refresher;
+  C? initialCursor;
 
   CursorRefreshController({
-    @required this.refresher,
-    Duration lifetime,
+    required this.refresher,
+    Duration? lifetime,
     this.initialCursor,
-    RefreshState<V, E> initialState,
+    RefreshState<V, E>? initialState,
   }) : super._(
           lifetime: lifetime,
           initialState: initialState,
@@ -22,13 +22,13 @@ class CursorRefreshController<C, V extends ICursorable<V, C>, E> extends Refresh
 
     try {
       final cursor = config.stack //
-          ? currentState.value.cursor
+          ? currentState.value!.cursor
           : initialCursor;
 
       var value = await refresher(cursor);
 
       if (config.stack) {
-        value = currentState.value.merge(value);
+        value = currentState.value!.merge(value);
       }
 
       yield currentState = currentState.copyWith(

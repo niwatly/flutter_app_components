@@ -4,7 +4,7 @@ import 'inapp_router.dart';
 import 'screen_arguments.dart';
 
 class InAppLauncher {
-  static Function(dynamic e, StackTrace st) errorCallback;
+  static Function(dynamic e, StackTrace st)? errorCallback;
 
   final InAppRouter router;
   final List<RegExp> blackListForUnknownUri;
@@ -12,7 +12,7 @@ class InAppLauncher {
   const InAppLauncher(this.router, {this.blackListForUnknownUri = const []});
 
   Future<InAppLaunchResult> handleUri({
-    @required Uri uri,
+    required Uri uri,
     bool disableInAppNavigation = false,
   }) async {
     if (uri.scheme == "http" || uri.scheme == "https") {
@@ -81,9 +81,9 @@ class InAppLauncher {
 }
 
 class InAppLaunchResult {
-  final IScreenArguments screenArguments;
-  final Uri browserUri;
-  final InAppLaunchResultKind kind;
+  final IScreenArguments? screenArguments;
+  final Uri? browserUri;
+  final InAppLaunchResultKind? kind;
 
   InAppLaunchResult({
     this.browserUri,

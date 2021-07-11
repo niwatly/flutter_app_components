@@ -9,7 +9,7 @@ import 'refresh_state.dart';
 ///
 /// 型を毎回記述するのが面倒だった
 StateNotifierProvider refreshControllerProvider<V, E>({
-  @required RefreshController<V, E> Function(BuildContext context) create,
+  required RefreshController<V, E> Function(BuildContext context) create,
 }) {
   return StateNotifierProvider<RefreshController<V, E>, RefreshState<V, E>>(
     create: (context) => create(context),

@@ -2,7 +2,7 @@ import 'api_client_error.dart';
 
 extension JsonObjectHelper on Map<String, dynamic> {
   // ignore: avoid_init_to_null
-  T _get<T>(String key, {T defaultValue = null}) {
+  T? _get<T>(String key, {T? defaultValue = null}) {
     if (this == null) {
       throw JsonNullSourceFoundError(key);
     }
@@ -15,21 +15,21 @@ extension JsonObjectHelper on Map<String, dynamic> {
     return defaultValue;
   }
 
-  String stringOrNull(String key) => _get<String>(key);
+  String? stringOrNull(String key) => _get<String>(key);
 
   String string(String key, {String defaultValue = ""}) => stringOrNull(key) ?? defaultValue;
 
-  int integerOrNull(String key) => _get<int>(key);
+  int? integerOrNull(String key) => _get<int>(key);
 
   int integer(String key, {int defaultValue = -1}) => integerOrNull(key) ?? defaultValue;
 
-  double doubleOrNull(String key) => _get<double>(key);
+  double? doubleOrNull(String key) => _get<double>(key);
 
   double doublee(String key, {double defaultValue = -1}) => doubleOrNull(key) ?? defaultValue;
 
-  bool boolean(String key, {bool defaultValue = false}) => _get<bool>(key, defaultValue: false);
+  bool? boolean(String key, {bool defaultValue = false}) => _get<bool>(key, defaultValue: false);
 
-  DateTime dateOrNull(String key) {
+  DateTime? dateOrNull(String key) {
     final str = _get<String>(key);
 
     if (str == null || str.isEmpty) {
@@ -42,13 +42,13 @@ extension JsonObjectHelper on Map<String, dynamic> {
     }
   }
 
-  DateTime date(String key, {DateTime defaultValue}) => dateOrNull(key) ?? defaultValue;
+  DateTime? date(String key, {DateTime? defaultValue}) => dateOrNull(key) ?? defaultValue;
 
-  Map<String, dynamic> objectOrNull(String key) => _get<Map<String, dynamic>>(key);
+  Map<String, dynamic>? objectOrNull(String key) => _get<Map<String, dynamic>>(key);
 
   Map<String, dynamic> object(String key) => objectOrNull(key) ?? {};
 
-  T valueOrNull<T>(String key, T selector(dynamic v)) {
+  T? valueOrNull<T>(String key, T selector(dynamic v)) {
     try {
       return value(key, selector);
     } catch (e) {
@@ -67,7 +67,7 @@ extension JsonObjectHelper on Map<String, dynamic> {
   }
 
   //non-nullable
-  List<T> array<T>(String key, T selector(dynamic v)) => _get<List<dynamic>>(key, defaultValue: []).map((x) => selector(x)).toList(growable: false);
+  List<T> array<T>(String key, T selector(dynamic v)) => _get<List<dynamic>>(key, defaultValue: [])!.map((x) => selector(x)).toList(growable: false);
 }
 
 class IJsonError implements IApiClientError {

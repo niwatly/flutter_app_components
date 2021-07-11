@@ -11,7 +11,7 @@ class InvalidUriError implements IApiClientError {
 
   final String host;
   final String path;
-  final Map<String, dynamic> query;
+  final Map<String, dynamic>? query;
 
   const InvalidUriError(this.host, this.path, this.query);
 
@@ -79,7 +79,7 @@ class UnsuccessfulStatusError implements IApiClientError {
     final url = response?.request?.url;
     final status = response?.statusCode?.toString() ?? null;
     final body = isContentJson ? response.body : null;
-    final method = response.request.method;
+    final method = response.request!.method;
 
     return "$runtimeType（${method.toUpperCase()} $url, code = $status, body = $body）";
   }

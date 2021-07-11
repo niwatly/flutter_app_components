@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'lazy_future_builder.dart';
 
 class RefreshButton extends StatefulWidget {
-  final Future Function() onRefresh;
+  final Future Function()? onRefresh;
   final IconData icon;
 
   const RefreshButton({
@@ -18,7 +18,7 @@ class RefreshButton extends StatefulWidget {
 }
 
 class _State extends State<RefreshButton> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _State extends State<RefreshButton> with SingleTickerProviderStateMixin {
       futureBuilder: () async {
         _controller.repeat();
         try {
-          await widget.onRefresh();
+          await widget.onRefresh!();
         } finally {
           _controller.stop();
         }

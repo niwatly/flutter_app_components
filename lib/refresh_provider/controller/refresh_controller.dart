@@ -10,18 +10,18 @@ part 'page_refresh_controller.dart';
 part 'simple_refresh_controller.dart';
 
 abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>> {
-  static Function(dynamic e, StackTrace st) errorCallback;
+  static Function(dynamic e, StackTrace st)? errorCallback;
   static bool notifyErrorEvenExpected = false;
 
-  Duration lifetime;
+  Duration? lifetime;
 
-  DateTime _lastLoadTime;
-
-  // ignore: close_sinks
-  Sink<Stream<void>> requestLifetimeRefreshSink;
+  DateTime? _lastLoadTime;
 
   // ignore: close_sinks
-  Sink<Stream<RefreshConfig>> requestConfigRefreshSink;
+  Sink<Stream<void>>? requestLifetimeRefreshSink;
+
+  // ignore: close_sinks
+  Sink<Stream<RefreshConfig>>? requestConfigRefreshSink;
 
   final CompositeSubscription _compositeSubscription = CompositeSubscription();
 
@@ -30,7 +30,7 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
 
   RefreshController._({
     this.lifetime,
-    RefreshState<V, E> initialState,
+    RefreshState<V, E>? initialState,
   }) : super(initialState ?? RefreshState<V, E>()) {
     requestLifetimeRefreshSink = _requestLifetimeRefreshSub.sink;
     requestConfigRefreshSink = _requestConfigRefreshSub.sink;
@@ -49,7 +49,7 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
     super.dispose();
   }
 
-  Future requestLifetimeRefresh({RefreshConfig config}) async {
+  Future requestLifetimeRefresh({RefreshConfig? config}) async {
     final conf = config ?? RefreshConfig();
 
     if (!_checkNeedLoad(conf)) {
@@ -69,13 +69,13 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
   Future<V> requestCleanRefresh({silent = false}) async {
     final config = RefreshConfig(silent: silent);
 
-    return await _mayRefresh(config);
+    return await (_mayRefresh(config) as FutureOr<V>);
   }
 
   Future<V> requestMoreRefresh() async {
     final config = RefreshConfig(silent: true, stack: true);
 
-    return await _mayRefresh(config);
+    return await (_mayRefresh(config) as FutureOr<V>);
   }
 
   Future _mayRefresh(RefreshConfig config) async {
@@ -114,11 +114,11 @@ abstract class RefreshController<V, E> extends StateNotifier<RefreshState<V, E>>
     }
 
     final now = DateTime.now();
-    final diff = now.difference(_lastLoadTime);
-    final needLoad = diff.compareTo(lifetime) == 1;
+    final diff = now.difference(_lastLoadTime!);
+    final needLoad = diff.compareTo(lifetime!) == 1;
 
     if (!needLoad) {
-      print("Skip refresh. lifetime will be over after ${(lifetime - diff).inSeconds} seconds.");
+      print("Skip refresh. lifetime will be over after ${(lifetime! - diff).inSeconds} seconds.");
     }
     return needLoad;
   }

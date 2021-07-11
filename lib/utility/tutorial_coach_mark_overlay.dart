@@ -6,11 +6,11 @@ import 'package:tutorial_coach_mark/src/widgets/tutorial_coach_mark_widget.dart'
 class TutorialCoachMarkOverlay {
   final OverlayState overlay;
   final List<TargetFocus> targets;
-  final Function(TargetFocus) onClickTarget; //optional
-  final Function(TargetFocus) onClickOverlay; //optional
-  final Function() onFinish; //optional
+  final Function(TargetFocus)? onClickTarget; //optional
+  final Function(TargetFocus)? onClickOverlay; //optional
+  final Function()? onFinish; //optional
   final double paddingFocus;
-  final Function() onSkip; //optional
+  final Function()? onSkip; //optional
   final AlignmentGeometry alignSkip;
   final String textSkip;
   final TextStyle textStyleSkip;
@@ -20,12 +20,12 @@ class TutorialCoachMarkOverlay {
   final GlobalKey<TutorialCoachMarkWidgetState> _widgetKey = GlobalKey();
   final Duration focusAnimationDuration;
   final Duration pulseAnimationDuration;
-  final Widget skipWidget; //optional
+  final Widget? skipWidget; //optional
 
-  OverlayEntry _overlayEntry;
+  OverlayEntry? _overlayEntry;
 
   TutorialCoachMarkOverlay(this.overlay,
-      {this.targets, //required
+      {required this.targets, //required
       this.colorShadow = Colors.black,
       this.onClickTarget,
       this.onClickOverlay,
@@ -64,20 +64,20 @@ class TutorialCoachMarkOverlay {
   void show() {
     if (_overlayEntry == null) {
       _overlayEntry = _buildOverlay();
-      overlay.insert(_overlayEntry);
+      overlay.insert(_overlayEntry!);
     }
   }
 
   void finish() {
     if (onFinish != null) {
-      onFinish();
+      onFinish!();
     }
     _removeOverlay();
   }
 
   void skip() {
     if (onSkip != null) {
-      onSkip();
+      onSkip!();
     }
 
     _removeOverlay();

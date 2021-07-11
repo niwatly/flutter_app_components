@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class TraceStack extends StatelessWidget {
-  final List<TraceStackChild> children;
+  final List<TraceStackChild>? children;
   final StackFit fit;
   final AlignmentGeometry alignment;
   final Overflow clip;
@@ -18,7 +18,7 @@ class TraceStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(children.any((x) => x.isBaseSizeChild));
+    assert(children!.any((x) => x.isBaseSizeChild));
 
     return ChangeNotifierProvider<_Notifier>(
       create: (context) => _Notifier(),
@@ -26,14 +26,14 @@ class TraceStack extends StatelessWidget {
         fit: fit,
         alignment: alignment,
         overflow: clip,
-        children: children,
+        children: children!,
       ),
     );
   }
 }
 
 class TraceStackChild extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
   final bool isBaseSizeChild;
 
   const TraceStackChild({
@@ -56,7 +56,7 @@ class TraceStackChild extends StatelessWidget {
 }
 
 class _FollowChild extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   const _FollowChild({this.child});
 
@@ -73,7 +73,7 @@ class _FollowChild extends StatelessWidget {
 }
 
 class _BaseChild extends SingleChildRenderObjectWidget {
-  const _BaseChild({Widget child}) : super(child: child);
+  const _BaseChild({Widget? child}) : super(child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) => _BaseChildRenderObject(
@@ -92,7 +92,7 @@ class _BaseChildRenderObject extends RenderProxyBox {
 
     final size = this.size;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => _notifier.value = size);
+    WidgetsBinding.instance!.addPostFrameCallback((_) => _notifier.value = size);
   }
 }
 

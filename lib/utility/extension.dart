@@ -8,7 +8,7 @@ import 'package:provider/provider.dart' hide Locator;
 import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
-extension StringHelper on String {
+extension StringHelper on String? {
   bool get isNullOrEmpty => this == null || isEmpty;
 }
 
@@ -36,7 +36,7 @@ extension DateHelper on DateTime {
 }
 
 extension MapHelper<K, V> on Map<K, V> {
-  V getOrDefault(K key, V fallback) {
+  V? getOrDefault(K key, V fallback) {
     if (containsKey(key)) {
       return this[key];
     } else {
@@ -47,8 +47,8 @@ extension MapHelper<K, V> on Map<K, V> {
 
 extension IterableHelper<T> on Iterable<T> {
   //nullable
-  T get firstOrNull => isNotEmpty ? first : null;
-  T get lastOrNull => isNotEmpty ? last : null;
+  T? get firstOrNull => isNotEmpty ? first : null;
+  T? get lastOrNull => isNotEmpty ? last : null;
 }
 
 extension ListHelper<T> on Iterable<T> {
@@ -135,7 +135,7 @@ extension StateNotifierEx<T> on StateNotifier<T> {
     // ignore: close_sinks
     final sc = StreamController<T>.broadcast();
 
-    VoidCallback removeListener;
+    VoidCallback? removeListener;
 
     final op = CancelableOperation.fromFuture(
       Future.microtask(() {

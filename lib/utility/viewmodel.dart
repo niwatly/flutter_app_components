@@ -9,11 +9,11 @@ typedef ViewModelStateWatcher<T> = T Function(T currentState, Locator locator);
 /// 通常のStateNotifierよりも少しだけ便利です。
 ///
 /// UIからの入力を[ViewModel]で受け取りたい場合は、継承して使用してください
-class ViewModel<T> extends StateNotifier<T> with LocatorMixin {
-  final ViewModelStateWatcher<T> stateWatcher;
+class ViewModel<T> extends StateNotifier<T?> with LocatorMixin {
+  final ViewModelStateWatcher<T?>? stateWatcher;
 
   ViewModel({
-    T initialState,
+    T? initialState,
     this.stateWatcher,
   }) : super(initialState);
 
@@ -21,14 +21,14 @@ class ViewModel<T> extends StateNotifier<T> with LocatorMixin {
   void initState() {
     super.initState();
 
-    _tryUpdateState(read);
+    _tryUpdateState(read as T Function<T>());
   }
 
   @override
   void update(T Function<T>() watch) {
     super.update(watch);
 
-    _tryUpdateState(watch);
+    _tryUpdateState(watch as T Function<T>());
   }
 
   void _tryUpdateState(Locator locator) {
@@ -36,9 +36,9 @@ class ViewModel<T> extends StateNotifier<T> with LocatorMixin {
       return;
     }
 
-    final oldState = state;
+    final T? oldState = state;
 
-    final newState = stateWatcher(state, locator);
+    final newState = stateWatcher!(state, locator);
 
     if (oldState != newState) {
       state = newState;

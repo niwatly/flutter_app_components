@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_components/view/refresh_button.dart';
 
 class ErrorText extends StatelessWidget {
-  final String label;
-  final Future Function() retryCallback;
+  final String? label;
+  final Future Function()? retryCallback;
 
   const ErrorText({
     this.label,
@@ -20,7 +20,7 @@ class ErrorText extends StatelessWidget {
         children: [
           Flexible(
             child: Text(
-              label,
+              label!,
               maxLines: 2,
             ),
           ),

@@ -9,11 +9,11 @@ class LoadingCrossFade extends StatelessWidget {
   final bool isLoading;
   final Widget child;
   final Duration duration;
-  final Widget loadingWidget;
+  final Widget? loadingWidget;
 
   const LoadingCrossFade({
-    @required this.isLoading,
-    @required this.child,
+    required this.isLoading,
+    required this.child,
     this.loadingWidget,
     this.duration = const Duration(milliseconds: 200),
   });

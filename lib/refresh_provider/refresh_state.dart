@@ -1,9 +1,9 @@
 class RefreshState<V, E> {
   final bool isRefreshing;
   final bool initialRefreshCompleted;
-  final V value;
-  final E error;
-  final DateTime lastRefreshedAt;
+  final V? value;
+  final E? error;
+  final DateTime? lastRefreshedAt;
 
   RefreshState({
     this.value,
@@ -18,11 +18,11 @@ class RefreshState<V, E> {
   bool get hasError => error != null;
 
   RefreshState<V, E> copyWith({
-    V value,
-    E error,
-    bool isRefreshing,
-    bool initialRefreshCompleted,
-    DateTime lastRefreshedAt,
+    V? value,
+    E? error,
+    bool? isRefreshing,
+    bool? initialRefreshCompleted,
+    DateTime? lastRefreshedAt,
   }) =>
       RefreshState(
         value: value ?? this.value,

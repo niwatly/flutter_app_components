@@ -10,7 +10,7 @@ class Unfocus extends StatelessWidget {
   const Unfocus({
     this.unfocusWhenTapped = false,
     this.unfocusWhenScrollStarted = false,
-    @required this.child,
+    required this.child,
   });
 
   @override
@@ -34,7 +34,7 @@ class Unfocus extends StatelessWidget {
             context.read<_ScrollDirectionNotifier>().value = notification.direction;
             return false;
           },
-          child: child,
+          child: child!,
         ),
         child: ret,
       );

@@ -5,20 +5,20 @@ import 'package:provider/provider.dart';
 import 'floating_dialog.dart';
 
 class DialogBuilder extends StatefulWidget {
-  final String okLabel;
-  final String cancelLabel;
-  final String confirmTitle;
-  final String errorTitle;
-  final String pickTitle;
-  final String askTitle;
-  final TextStyle cancelStyle;
-  final TextStyle okStyle;
-  final Widget loadingWidget;
-  final TextStyle loadingMessageStyle;
-  final Color loadingMessageBackgroundColor;
-  final String doNotShowAgainMessage;
+  final String? okLabel;
+  final String? cancelLabel;
+  final String? confirmTitle;
+  final String? errorTitle;
+  final String? pickTitle;
+  final String? askTitle;
+  final TextStyle? cancelStyle;
+  final TextStyle? okStyle;
+  final Widget? loadingWidget;
+  final TextStyle? loadingMessageStyle;
+  final Color? loadingMessageBackgroundColor;
+  final String? doNotShowAgainMessage;
 
-  final Widget child;
+  final Widget? child;
 
   const DialogBuilder({
     this.okLabel,
@@ -34,7 +34,7 @@ class DialogBuilder extends StatefulWidget {
     this.loadingMessageBackgroundColor,
     this.doNotShowAgainMessage,
     this.child,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -92,7 +92,7 @@ class DialogBuilderState extends State<DialogBuilder> {
 
   Route<bool> confirmWithDoNotShowAgain(
     String message, {
-    String title,
+    String? title,
   }) =>
       DialogRoute<bool>(
         builder: (context) => ChangeNotifierProvider<_CheckBoxNotifier>(
@@ -133,14 +133,14 @@ class DialogBuilderState extends State<DialogBuilder> {
       );
 
   Route<bool> ask({
-    String title,
-    String message,
+    String? title,
+    String? message,
   }) =>
       DialogRoute<bool>(
         builder: (context) => _createDialog(
           context: context,
           title: title ?? askTitle,
-          body: message,
+          body: message!,
           actions: [
             FlatButton(
               child: Text(
@@ -162,8 +162,8 @@ class DialogBuilderState extends State<DialogBuilder> {
 
   Route<int> pick(
     List<String> candidates, {
-    String title,
-    String message,
+    String? title,
+    String? message,
   }) =>
       DialogRoute<int>(
         builder: (context) => FloatingDialog(
@@ -193,15 +193,15 @@ class DialogBuilderState extends State<DialogBuilder> {
       );
 
   Route loading<T>({
-    Future<T> future,
-    String message,
+    Future<T>? future,
+    String? message,
   }) {
     return DialogRoute(
       builder: (context) => FutureBuilder(
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
+            WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context).pop());
           }
 
           final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
@@ -240,13 +240,13 @@ class DialogBuilderState extends State<DialogBuilder> {
   }
 
   AlertDialog _createDialog({
-    BuildContext context,
-    String title,
-    String body,
-    List<Widget> actions,
+    BuildContext? context,
+    String? title,
+    required String body,
+    List<Widget>? actions,
   }) =>
       AlertDialog(
-        title: title?.isNotEmpty == true ? Text(title) : null,
+        title: title?.isNotEmpty == true ? Text(title!) : null,
         content: Text(
           body,
         ),
@@ -255,7 +255,7 @@ class DialogBuilderState extends State<DialogBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return widget.child!;
   }
 }
 

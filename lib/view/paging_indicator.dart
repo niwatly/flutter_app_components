@@ -12,16 +12,16 @@ class PaginationIndicator extends StatelessWidget {
   static Widget Function(BuildContext context) defaultOnLoading = (context) => const CircularProgressIndicator();
 
   final PaginationCallback onPagination;
-  final NotificationReceivedCallback onNotificationReceived;
+  final NotificationReceivedCallback? onNotificationReceived;
   final Widget child;
   final bool hasMore;
   final bool reverse;
 
   const PaginationIndicator({
-    Key key,
-    @required this.onPagination,
-    @required this.hasMore,
-    @required this.child,
+    Key? key,
+    required this.onPagination,
+    required this.hasMore,
+    required this.child,
     this.onNotificationReceived,
     this.reverse = false,
   }) : super(key: key);

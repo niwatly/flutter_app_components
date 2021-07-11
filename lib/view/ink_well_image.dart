@@ -5,8 +5,8 @@ import 'package:flutter_app_components/view/lazy_future_builder.dart';
 import 'package:flutter_app_components/view/trace_stack.dart';
 
 class InkWellImage extends StatelessWidget {
-  final WidgetBuilder imageBuilder;
-  final FutureOr Function() onTap;
+  final WidgetBuilder? imageBuilder;
+  final FutureOr Function()? onTap;
   final Alignment alignment;
 
   const InkWellImage({
@@ -21,7 +21,7 @@ class InkWellImage extends StatelessWidget {
       alignment: alignment,
       children: [
         TraceStackChild.base(
-          child: imageBuilder(context),
+          child: imageBuilder!(context),
         ),
         if (onTap != null)
           TraceStackChild.follow(

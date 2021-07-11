@@ -17,10 +17,10 @@ class RefreshSelector<V, E> extends StatelessWidget {
   final Widget Function(BuildContext context, V value) onValue;
 
   /// [RefreshState.hasError]時のWidgetのBuilder
-  final Widget Function(BuildContext context, E error) onError;
+  final Widget Function(BuildContext context, E error)? onError;
 
   /// [RefreshState.isRefreshing]中のWidgetのBuilder
-  final Widget Function(BuildContext context) onLoading;
+  final Widget Function(BuildContext context)? onLoading;
 
   /// 下位Widgetを[RefreshIndicator]でラップするかどうか
   /// [RefreshIndicator.onRefresh]の設定値が冗長になりがちなので、そこの記述量を抑えたい
@@ -38,10 +38,10 @@ class RefreshSelector<V, E> extends StatelessWidget {
   /// [RefreshController] の生成方法
   ///
   /// 指定されなかった場合は、すでに上位で[RefreshController]が宣言されていると仮定し、[StateNotifierProvider]の宣言をSkipする
-  final RefreshController<V, E> Function(BuildContext context) controller;
+  final RefreshController<V, E> Function(BuildContext context)? controller;
 
   const RefreshSelector({
-    @required this.onValue,
+    required this.onValue,
     this.onError,
     this.onLoading,
     this.controller,
@@ -55,11 +55,11 @@ class RefreshSelector<V, E> extends StatelessWidget {
     Widget ret = Stack(
       fit: fit,
       children: [
-        Selector<RefreshState<V, E>, E>(
+        Selector<RefreshState<V, E>, E?>(
           selector: (context, x) => x.value == null ? x.error : null,
-          builder: (context, value, child) => value != null && onError != null ? onError(context, value) : const SizedBox(width: 0, height: 0),
+          builder: (context, value, child) => value != null && onError != null ? onError!(context, value) : const SizedBox(width: 0, height: 0),
         ),
-        Selector<RefreshState<V, E>, V>(
+        Selector<RefreshState<V, E>, V?>(
           selector: (context, x) => x.value,
           builder: (context, value, child) => value != null ? onValue(context, value) : const SizedBox(width: 0, height: 0),
         ),
@@ -70,7 +70,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
               return AnimatedOpacity(
                 duration: Duration(milliseconds: 200),
                 opacity: value ? 1 : 0,
-                child: onLoading != null ? onLoading(context) : defaultOnLoading(context),
+                child: onLoading != null ? onLoading!(context) : defaultOnLoading(context),
               );
             },
           ),
@@ -83,7 +83,7 @@ class RefreshSelector<V, E> extends StatelessWidget {
 
     if (controller != null) {
       ret = StateNotifierProvider<RefreshController<V, E>, RefreshState<V, E>>.value(
-        value: controller(context),
+        value: controller!(context),
         child: ret,
       );
     }

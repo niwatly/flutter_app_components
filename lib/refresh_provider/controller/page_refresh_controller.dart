@@ -1,20 +1,20 @@
 part of 'refresh_controller.dart';
 
 class PageRefreshController<V extends IPagiable<V>, E> extends RefreshController<V, E> {
-  int _currentPageInstance;
+  int? _currentPageInstance;
   int defaultPage;
 
   int get currentPage => _currentPageInstance ?? defaultPage;
   set currentPage(value) => _currentPageInstance = value;
 
-  int get nextPage => _currentPageInstance != null ? _currentPageInstance + 1 : defaultPage;
+  int get nextPage => _currentPageInstance != null ? _currentPageInstance! + 1 : defaultPage;
 
   Future<V> Function(int page) refresher;
 
   PageRefreshController({
-    @required this.refresher,
-    Duration lifetime,
-    RefreshState<V, E> initialState,
+    required this.refresher,
+    Duration? lifetime,
+    RefreshState<V, E>? initialState,
     this.defaultPage = 1,
   }) : super._(
           lifetime: lifetime,
@@ -36,7 +36,7 @@ class PageRefreshController<V extends IPagiable<V>, E> extends RefreshController
       var value = await refresher(nextPage);
 
       if (config.stack) {
-        value = currentState.value.merge(value);
+        value = currentState.value!.merge(value);
       }
 
       yield currentState = currentState.copyWith(

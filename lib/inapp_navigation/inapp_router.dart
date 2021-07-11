@@ -9,19 +9,19 @@ typedef RouteGenerator = IScreenArguments Function(Map<String, List<String>> par
 class RouteState {}
 
 class InAppRouter {
-  static Function(dynamic e, StackTrace st) errorCallback;
+  static Function(dynamic e, StackTrace st)? errorCallback;
 
-  FluroRouter _router;
+  late FluroRouter _router;
 
   final Map<String, RouteGenerator> routeDefines;
-  final String customUrlScheme;
-  final String deepLinkHost;
+  final String? customUrlScheme;
+  final String? deepLinkHost;
 
   bool get enableInAppNavigation => customUrlScheme != null;
   bool get enableDeepLinkNavigation => deepLinkHost != null;
 
   InAppRouter({
-    @required this.routeDefines,
+    required this.routeDefines,
     this.customUrlScheme,
     this.deepLinkHost,
   }) {
@@ -46,8 +46,8 @@ class InAppRouter {
   /// e.g. instagram:// -> /
   /// e.g. https://yahoo.co.jp/home -> /home
   /// e.g. https://yahoo.co.jp/search?query=bump -> /home?query=bump
-  String _extractPathFromUri(Uri uri) {
-    String path;
+  String? _extractPathFromUri(Uri uri) {
+    String? path;
 
     if (uri.scheme == "http" || uri.scheme == "https" && enableInAppNavigation && uri.host == deepLinkHost) {
       // Http、かつDeepLinkとして指定されているHostなら、Uriのpathをそのまま使用する
@@ -94,7 +94,7 @@ class InAppRouter {
     return handlePath(path);
   }
 
-  Future<IScreenArguments> handlePath(String path) async {
+  Future<IScreenArguments> handlePath(String? path) async {
     if (path == Navigator.defaultRouteName) {
       //背景: defaultRouteNameへの遷移がリクエストされたらアプリを立ち上げたい（開く画面は特に気にしない）
       //背景: handleUriメソッドを呼べるということは既に何かしらの画面を開いている
@@ -106,13 +106,13 @@ class InAppRouter {
 
     IScreenArguments found;
 
-    final match = _router.match(path);
+    final match = _router.match(path!);
 
     if (match == null) {
       errorCallback?.call(RouteNotFoundException.noMatch(path), StackTrace.current);
       found = const RouteNotFoundScreenArguments();
     } else {
-      found = routeDefines[match.route.route](match.parameters);
+      found = routeDefines[match.route.route]!(match.parameters);
     }
 
     return found;
