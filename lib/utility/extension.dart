@@ -46,19 +46,7 @@ extension MapHelper<K, V> on Map<K, V> {
   }
 }
 
-extension IterableHelper<T> on Iterable<T> {
-  T? get firstOrNull => isNotEmpty ? first : null;
-  T? get lastOrNull => isNotEmpty ? last : null;
-}
-
 extension ListHelper<T> on Iterable<T> {
-  Iterable<V> mapIndexed<V>(V Function(int index, T value) f) sync* {
-    final list = toList();
-    for (var i = 0; i < length; i++) {
-      yield f(i, list[i]);
-    }
-  }
-
   Iterable<T> insertBetween(T Function(int index) f) sync* {
     final list = toList();
     for (var i = 0; i < length; i++) {
