@@ -31,4 +31,29 @@ class RefreshState<V, E> {
         initialRefreshCompleted: initialRefreshCompleted ?? this.initialRefreshCompleted,
         lastRefreshedAt: lastRefreshedAt ?? this.lastRefreshedAt,
       );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RefreshState &&
+          runtimeType == other.runtimeType &&
+          isRefreshing == other.isRefreshing &&
+          initialRefreshCompleted == other.initialRefreshCompleted &&
+          value == other.value &&
+          error == other.error &&
+          lastRefreshedAt == other.lastRefreshedAt;
+
+  @override
+  int get hashCode => isRefreshing.hashCode ^ initialRefreshCompleted.hashCode ^ value.hashCode ^ error.hashCode ^ lastRefreshedAt.hashCode;
+}
+
+extension RefreshControllerRx<T, E> on Stream<RefreshState<T, E>> {
+  // ignore: invalid_use_of_protected_member
+  Stream<T> successValueDistinct() => where((x) => x.isSuccess).map((x) {
+        final value = x.value;
+        if (value == null) {
+          throw Exception("Invalid RefreshState found. isSuccess is true, but value is null.");
+        }
+        return value;
+      }).distinct();
 }
