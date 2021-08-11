@@ -82,12 +82,12 @@ class InAppLauncher {
 class InAppLaunchResult {
   final IScreenArguments? screenArguments;
   final Uri? browserUri;
-  final InAppLaunchResultKind? kind;
+  final InAppLaunchResultKind kind;
 
   InAppLaunchResult({
+    required this.kind,
     this.browserUri,
     this.screenArguments,
-    this.kind,
   });
 
   InAppLaunchResult.screen(IScreenArguments arguments)
