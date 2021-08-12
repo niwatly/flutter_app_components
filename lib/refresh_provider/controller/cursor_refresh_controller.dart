@@ -1,6 +1,6 @@
 part of 'refresh_controller.dart';
 
-class CursorRefreshController<C extends Object, V extends ICursorable<V, C>, E extends Object> extends RefreshController<V, E> {
+class CursorRefreshController<C, V extends ICursorable<V, C>, E extends Object> extends RefreshController<V, E> {
   Future<V> Function(C? cursor) refresher;
   C? initialCursor;
 
