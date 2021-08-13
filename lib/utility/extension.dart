@@ -120,16 +120,64 @@ extension StateNotifierEx<T> on StateNotifier<T> {
 
 extension StreamEx<T> on Stream<T> {
   Stream<List<T>> bufferWhile(Stream<bool> predicate) {
-    final window = Rx.combineLatest2<void, bool, bool>(
-      Stream.value(null),
-      predicate,
-      (_, condition) => condition,
-    );
+    return Stream<List<T>>.eventTransformed(this, (sink) => BufferWhileEventSink<T>(predicate, sink));
+  }
 
-    return buffer(window.where((x) => !x));
+  Stream<T> logging({
+    Function(String msg)? onLogging,
+    String? prefix,
+  }) {
+    final log = onLogging ?? (String msg) => print(msg);
+    final _prefix = prefix != null ? "${prefix}:" : "";
+
+    return doOnData((x) => log("${_prefix}onData: $x")) //
+        .doOnListen(() => log("${_prefix}onListen")) //
+        .doOnCancel(() => log("${_prefix}onCancel"))
+        .doOnDone(() => log("${_prefix}onDone"))
+        .doOnError((x, st) => log("${_prefix}onError: $x"));
   }
 }
 
 extension BoolStreamEx on Stream<bool> {
   Stream<bool> not() => map((x) => !x);
+}
+
+class BufferWhileEventSink<T> implements EventSink<T> {
+  final Stream<bool> windowStream;
+  final EventSink<List<T>> outputSink;
+  List<T> _buffer = [];
+  late StreamSubscription _sub;
+  var windowOpen = false;
+
+  BufferWhileEventSink(this.windowStream, this.outputSink) {
+    _sub = this.windowStream.listen((x) {
+      windowOpen = !x;
+      tryOutput();
+    });
+  }
+
+  void tryOutput() {
+    if (windowOpen) {
+      outputSink.add(_buffer);
+      _buffer.clear();
+    }
+  }
+
+  @override
+  void add(T event) {
+    _buffer.add(event);
+
+    tryOutput();
+  }
+
+  @override
+  void addError(Object error, [StackTrace? stackTrace]) {
+    outputSink.addError(error, stackTrace);
+  }
+
+  @override
+  void close() {
+    _buffer.clear();
+    _sub.cancel();
+  }
 }
