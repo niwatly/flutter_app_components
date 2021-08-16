@@ -25,16 +25,16 @@ class TextSpanBuilder {
 
     final textSpans = elements.map((x) {
       GestureRecognizer? recognizer = null;
-
       final callback = onUrlTapCallback;
-      if (x.isLink != null && callback != null) {
+
+      if (x.isLink && callback != null) {
         recognizer = TapGestureRecognizer() //
           ..onTap = () => callback(x.text);
       }
 
       return TextSpan(
         text: x.text,
-        style: x.isLink != null ? linkStyle : style,
+        style: x.isLink ? linkStyle : style,
         recognizer: recognizer,
       );
     });
@@ -46,6 +46,7 @@ class TextSpanBuilder {
 
   Iterable<_Element> _generateElements(String text) sync* {
     if (text.isEmpty) {
+      // テキストがそもそも空文字
       return;
     }
 
@@ -53,6 +54,7 @@ class TextSpanBuilder {
     final matches = regexp.allMatches(text);
 
     if (matches.isEmpty) {
+      // 正規表現にマッチする箇所が0件
       yield _Element.text(text);
 
       return;
@@ -62,25 +64,37 @@ class TextSpanBuilder {
 
     for (final match in matches) {
       if (match.start != 0) {
+        // 前回のマッチ箇所終わりから今回の箇所始まりに囲まれている通常のテキストをElement化する
         yield _Element.text(text.substring(index, match.start));
       }
-      yield _Element.link(match.group(0));
+
+      final mateched = match.group(0);
+
+      if (mateched != null) {
+        // マッチしたテキストをElement化する
+        yield _Element.link(mateched);
+      }
 
       index = match.end;
     }
+
     if (index < text.length) {
+      // 最後のマッチ箇所終わりからテキスト終端までをElement化する
       yield _Element.text(text.substring(index));
     }
   }
 }
 
 class _Element {
-  final bool? isLink;
-  final String? text;
+  final bool isLink;
+  final String text;
 
-  _Element({this.isLink, this.text});
+  _Element({
+    required this.isLink,
+    required this.text,
+  });
 
   _Element.text(String text) : this(isLink: false, text: text);
 
-  _Element.link(String? link) : this(isLink: true, text: link);
+  _Element.link(String link) : this(isLink: true, text: link);
 }
