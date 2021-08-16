@@ -18,10 +18,10 @@ abstract class RefreshController<V extends Object, E extends Object> extends Sta
   DateTime? _lastLoadTime;
 
   // ignore: close_sinks
-  Sink<Stream<void>>? requestLifetimeRefreshSink;
+  late Sink<Stream<void>> requestLifetimeRefreshSink;
 
   // ignore: close_sinks
-  Sink<Stream<RefreshConfig>>? requestConfigRefreshSink;
+  late Sink<Stream<RefreshConfig>> requestConfigRefreshSink;
 
   final CompositeSubscription _compositeSubscription = CompositeSubscription();
 
