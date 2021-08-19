@@ -49,11 +49,12 @@ class RefreshState<V, E> {
 
 extension RefreshControllerRx<T, E> on Stream<RefreshState<T, E>> {
   // ignore: invalid_use_of_protected_member
-  Stream<T> successValueDistinct() => where((x) => x.isSuccess).map((x) {
+  Stream<T> successValueDistinct() => where((x) => x.isSuccess && !x.isRefreshing).map((x) {
         final value = x.value;
         if (value == null) {
           throw Exception("Invalid RefreshState found. isSuccess is true, but value is null.");
         }
+
         return value;
       }).distinct();
 }
