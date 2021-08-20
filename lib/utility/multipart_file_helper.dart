@@ -84,7 +84,7 @@ class MultipartFileHelper {
       filename: filename,
       // ContentType
       // FIXME: fileTypeがnullになるエラーがたまに報告されている（nullable対応前から）
-      contentType: MediaType("image", result.fileType!),
+      contentType: MediaType("image", result.fileType ?? "image/png"),
     );
 
     return MultipartFileInfo(multipartFile, result);
