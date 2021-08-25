@@ -24,7 +24,7 @@ extension JsonObjectHelper on Map<String, dynamic> {
 
   double doublee(String key, {double defaultValue = -1}) => doubleOrNull(key) ?? defaultValue;
 
-  bool? boolean(String key, {bool defaultValue = false}) => _get<bool>(key, defaultValue: false);
+  bool boolean(String key, {bool defaultValue = false}) => _get<bool>(key) ?? defaultValue;
 
   DateTime? dateOrNull(String key) {
     final str = _get<String>(key);
