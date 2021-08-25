@@ -37,12 +37,14 @@ extension DateHelper on DateTime {
 }
 
 extension MapHelper<K, V> on Map<K, V> {
-  V? getOrDefault(K key, V fallback) {
-    if (containsKey(key)) {
-      return this[key];
-    } else {
+  V getOrDefault(K key, V fallback) {
+    final v = this[key];
+
+    if (v == null) {
       return fallback;
     }
+
+    return v;
   }
 }
 
