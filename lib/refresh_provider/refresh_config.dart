@@ -21,5 +21,5 @@ abstract class IPagiable<R> implements IContinuable<R> {
 
 abstract class ICursorable<R, C> implements IContinuable<R> {
   bool get hasMore;
-  C get cursor;
+  C? get cursor;
 }
