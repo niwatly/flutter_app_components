@@ -6,6 +6,8 @@ abstract class ILogger {
 }
 
 class PrintLogger implements ILogger {
+  const PrintLogger();
+  
   @override
   void info(dynamic msg) {
     _output(msg, "INFO");
@@ -33,6 +35,8 @@ class PrintLogger implements ILogger {
 }
 
 class SilentLogger implements ILogger {
+  const SilentLogger();
+  
   @override
   void info(dynamic msg) {}
 
