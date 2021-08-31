@@ -67,6 +67,8 @@ class InAppLauncher {
     } else {
       for (final e in blackListForUnknownUri) {
         if (e.hasMatch(uri.toString())) {
+          print("$runtimeType: uri has blocked by $e. $uri");
+          
           return InAppLaunchResult.silent();
         }
       }
