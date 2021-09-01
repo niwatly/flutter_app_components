@@ -17,20 +17,37 @@ class RefreshState<V, E> {
 
   bool get hasError => error != null;
 
-  RefreshState<V, E> copyWith({
-    V? value,
-    E? error,
-    bool? isRefreshing,
-    bool? initialRefreshCompleted,
-    DateTime? lastRefreshedAt,
-  }) =>
-      RefreshState(
-        value: value ?? this.value,
-        error: error ?? this.error,
-        isRefreshing: isRefreshing ?? this.isRefreshing,
-        initialRefreshCompleted: initialRefreshCompleted ?? this.initialRefreshCompleted,
-        lastRefreshedAt: lastRefreshedAt ?? this.lastRefreshedAt,
-      );
+  // FIXME: よくあるcopyWithの書き方を真似るとerrorをnullで上書きできないので、個別にcopyWithを作成している
+  RefreshState<V, E> copyWithIsRefreshingTrue() {
+    return RefreshState(
+      value: value,
+      error: error,
+      isRefreshing: true,
+      initialRefreshCompleted: initialRefreshCompleted,
+      lastRefreshedAt: lastRefreshedAt ?? this.lastRefreshedAt,
+    );
+  }
+
+  RefreshState<V, E> copyWithSuccessValue(V v) {
+    return RefreshState(
+      value: v,
+      error: null,
+      isRefreshing: false,
+      initialRefreshCompleted: true,
+      lastRefreshedAt: DateTime.now(),
+    );
+  }
+
+  RefreshState<V, E> copyWithError(E e) {
+    return RefreshState(
+      // エラー時、直前までは成功していた分でUI表示を行いたいケースを考慮し、valueは初期化しない
+      value: value,
+      error: e,
+      isRefreshing: false,
+      initialRefreshCompleted: initialRefreshCompleted,
+      lastRefreshedAt: lastRefreshedAt,
+    );
+  }
 
   @override
   bool operator ==(Object other) =>

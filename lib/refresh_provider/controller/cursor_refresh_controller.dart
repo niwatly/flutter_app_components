@@ -17,7 +17,7 @@ class CursorRefreshController<C, V extends ICursorable<V, C>, E extends Object> 
   @override
   Stream<RefreshState<V, E>> _doRefresh(RefreshConfig config, RefreshState<V, E> currentState) async* {
     if (!config.silent) {
-      yield currentState = currentState.copyWith(isRefreshing: true);
+      yield currentState = currentState.copyWithIsRefreshingTrue();
     }
 
     try {
@@ -34,17 +34,9 @@ class CursorRefreshController<C, V extends ICursorable<V, C>, E extends Object> 
         newValue = await refresher(initialCursor);
       }
 
-      yield currentState = currentState.copyWith(
-        value: newValue,
-        isRefreshing: false,
-        initialRefreshCompleted: true,
-        lastRefreshedAt: DateTime.now(),
-      );
+      yield currentState = currentState.copyWithSuccessValue(newValue);
     } on E catch (e, st) {
-      yield currentState = currentState.copyWith(
-        error: e,
-        isRefreshing: false,
-      );
+      yield currentState = currentState.copyWithError(e);
       if (RefreshController.notifyErrorEvenExpected) {
         RefreshController.errorCallback?.call(e, st);
       }

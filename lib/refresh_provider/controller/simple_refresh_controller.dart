@@ -28,23 +28,16 @@ class SimpleRefreshController<V extends Object, E extends Object> extends Refres
   @override
   Stream<RefreshState<V, E>> _doRefresh(RefreshConfig config, RefreshState<V, E> currentState) async* {
     if (!config.silent) {
-      yield currentState = currentState.copyWith(isRefreshing: true);
+      yield currentState = currentState.copyWithIsRefreshingTrue();
     }
 
     try {
       final value = await refresher();
 
-      yield currentState = currentState.copyWith(
-        value: value,
-        isRefreshing: false,
-        initialRefreshCompleted: true,
-        lastRefreshedAt: DateTime.now(),
-      );
+      yield currentState = currentState.copyWithSuccessValue(value);
     } on E catch (e, st) {
-      yield currentState = currentState.copyWith(
-        error: e,
-        isRefreshing: false,
-      );
+      yield currentState = currentState.copyWithError(e);
+
       if (RefreshController.notifyErrorEvenExpected) {
         RefreshController.errorCallback?.call(e, st);
       }

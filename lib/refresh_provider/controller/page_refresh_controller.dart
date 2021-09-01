@@ -29,7 +29,7 @@ class PageRefreshController<V extends IPagiable<V>, E extends Object> extends Re
     }
 
     if (!config.silent) {
-      yield currentState = currentState.copyWith(isRefreshing: true);
+      yield currentState = currentState.copyWithIsRefreshingTrue();
     }
 
     try {
@@ -46,20 +46,12 @@ class PageRefreshController<V extends IPagiable<V>, E extends Object> extends Re
         newValue = await refresher(nextPage);
       }
 
-      yield currentState = currentState.copyWith(
-        value: newValue,
-        isRefreshing: false,
-        initialRefreshCompleted: true,
-        lastRefreshedAt: DateTime.now(),
-      );
+      yield currentState = currentState.copyWithSuccessValue(newValue);
 
       // ページングに成功したのでページ番号を更新する
       currentPage = nextPage;
     } on E catch (e, st) {
-      yield currentState = currentState.copyWith(
-        error: e,
-        isRefreshing: false,
-      );
+      yield currentState = currentState.copyWithError(e);
 
       if (RefreshController.notifyErrorEvenExpected) {
         RefreshController.errorCallback?.call(e, st);
