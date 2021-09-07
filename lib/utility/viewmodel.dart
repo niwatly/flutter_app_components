@@ -23,7 +23,7 @@ class ViewModel<T> extends StateNotifier<T> with LocatorMixin {
 
     _tryUpdateState(read);
   }
-  
+
   void set(T source) {
     state = source;
   }
