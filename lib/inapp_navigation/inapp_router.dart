@@ -46,7 +46,7 @@ class InAppRouter {
   /// e.g. instagram:// -> /
   /// e.g. https://yahoo.co.jp/home -> /home
   /// e.g. https://yahoo.co.jp/search?query=bump -> /home?query=bump
-  String? _extractPathFromUri(Uri uri) {
+  String? extractPathFromUri(Uri uri) {
     String? path;
 
     if (uri.scheme == "http" || uri.scheme == "https" && enableInAppNavigation && uri.host == deepLinkHost) {
@@ -78,7 +78,7 @@ class InAppRouter {
   ) async {
     //logger.info("try handle uri $input");
 
-    final path = _extractPathFromUri(uri);
+    final path = extractPathFromUri(uri);
 
     //logger.info("extracted path $path");
 
