@@ -55,6 +55,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String message,
   ) =>
       DialogRoute(
+        useSafeArea: false,
         context: context,
         builder: (context) => _MyDialog(
           title: errorTitle,
@@ -75,6 +76,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String message,
   ) =>
       DialogRoute(
+        useSafeArea: false,
         context: context,
         builder: (context) => _MyDialog(
           title: confirmTitle,
@@ -96,6 +98,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String? title,
   }) =>
       DialogRoute<bool>(
+        useSafeArea: false,
         context: context,
         builder: (context) => ChangeNotifierProvider<_CheckBoxNotifier>(
           create: (context) => _CheckBoxNotifier(false),
@@ -139,6 +142,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     required String message,
   }) =>
       DialogRoute<bool>(
+        useSafeArea: false,
         context: context,
         builder: (context) => _MyDialog(
           title: title ?? askTitle,
@@ -168,6 +172,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String? message,
   }) =>
       DialogRoute<int>(
+        useSafeArea: false,
         context: context,
         builder: (context) => FloatingDialog(
           onClose: () => Navigator.of(context).pop(-1),
@@ -200,6 +205,7 @@ class DialogBuilderState extends State<DialogBuilder> {
     String? message,
   }) {
     return DialogRoute(
+      useSafeArea: false,
       context: context,
       builder: (context) => FutureBuilder(
         future: future,
