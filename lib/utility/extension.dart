@@ -183,3 +183,7 @@ class BufferWhileEventSink<T> implements EventSink<T> {
     _sub.cancel();
   }
 }
+
+extension EdgeInsetsEx on EdgeInsets {
+  EdgeInsets withSystemPadding(BuildContext context) => add(MediaQuery.of(context).padding);
+}
