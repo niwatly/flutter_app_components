@@ -6,7 +6,7 @@ class TextSpanBuilder {
   static const phoneNumberRegExpPattern = r'[+0]\d+[\d-]+\d';
   static const emailRegExpPattern = r'[^@\s]+@([^@\s]+\.)+[^@\W]+';
 
-  static const defaultLinkRegExpPatterns = [urlRegExpPattern, phoneNumberRegExpPattern, emailRegExpPattern];
+  static const defaultLinkRegExpPatterns = [urlRegExpPattern];
 
   final List<String> linkRegExpPatterns;
   final TextStyle? style;
