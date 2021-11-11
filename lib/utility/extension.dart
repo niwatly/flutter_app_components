@@ -185,5 +185,5 @@ class BufferWhileEventSink<T> implements EventSink<T> {
 }
 
 extension EdgeInsetsEx on EdgeInsets {
-  EdgeInsets withSystemPadding(BuildContext context) => add(MediaQuery.of(context).padding);
+  EdgeInsets withSystemPadding(BuildContext context) => add(MediaQuery.of(context).padding) as EdgeInsets;
 }
