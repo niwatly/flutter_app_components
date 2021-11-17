@@ -11,7 +11,7 @@ class TextSpanBuilder {
   final List<String> linkRegExpPatterns;
   final TextStyle? style;
   final TextStyle? linkStyle;
-  final void Function(String? url)? onUrlTapCallback;
+  final void Function(String url)? onUrlTapCallback;
 
   TextSpanBuilder({
     this.linkRegExpPatterns = defaultLinkRegExpPatterns,
