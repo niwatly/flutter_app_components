@@ -23,3 +23,8 @@ abstract class ICursorable<R, C> implements IContinuable<R> {
   bool get hasMore;
   C? get cursor;
 }
+
+abstract class IOffsetStylePagiable<R> implements IContinuable<R> {
+  bool get hasMore;
+  int get offset;
+}

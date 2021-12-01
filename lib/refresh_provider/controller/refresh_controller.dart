@@ -7,6 +7,7 @@ import '../refresh_state.dart';
 
 part 'cursor_refresh_controller.dart';
 part 'page_refresh_controller.dart';
+part 'offset_style_page_refresh_controller.dart';
 part 'simple_refresh_controller.dart';
 
 abstract class RefreshController<V extends Object, E extends Object> extends StateNotifier<RefreshState<V, E>> {
