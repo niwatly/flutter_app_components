@@ -24,7 +24,7 @@ abstract class ICursorable<R, C> implements IContinuable<R> {
   C? get cursor;
 }
 
-abstract class IOffsetStylePagiable<R> implements IContinuable<R> {
+abstract class IOffsetable<R> implements IContinuable<R> {
   bool get hasMore;
   int get offset;
 }

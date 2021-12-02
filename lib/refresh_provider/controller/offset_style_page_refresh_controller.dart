@@ -1,10 +1,10 @@
 part of 'refresh_controller.dart';
 
-class OffsetStylePageRefreshController<V extends IOffsetStylePagiable<V>, E extends Object> extends RefreshController<V, E> {
+class OffsetRefreshController<V extends IOffsetable<V>, E extends Object> extends RefreshController<V, E> {
   final Future<V> Function(int offset) refresher;
   int initialOffset;
 
-  OffsetStylePageRefreshController({
+  OffsetRefreshController({
     required this.refresher,
     this.initialOffset = 0,
     Duration? lifetime,
