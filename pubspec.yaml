@@ -6,7 +6,7 @@ publish_to: none
 homepage: "https://github.com/niwatly"
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.13.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -16,19 +16,19 @@ dependencies:
 
   # StateNotifierを使って状態管理したい
   # https://pub.dev/packages/state_notifier
-  state_notifier: ^0.7.0
+  state_notifier: ^0.7.1
 
   # StateNotifierをWidgetTree上で保持したい
   # https://pub.dev/packages/flutter_state_notifier
-  flutter_state_notifier: ^0.7.0
+  flutter_state_notifier: ^0.7.1
 
   # InheritedWidgetを利用した状態管理を楽に行いたい
   # https://pub.dev/packages/provider
-  provider: ^5.0.0
+  provider: ^6.0.1
 
   # RxOperatorを使いたい
   # https://pub.dev/packages/rxdart
-  rxdart: ^0.27.1
+  rxdart: ^0.27.3
 
   # 複雑なRoutingを楽に書きたい
   # https://pub.dev/packages/fluro
@@ -36,18 +36,18 @@ dependencies:
 
   # URLを外部ブラウザで開きたい
   # https://pub.dev/packages/url_launcher
-  url_launcher: ^6.0.9
+  url_launcher: ^6.0.17
 
   # Http通信したい
   # https://pub.dev/packages/http
-  http: ^0.13.3
+  http: ^0.13.4
 
   # Textの文字サイズを自動で調整したい
   # https://pub.dev/packages/auto_size_text
-  auto_size_text:  ^3.0.0-nullsafety.0
+  auto_size_text: ^3.0.0
 
   # https://pub.dev/packages/in_app_review
-  in_app_review: ^2.0.2
+  in_app_review: ^2.0.3
 
   # アプリバージョンとかを取得したい
   # https://pub.dev/packages/package_info#-installing-tab-
@@ -55,7 +55,7 @@ dependencies:
 
   # 一時ディレクトリを取得するのに使用
   # https://pub.dev/packages/path_provider
-  path_provider: ^2.0.2
+  path_provider: ^2.0.7
 
   # バージョン値を比較したい
   # https://pub.dev/packages/version
@@ -63,22 +63,22 @@ dependencies:
 
   # アプリのローカルストレージに値を保存したい
   # https://pub.dev/packages/shared_preferences
-  shared_preferences: ^2.0.7
+  shared_preferences: ^2.0.9
 
   # 画像からexifを削除したい
   # https://pub.dev/packages/image
-  image: ^3.0.2
+  image: ^3.1.0
 
   # 指定したWidgetにフォーカスするOverlay形式のUI表現を楽に作りたい
   # https://pub.dev/packages/tutorial_coach_mark
-  tutorial_coach_mark: ^1.1.1
+  tutorial_coach_mark: ^1.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.0.1
+  dart_code_metrics: ^4.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
