@@ -1,12 +1,11 @@
 name: flutter_app_components
 description: A new Flutter package.
 version: 1.0.0
-author: niwatly
 publish_to: none
 homepage: "https://github.com/niwatly"
 
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
   flutter:

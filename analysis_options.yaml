@@ -1,4 +1,9 @@
 analyzer:
+  errors:
+    # allow having TODOs in the code
+    todo: ignore
+    # fixmeでwarningを出したくない
+    fixme: false
   plugins:
     - dart_code_metrics
 
