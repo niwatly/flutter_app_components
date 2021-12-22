@@ -6,6 +6,7 @@ homepage: "https://github.com/niwatly"
 
 environment:
   sdk: '>=2.15.0 <3.0.0'
+  flutter: 2.8.1
 
 dependencies:
   flutter:
@@ -54,7 +55,7 @@ dependencies:
 
   # 一時ディレクトリを取得するのに使用
   # https://pub.dev/packages/path_provider
-  path_provider: ^2.0.7
+  path_provider: ^2.0.8
 
   # バージョン値を比較したい
   # https://pub.dev/packages/version
@@ -62,7 +63,7 @@ dependencies:
 
   # アプリのローカルストレージに値を保存したい
   # https://pub.dev/packages/shared_preferences
-  shared_preferences: ^2.0.9
+  shared_preferences: ^2.0.11
 
   # 画像からexifを削除したい
   # https://pub.dev/packages/image
@@ -70,7 +71,7 @@ dependencies:
 
   # 指定したWidgetにフォーカスするOverlay形式のUI表現を楽に作りたい
   # https://pub.dev/packages/tutorial_coach_mark
-  tutorial_coach_mark: ^1.2.0
+  tutorial_coach_mark: ^1.2.1
 
 dev_dependencies:
   flutter_test:
