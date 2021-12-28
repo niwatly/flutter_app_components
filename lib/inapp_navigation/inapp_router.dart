@@ -1,10 +1,10 @@
 import 'package:fluro/fluro.dart' hide RouteNotFoundException;
 import 'package:flutter/material.dart' hide Router;
 
-import '../utility/extension.dart';
 import 'screen_arguments.dart';
 
-typedef RouteGenerator = IScreenArguments Function(Map<String, List<String>> params);
+typedef RouteGenerator = IScreenArguments Function(
+    Map<String, List<String>> params);
 
 class RouteState {}
 
@@ -36,7 +36,8 @@ class InAppRouter {
 
     for (final key in keys.reversed) {
       // Hanlderは使わないので何でも良い
-      _router.define(key, handler: Handler(handlerFunc: (context, parameters) {}));
+      _router.define(key,
+          handler: Handler(handlerFunc: (context, parameters) {}));
     }
   }
 
@@ -49,24 +50,27 @@ class InAppRouter {
   String? extractPathFromUri(Uri uri) {
     String? path;
 
-    if (uri.scheme == "http" || uri.scheme == "https" && enableInAppNavigation && uri.host == deepLinkHost) {
+    if (uri.scheme == "http" ||
+        uri.scheme == "https" &&
+            enableInAppNavigation &&
+            uri.host == deepLinkHost) {
       // Http、かつDeepLinkとして指定されているHostなら、Uriのpathをそのまま使用する
       path = uri.path;
     } else if (enableInAppNavigation && uri.scheme == customUrlScheme) {
       // customUrlScheme なら、hostより後ろをPathとして切り取る
       // host がない場合（"scheme://"）は "/" をPathとする
-      if (uri.host.isNullOrEmpty) {
+      if (uri.host.isEmpty) {
         path = Navigator.defaultRouteName;
       } else {
-        path = uri.path.isNullOrEmpty ? uri.host : "${uri.host}${uri.path}";
+        path = uri.path.isEmpty ? uri.host : "${uri.host}${uri.path}";
       }
     }
 
-    if (path.isNullOrEmpty) {
+    if (path?.isEmpty ?? true) {
       return null;
     }
 
-    if (!uri.query.isNullOrEmpty) {
+    if (uri.query.isNotEmpty) {
       path = "$path?${uri.query}";
     }
 
@@ -86,7 +90,8 @@ class InAppRouter {
       // pathの解析に失敗したのでRouteNotFound
       // e.g. 無効な文字列
       // e.g. 無効なscheme
-      errorCallback?.call(RouteNotFoundException.cannotExtractPath(uri), StackTrace.current);
+      errorCallback?.call(
+          RouteNotFoundException.cannotExtractPath(uri), StackTrace.current);
 
       return const RouteNotFoundScreenArguments();
     }
@@ -109,7 +114,8 @@ class InAppRouter {
     final match = _router.match(path);
 
     if (match == null) {
-      errorCallback?.call(RouteNotFoundException.noMatch(path), StackTrace.current);
+      errorCallback?.call(
+          RouteNotFoundException.noMatch(path), StackTrace.current);
       found = const RouteNotFoundScreenArguments();
     } else {
       found = routeDefines[match.route.route]!(match.parameters);
