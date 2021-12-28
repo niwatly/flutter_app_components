@@ -7,11 +7,6 @@ import 'package:provider/provider.dart' hide Locator;
 import 'package:rxdart/rxdart.dart';
 import 'package:state_notifier/state_notifier.dart';
 
-extension StringHelper on String? {
-  @Deprecated("nullチェックした場合と比べてsmart castが効かないため非推奨")
-  bool get isNullOrEmpty => this?.isNotEmpty != true;
-}
-
 extension IntHelper on int {
   String toCommaString() => NumberFormat("#,###").format(this);
 
