@@ -1,7 +1,6 @@
 import 'package:fluro/fluro.dart' hide RouteNotFoundException;
 import 'package:flutter/material.dart' hide Router;
 
-import '../utility/extension.dart';
 import 'screen_arguments.dart';
 
 typedef RouteGenerator = IScreenArguments Function(Map<String, List<String>> params);
@@ -55,18 +54,18 @@ class InAppRouter {
     } else if (enableInAppNavigation && uri.scheme == customUrlScheme) {
       // customUrlScheme なら、hostより後ろをPathとして切り取る
       // host がない場合（"scheme://"）は "/" をPathとする
-      if (uri.host.isNullOrEmpty) {
+      if (uri.host.isEmpty) {
         path = Navigator.defaultRouteName;
       } else {
-        path = uri.path.isNullOrEmpty ? uri.host : "${uri.host}${uri.path}";
+        path = uri.path.isEmpty ? uri.host : "${uri.host}${uri.path}";
       }
     }
 
-    if (path.isNullOrEmpty) {
+    if (path?.isEmpty ?? true) {
       return null;
     }
 
-    if (!uri.query.isNullOrEmpty) {
+    if (uri.query.isNotEmpty) {
       path = "$path?${uri.query}";
     }
 
