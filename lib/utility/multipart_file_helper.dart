@@ -21,6 +21,7 @@ class MultipartFileHelper {
     Uint8List? bytes,
     ImageProvider? imageProvider,
     int maxSize = 480,
+    Duration imageConvertTimeout = const Duration(seconds: 20),
   }) async {
     Uint8List input;
     String? fileTypeByFilePath;
@@ -42,7 +43,7 @@ class MultipartFileHelper {
       fileTypeByFilePath = filePath;
     } else if (imageProvider != null) {
       // ImageProviderが与えられたので、ImageInfoに変換してからバイトデータに変換して使う
-      final imageInfo = await imageProvider.toImageInfo(timeout: const Duration(seconds: 20));
+      final imageInfo = await imageProvider.toImageInfo(timeout: imageConvertTimeout);
 
       // 中間ファイルをByteデータにする
       //
