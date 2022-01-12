@@ -73,13 +73,14 @@ class DialogBuilderState extends State<DialogBuilder> {
       );
 
   Route confirm(
-    String message,
-  ) =>
+    String message, {
+    String? title,
+  }) =>
       DialogRoute(
         useSafeArea: false,
         context: context,
         builder: (context) => _MyDialog(
-          title: confirmTitle,
+          title: title ?? confirmTitle,
           body: message,
           actions: [
             TextButton(
