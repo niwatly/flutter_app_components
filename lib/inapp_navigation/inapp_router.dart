@@ -35,7 +35,7 @@ class InAppRouter {
 
     for (final key in keys.reversed) {
       // Hanlderは使わないので何でも良い
-      _router.define(key, handler: Handler(handlerFunc: (context, parameters) {}));
+      _router.define(key, handler: Handler(handlerFunc: (context, parameters) => null));
     }
   }
 
