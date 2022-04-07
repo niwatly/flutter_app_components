@@ -1,4 +1,5 @@
 import 'api_client_error.dart';
+import '../utility/extension.dart';
 
 extension JsonObjectHelper on Map<String, dynamic> {
   // ignore: avoid_init_to_null
@@ -67,7 +68,7 @@ extension JsonObjectHelper on Map<String, dynamic> {
   List<T> array<T>(String key, T selector(dynamic v)) {
     final list = _get<List<dynamic>>(key) ?? [];
 
-    return list.map((x) => selector(x)).toList(growable: false);
+    return list.map((x) => selector(x)).toListNonGrowable();
   }
 }
 

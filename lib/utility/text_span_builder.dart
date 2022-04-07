@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
+import '../utility/extension.dart';
 
 class TextSpanBuilder {
   static const urlRegExpPattern = r'https?://([\w-]+\.)+[\w-]+(/[\w-./?%&=~#+:]*)?';
@@ -40,7 +41,7 @@ class TextSpanBuilder {
     });
 
     return TextSpan(
-      children: textSpans.toList(growable: false),
+      children: textSpans.toListNonGrowable(),
     );
   }
 

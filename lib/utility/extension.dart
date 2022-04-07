@@ -43,7 +43,7 @@ extension MapHelper<K, V> on Map<K, V> {
   }
 }
 
-extension ListHelper<T> on Iterable<T> {
+extension IterableHelper<T> on Iterable<T> {
   Iterable<T> insertBetween(T Function(int index) f) sync* {
     final list = toList();
     for (var i = 0; i < length; i++) {
@@ -59,6 +59,8 @@ extension ListHelper<T> on Iterable<T> {
 
         return "$prefix$v";
       });
+
+  List<T> toListNonGrowable() => toList(growable: false);
 }
 
 extension ObjectHelper<T extends Object> on T {

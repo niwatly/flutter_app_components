@@ -2,6 +2,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version/version.dart';
+import '../utility/extension.dart';
 
 const String _prefKeyReviewedVersions = "flutter_app_components_reviewed_versions";
 const String _prefKeyNotNowTime = "flutter_app_components_not_now_time";
@@ -99,7 +100,7 @@ class InAppReviewRestrictor {
     }
 
     final kind = (await reviewKind) ?? InAppReviewNavigationKind.Silent;
-    final reviewed = _reviewed.map((x) => Version.parse(x)).toList(growable: false);
+    final reviewed = _reviewed.map((x) => Version.parse(x)).toListNonGrowable();
     final request = Version.parse(_request);
     final current = await PackageInfo.fromPlatform().then((x) => Version.parse(x.version));
 
