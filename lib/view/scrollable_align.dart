@@ -62,7 +62,7 @@ class ScrollableAlign extends StatelessWidget {
     if (showScrollBar) {
       ret = Scrollbar(
         child: ret,
-        isAlwaysShown: scrollBarIsAlwaysShown,
+        thumbVisibility: scrollBarIsAlwaysShown,
       );
     }
 
