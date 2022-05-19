@@ -48,8 +48,7 @@ class DialogBuilderState extends State<DialogBuilder> {
   String get confirmTitle => widget.confirmTitle ?? "Confirm";
   String get pickTitle => widget.pickTitle ?? "Select one";
   String get askTitle => widget.askTitle ?? "Ask";
-  String get doNotShowAgainMessage =>
-      widget.doNotShowAgainMessage ?? "Do not show again";
+  String get doNotShowAgainMessage => widget.doNotShowAgainMessage ?? "Do not show again";
 
   Route error(
     String message,
@@ -131,8 +130,7 @@ class DialogBuilderState extends State<DialogBuilder> {
                   okLabel,
                   style: widget.okStyle,
                 ),
-                onPressed: () => Navigator.of(context)
-                    .pop(context.read<_CheckBoxNotifier>().value),
+                onPressed: () => Navigator.of(context).pop(context.read<_CheckBoxNotifier>().value),
               ),
             ],
           ),
@@ -213,14 +211,10 @@ class DialogBuilderState extends State<DialogBuilder> {
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            WidgetsBinding.instance
-                .addPostFrameCallback((_) => Navigator.of(context).pop());
+            WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
           }
 
-          final color = widget.loadingMessageBackgroundColor ??
-              (DialogTheme.of(context).backgroundColor ??
-                      Theme.of(context).dialogBackgroundColor)
-                  .withOpacity(0.8);
+          final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
 
           return WillPopScope(
             onWillPop: () async => false,
@@ -238,8 +232,7 @@ class DialogBuilderState extends State<DialogBuilder> {
                       ),
                       color: color,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 24),
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         child: Text(
                           message,
                           style: widget.loadingMessageStyle,
@@ -277,8 +270,7 @@ class _MyDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final _title = title;
 
-    final titleWidget =
-        _title != null && _title.isNotEmpty ? Text(_title) : null;
+    final titleWidget = _title != null && _title.isNotEmpty ? Text(_title) : null;
 
     return AlertDialog(
       title: titleWidget,

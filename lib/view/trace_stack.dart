@@ -50,9 +50,7 @@ class TraceStackChild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isBaseSizeChild
-        ? _BaseChild(child: child)
-        : _FollowChild(child: child);
+    return isBaseSizeChild ? _BaseChild(child: child) : _FollowChild(child: child);
   }
 }
 
@@ -77,8 +75,7 @@ class _BaseChild extends SingleChildRenderObjectWidget {
   const _BaseChild({required Widget child}) : super(child: child);
 
   @override
-  RenderObject createRenderObject(BuildContext context) =>
-      _BaseChildRenderObject(
+  RenderObject createRenderObject(BuildContext context) => _BaseChildRenderObject(
         Provider.of<_Notifier>(context),
       );
 }
