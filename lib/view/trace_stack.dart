@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
-import '../utility/extension.dart';
-
 class TraceStack extends StatelessWidget {
   final List<TraceStackChild> children;
   final StackFit fit;
@@ -93,7 +91,7 @@ class _BaseChildRenderObject extends RenderProxyBox {
 
     final size = this.size;
 
-    WidgetsBinding.instance?.let((x) => x.addPostFrameCallback((_) => _notifier.value = size));
+    WidgetsBinding.instance.addPostFrameCallback((_) => _notifier.value = size);
   }
 }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_components/view/check_box_text.dart';
 import 'package:provider/provider.dart';
 
-import '../utility/extension.dart';
 import 'floating_dialog.dart';
 
 class DialogBuilder extends StatefulWidget {
@@ -212,7 +211,7 @@ class DialogBuilderState extends State<DialogBuilder> {
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            WidgetsBinding.instance?.let((x) => x.addPostFrameCallback((_) => Navigator.of(context).pop()));
+            WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
           }
 
           final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
