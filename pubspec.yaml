@@ -29,11 +29,15 @@ dependencies:
   tutorial_coach_mark: ^1.2.2
   url_launcher: ^6.1.2
   version: ^2.0.0
+  hooks_riverpod: ^2.0.0-dev.9
+  freezed_annotation: ^2.0.3
 
 dev_dependencies:
 
   # https://pub.dev/packages/dart_code_metrics
   dart_code_metrics: ^4.15.2
+  build_runner: ^2.1.11
+  freezed: ^2.0.3+1
   flutter_test:
     sdk: flutter
 

@@ -1,3 +1,4 @@
 {
+    "dart.flutterSdkPath": "flutter_sdk",
     "dart.lineLength": 200
 }
