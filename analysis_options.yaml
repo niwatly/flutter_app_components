@@ -4,6 +4,8 @@ analyzer:
     todo: ignore
     # fixmeでwarningを出したくない
     fixme: false
+  exclude:
+    - "flutter_sdk/**"
   plugins:
     - dart_code_metrics
 
