@@ -13,16 +13,13 @@ class InAppRouter {
   late FluroRouter _router;
 
   final Map<String, RouteGenerator> routeDefines;
-  final String? customUrlScheme;
-  final String? deepLinkHost;
-
-  bool get enableInAppNavigation => customUrlScheme != null;
-  bool get enableDeepLinkNavigation => deepLinkHost != null;
+  final List<String> customUrlSchemeWhiteList;
+  final List<String> deepLinkWhiteList;
 
   InAppRouter({
     required this.routeDefines,
-    this.customUrlScheme,
-    this.deepLinkHost,
+    this.customUrlSchemeWhiteList = const [],
+    this.deepLinkWhiteList = const [],
   }) {
     _router = FluroRouter.appRouter;
 
@@ -48,10 +45,10 @@ class InAppRouter {
   String? extractPathFromUri(Uri uri) {
     String? path;
 
-    if (uri.scheme == "http" || uri.scheme == "https" && enableInAppNavigation && uri.host == deepLinkHost) {
+    if (uri.scheme == "http" || uri.scheme == "https" && customUrlSchemeWhiteList.isNotEmpty && deepLinkWhiteList.contains(uri.host)) {
       // Http、かつDeepLinkとして指定されているHostなら、Uriのpathをそのまま使用する
       path = uri.path;
-    } else if (enableInAppNavigation && uri.scheme == customUrlScheme) {
+    } else if (customUrlSchemeWhiteList.contains(uri.scheme)) {
       // customUrlScheme なら、hostより後ろをPathとして切り取る
       // host がない場合（"scheme://"）は "/" をPathとする
       if (uri.host.isEmpty) {

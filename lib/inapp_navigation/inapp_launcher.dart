@@ -14,7 +14,7 @@ class InAppLauncher {
     bool disableInAppNavigation = false,
   }) async {
     if (uri.scheme == "http" || uri.scheme == "https") {
-      if (router.enableDeepLinkNavigation && uri.host == router.deepLinkHost) {
+      if (router.deepLinkWhiteList.contains(uri.host)) {
         // FirebaseDynamicLinkから受け取ったDeepLinkがここにくる
         //
         // PathをCustomUrlSchemeとして処理し、アプリ内遷移する
@@ -42,7 +42,7 @@ class InAppLauncher {
         // アプリ外遷移する（任意のhttpリンクをブラウザで開く）
         return InAppLaunchResult.browser(uri);
       }
-    } else if (router.enableInAppNavigation && uri.scheme == router.customUrlScheme) {
+    } else if (router.customUrlSchemeWhiteList.contains(uri.scheme)) {
       // CustomUrlSchemeがここにくる
       //
       // Host+PathをCustomUrlSchemeとして処理し、アプリ内遷移する
