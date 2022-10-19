@@ -9,10 +9,10 @@ typedef _LegacyAsyncNotifierFuture<T> = Future<T> Function();
 
 class LegacyAsyncNotifier<T> extends StateNotifier<AsyncState<T>> {
   LegacyAsyncNotifier({
-    required Reader read,
+    required Ref ref,
     required _LegacyAsyncNotifierFuture<T> future,
     bool requestOnInitialize = false,
-  })  : _read = read,
+  })  : _ref = ref,
         _future = future,
         super(AsyncState()) {
     if (requestOnInitialize) {
@@ -21,7 +21,7 @@ class LegacyAsyncNotifier<T> extends StateNotifier<AsyncState<T>> {
   }
 
   // ignore: unused_field
-  final Reader _read;
+  final Ref _ref;
   final _LegacyAsyncNotifierFuture<T> _future;
 
   Future request() async {
