@@ -5,14 +5,14 @@ import 'async_state.dart';
 export 'async_state.dart';
 export 'async_taka_selector.dart';
 
-typedef _AsyncNotifierFuture<T> = Future<T> Function();
+typedef _LegacyAsyncNotifierFuture<T> = Future<T> Function();
 
-class AsyncNotifier<T> extends StateNotifier<AsyncState<T>> {
-  AsyncNotifier({
-    required Reader read,
-    required _AsyncNotifierFuture<T> future,
+class LegacyAsyncNotifier<T> extends StateNotifier<AsyncState<T>> {
+  LegacyAsyncNotifier({
+    required Ref ref,
+    required _LegacyAsyncNotifierFuture<T> future,
     bool requestOnInitialize = false,
-  })  : _read = read,
+  })  : _ref = ref,
         _future = future,
         super(AsyncState()) {
     if (requestOnInitialize) {
@@ -21,8 +21,8 @@ class AsyncNotifier<T> extends StateNotifier<AsyncState<T>> {
   }
 
   // ignore: unused_field
-  final Reader _read;
-  final _AsyncNotifierFuture<T> _future;
+  final Ref _ref;
+  final _LegacyAsyncNotifierFuture<T> _future;
 
   Future request() async {
     try {
