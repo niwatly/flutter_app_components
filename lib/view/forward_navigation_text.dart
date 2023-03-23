@@ -25,7 +25,7 @@ class ForwardNavigationText extends StatelessWidget {
   Widget build(BuildContext context) {
     // なんでおまえnullableなんだ...
     // ignore: avoid-non-null-assertion
-    final _style = style ?? Theme.of(context).textTheme.bodyText2!;
+    final _style = style ?? Theme.of(context).textTheme.bodyMedium!;
 
     return Align(
       alignment: Alignment.centerRight,

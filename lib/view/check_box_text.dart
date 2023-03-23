@@ -38,7 +38,7 @@ class CheckBoxText extends StatelessWidget {
     final _desc = description;
     // なんでおまえnullableなんだ...
     // ignore: avoid-non-null-assertion
-    final bodyText2 = Theme.of(context).textTheme.bodyText2!;
+    final bodyText2 = Theme.of(context).textTheme.bodyMedium!;
 
     return InkWell(
       onTap: () => disable ? null : onChanged(!checkBoxValue),
@@ -77,7 +77,7 @@ class CheckBoxText extends StatelessWidget {
                       _desc,
                       maxLines: 5,
                       textAlign: TextAlign.left,
-                      style: descriptionTextStyle ?? Theme.of(context).textTheme.caption,
+                      style: descriptionTextStyle ?? Theme.of(context).textTheme.bodySmall,
                     ),
                 ],
               ),
