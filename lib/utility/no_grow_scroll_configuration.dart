@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class _Behavior extends ScrollBehavior {
   const _Behavior();
   @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) => child;
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) => child;
 }
 
 class NoGlowScrollConfiguration extends StatelessWidget {

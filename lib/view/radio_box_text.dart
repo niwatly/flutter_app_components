@@ -40,7 +40,7 @@ class RadioBoxText<T> extends StatelessWidget {
     );
     // なんでおまえnullなんだ...
     // ignore: avoid-non-null-assertion
-    final _labelTextStyle = (labelTextStyle ?? Theme.of(context).textTheme.bodyText2!);
+    final _labelTextStyle = (labelTextStyle ?? Theme.of(context).textTheme.bodyMedium!);
     final _leading = leading;
     final _secondary = secondary;
     final _desc = description;
@@ -80,7 +80,7 @@ class RadioBoxText<T> extends StatelessWidget {
                       _desc,
                       maxLines: 5,
                       textAlign: TextAlign.left,
-                      style: descriptionTextStyle ?? Theme.of(context).textTheme.caption,
+                      style: descriptionTextStyle ?? Theme.of(context).textTheme.bodySmall,
                     ),
                 ],
               ),

@@ -55,7 +55,7 @@ class RouteNotFoundScreenArguments implements IScreenArguments {
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     "OK",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               ],
