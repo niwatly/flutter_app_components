@@ -5,14 +5,12 @@ publish_to: none
 homepage: "https://github.com/niwatly"
 
 environment:
-  sdk: '>=2.19.5 <3.0.0'
+  sdk: ">=2.19.5 <3.0.0"
 
 dependencies:
   auto_size_text: ^3.0.0
   fluro: ^2.0.5
   flutter:
-    sdk: flutter
-  flutter_localizations:
     sdk: flutter
   flutter_state_notifier: ^0.7.3
   freezed_annotation: ^2.2.0
@@ -22,22 +20,26 @@ dependencies:
   http: ^0.13.5
   image: ^3.2.2
   in_app_review: ^2.0.6
-  package_info: ^2.0.2
+  intl: ^0.17.0
+  package_info_plus: ^3.0.3
   path_provider: ^2.0.14
   provider: ^6.0.5
   rxdart: ^0.27.7
   shared_preferences: ^2.0.20
   state_notifier: ^0.7.2+1
   tutorial_coach_mark: ^1.2.8
-  url_launcher: ^6.1.10
   version: ^3.0.2
 
 dev_dependencies:
   build_runner: ^2.3.3
   dart_code_metrics: ^5.7.0
-  flutter_test:
-    sdk: flutter
+  dependency_validator: ^3.2.2
   freezed: ^2.3.2
+
+dependency_overrides:
+  # dependency_validatorを使うときエラーになる
+  # https://stackoverflow.com/questions/73561012/flutter-the-method-file-create-has-fewer-named-arguments-than-those-of-overrid
+  file: ^6.1.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
