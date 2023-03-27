@@ -1,7 +1,8 @@
 import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version/version.dart';
+
 import '../utility/extension.dart';
 
 const String _prefKeyReviewedVersions = "flutter_app_components_reviewed_versions";
