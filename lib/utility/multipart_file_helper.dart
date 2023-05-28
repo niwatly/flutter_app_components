@@ -92,7 +92,7 @@ class MultipartFileHelper {
   }
 
   static Future<EncodeInfo> _removeExifAndEncodeIfNeed(
-    List<int> input, {
+    Uint8List input, {
     String? filePathForDecoderNotFound,
     required bool fromImageProvider,
     required int maxSize,
@@ -106,13 +106,13 @@ class MultipartFileHelper {
     var resizeDone = false;
     String decoderName;
 
-    final decodeAndResize = (List<int> input, image.Decoder decoder) {
+    final decodeAndResize = (Uint8List input, image.Decoder decoder) {
       print("decode by ${decoder.runtimeType}.");
 
       // デコードする
       // Note: これまでにnullになったことはない
       // ignore: avoid-non-null-assertion
-      final decoded = decoder.decodeImage(input)!;
+      final decoded = decoder.decode(input)!;
 
       beforeResizeLength = decoded.length;
       beforeResizeWidth = decoded.width;
@@ -139,8 +139,8 @@ class MultipartFileHelper {
       //
       // Note: bakeOrienation内で行われているexifデータの削除は効果がないので別途削除する
       // Note: bakeOrientation内ではexif.dataを削除しているが、encodeメソッドはexif.rawDataを参照している
-      final baked = image.bakeOrientation(resized) //
-        ..exif.rawData = [];
+      final baked = image.bakeOrientation(resized); //
+
 
       return baked;
     };
@@ -164,7 +164,7 @@ class MultipartFileHelper {
       // Note: 常にファイル名があるとは限らない
 
       print("findDecoderForData failed. try to get decoder from filename.");
-      decoder = image.getDecoderForNamedImage(filePathForDecoderNotFound);
+      decoder = image.findDecoderForNamedImage(filePathForDecoderNotFound);
       decoderName = "by filename ${decoder?.fileType}";
     }
 
