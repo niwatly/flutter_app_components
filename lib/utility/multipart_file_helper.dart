@@ -137,7 +137,7 @@ class MultipartFileHelper {
 
       // 回転方向を補正してからExifを削除する
       //
-      // Note: bakeOrienation内で行われているexifデータの削除は効果がないので別途削除する
+      // Note: bakeOrientation内で行われているexifデータの削除は効果がないので別途削除する
       // Note: bakeOrientation内ではexif.dataを削除しているが、encodeメソッドはexif.rawDataを参照している
       final baked = image.bakeOrientation(resized); //
 
@@ -181,11 +181,11 @@ class MultipartFileHelper {
       final ex = Exception("decoder not found");
       onErrorCallback?.call(ex, StackTrace.current);
 
-      return EncodeInfo(bytes: input as Uint8List, fileType: filePathForDecoderNotFound);
+      return EncodeInfo(bytes: input, fileType: filePathForDecoderNotFound);
     } else if (decoder is image.GifDecoder) {
       // GifアニメーションをdecodeImageするとアニメーションが失われてしまうので何もせずに終了する
       // （別途decodeAnimationというメソッドが用意されているが、これに対してリサイズはできなさそう）（Frameごとにresizeすれば良い？）
-      return EncodeInfo(bytes: input as Uint8List, fileType: "gif");
+      return EncodeInfo(bytes: input, fileType: "gif");
     }
 
     final type = decoder.fileType ?? filePathForDecoderNotFound;
@@ -199,12 +199,12 @@ class MultipartFileHelper {
         case "jpg":
         case "jpeg":
           print("encode by JpegEncoder.");
-          encoded = image.encodeJpg(decodedImage) as Uint8List;
+          encoded = image.encodeJpg(decodedImage);
           break;
         case "png":
         default:
           print("encode by PngEncoder.");
-          encoded = image.encodePng(decodedImage) as Uint8List;
+          encoded = image.encodePng(decodedImage);
           break;
       }
 
@@ -226,7 +226,7 @@ class MultipartFileHelper {
       // 背景: findDecoderForDataはJpegとして判定したが、JpegDecoder.decodeImageを実行するとエラーになるデータがある
       // 対応: エラーが出たら何もせずに終了する
       return EncodeInfo(
-        bytes: input as Uint8List,
+        bytes: input,
         fileType: filePathForDecoderNotFound,
         resizeDone: resizeDone,
         beforeResizeLength: beforeResizeLength,

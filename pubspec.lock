@@ -278,14 +278,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_hooks:
-    dependency: transitive
-    description:
-      name: flutter_hooks
-      sha256: e0dc5d18678880f5961c6d733f86a8540db63d74ff4bc612a05026053b61d6a3
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.18.4"
   flutter_lints:
     dependency: transitive
     description:
@@ -294,14 +286,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  flutter_riverpod:
-    dependency: transitive
-    description:
-      name: flutter_riverpod
-      sha256: b3c3a8a9714b7f88dd2a41e1efbc47f76d620b06ab427c62ae7bc82298cd7dbb
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.2"
   flutter_state_notifier:
     dependency: "direct main"
     description:
@@ -371,14 +355,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.4"
-  hooks_riverpod:
-    dependency: "direct main"
-    description:
-      name: hooks_riverpod
-      sha256: "7e673817a7db4d6403a079882485affd3156d79c06209389353d0977d513f905"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.2"
   html:
     dependency: transitive
     description:
@@ -683,14 +659,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  riverpod:
-    dependency: transitive
-    description:
-      name: riverpod
-      sha256: b0fbf7927333c5c318f7e2c22c8b4fd2542ba294de0373e80ecdb34e0dcd8dc4
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.2"
   rxdart:
     dependency: "direct main"
     description:
