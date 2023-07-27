@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 import 'api_client.dart';
 import 'api_client_error.dart';
 
-class DefaultApiClient with IApiClient {
+class DefaultApiClient extends IApiClient {
   static Function(int statusCode, Uri uri)? onResponseReceived;
 
   final bool useHttp;
