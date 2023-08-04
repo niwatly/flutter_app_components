@@ -282,4 +282,4 @@ class _MyDialog extends StatelessWidget {
   }
 }
 
-class _CheckBoxNotifier = ValueNotifier<bool> with Type;
+typedef _CheckBoxNotifier = ValueNotifier<bool>;

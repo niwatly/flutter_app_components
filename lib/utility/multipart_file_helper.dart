@@ -92,7 +92,7 @@ class MultipartFileHelper {
   }
 
   static Future<EncodeInfo> _removeExifAndEncodeIfNeed(
-    List<int> input, {
+    Uint8List input, {
     String? filePathForDecoderNotFound,
     required bool fromImageProvider,
     required int maxSize,
@@ -106,13 +106,13 @@ class MultipartFileHelper {
     var resizeDone = false;
     String decoderName;
 
-    final decodeAndResize = (List<int> input, image.Decoder decoder) {
+    final decodeAndResize = (Uint8List input, image.Decoder decoder) {
       print("decode by ${decoder.runtimeType}.");
 
       // デコードする
       // Note: これまでにnullになったことはない
       // ignore: avoid-non-null-assertion
-      final decoded = decoder.decodeImage(input)!;
+      final decoded = decoder.decode(input)!;
 
       beforeResizeLength = decoded.length;
       beforeResizeWidth = decoded.width;
@@ -137,10 +137,10 @@ class MultipartFileHelper {
 
       // 回転方向を補正してからExifを削除する
       //
-      // Note: bakeOrienation内で行われているexifデータの削除は効果がないので別途削除する
+      // Note: bakeOrientation内で行われているexifデータの削除は効果がないので別途削除する
       // Note: bakeOrientation内ではexif.dataを削除しているが、encodeメソッドはexif.rawDataを参照している
-      final baked = image.bakeOrientation(resized) //
-        ..exif.rawData = [];
+      final baked = image.bakeOrientation(resized); //
+
 
       return baked;
     };
@@ -164,7 +164,7 @@ class MultipartFileHelper {
       // Note: 常にファイル名があるとは限らない
 
       print("findDecoderForData failed. try to get decoder from filename.");
-      decoder = image.getDecoderForNamedImage(filePathForDecoderNotFound);
+      decoder = image.findDecoderForNamedImage(filePathForDecoderNotFound);
       decoderName = "by filename ${decoder?.fileType}";
     }
 
@@ -181,11 +181,11 @@ class MultipartFileHelper {
       final ex = Exception("decoder not found");
       onErrorCallback?.call(ex, StackTrace.current);
 
-      return EncodeInfo(bytes: input as Uint8List, fileType: filePathForDecoderNotFound);
+      return EncodeInfo(bytes: input, fileType: filePathForDecoderNotFound);
     } else if (decoder is image.GifDecoder) {
       // GifアニメーションをdecodeImageするとアニメーションが失われてしまうので何もせずに終了する
       // （別途decodeAnimationというメソッドが用意されているが、これに対してリサイズはできなさそう）（Frameごとにresizeすれば良い？）
-      return EncodeInfo(bytes: input as Uint8List, fileType: "gif");
+      return EncodeInfo(bytes: input, fileType: "gif");
     }
 
     final type = decoder.fileType ?? filePathForDecoderNotFound;
@@ -199,12 +199,12 @@ class MultipartFileHelper {
         case "jpg":
         case "jpeg":
           print("encode by JpegEncoder.");
-          encoded = image.encodeJpg(decodedImage) as Uint8List;
+          encoded = image.encodeJpg(decodedImage);
           break;
         case "png":
         default:
           print("encode by PngEncoder.");
-          encoded = image.encodePng(decodedImage) as Uint8List;
+          encoded = image.encodePng(decodedImage);
           break;
       }
 
@@ -226,7 +226,7 @@ class MultipartFileHelper {
       // 背景: findDecoderForDataはJpegとして判定したが、JpegDecoder.decodeImageを実行するとエラーになるデータがある
       // 対応: エラーが出たら何もせずに終了する
       return EncodeInfo(
-        bytes: input as Uint8List,
+        bytes: input,
         fileType: filePathForDecoderNotFound,
         resizeDone: resizeDone,
         beforeResizeLength: beforeResizeLength,
