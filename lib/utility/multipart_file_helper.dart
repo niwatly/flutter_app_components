@@ -123,8 +123,8 @@ class MultipartFileHelper {
       if (decoded.width > maxSize || decoded.height > maxSize) {
         // 横長画像
         resized = decoded.width > decoded.height //
-            ? image.copyResize(decoded, width: maxSize, interpolation: image.Interpolation.cubic) // 横長なのでwidthを揃える
-            : image.copyResize(decoded, height: maxSize, interpolation: image.Interpolation.cubic); // 縦長なのでheightを揃える
+            ? image.copyResize(decoded, width: maxSize, interpolation: image.Interpolation.linear) // 横長なのでwidthを揃える
+            : image.copyResize(decoded, height: maxSize, interpolation: image.Interpolation.linear); // 縦長なのでheightを揃える
 
         resizeDone = true;
       } else {
@@ -140,7 +140,6 @@ class MultipartFileHelper {
       // Note: bakeOrientation内で行われているexifデータの削除は効果がないので別途削除する
       // Note: bakeOrientation内ではexif.dataを削除しているが、encodeメソッドはexif.rawDataを参照している
       final baked = image.bakeOrientation(resized); //
-
 
       return baked;
     };
