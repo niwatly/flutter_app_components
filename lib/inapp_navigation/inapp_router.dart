@@ -1,5 +1,5 @@
 import 'package:fluro/fluro.dart' hide RouteNotFoundException;
-import 'package:flutter/material.dart' hide Router;
+import 'package:flutter/material.dart';
 
 import 'screen_arguments.dart';
 
