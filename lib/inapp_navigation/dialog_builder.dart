@@ -216,8 +216,8 @@ class DialogBuilderState extends State<DialogBuilder> {
 
           final color = widget.loadingMessageBackgroundColor ?? (DialogTheme.of(context).backgroundColor ?? Theme.of(context).dialogBackgroundColor).withOpacity(0.8);
 
-          return WillPopScope(
-            onWillPop: () async => false,
+          return PopScope(
+            canPop: false,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
